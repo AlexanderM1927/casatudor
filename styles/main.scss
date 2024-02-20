@@ -1,0 +1,18 @@
+
+html {
+    font-size: 16px; /* Sets the base font size to 16px */
+}
+
+@font-face {
+    font-family: 'contra-slab-bold';
+    src: url('/assets/contra-slab-2/ContraSlab-Bold.ttf') format('truetype');
+}
+
+@font-face {
+    font-family: 'contra-slab';
+    src: url('/assets/contra-slab-2/ContraSlab.ttf') format('truetype');
+}
+
+.custom-container {
+    padding-top: 5rem;
+}

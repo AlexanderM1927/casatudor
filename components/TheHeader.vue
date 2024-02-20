@@ -94,6 +94,7 @@
 
 <script setup lang="ts">
 import { useBreakpoints } from '../composables/getBreakpoints'
+const cart = useCartStore()
 const route = useRoute()
 
 const { type } = useBreakpoints()
@@ -101,26 +102,7 @@ const { type } = useBreakpoints()
 const burgerMenu: Ref<HTMLDivElement | undefined> = ref()
 const cartContent: Ref<HTMLDivElement | undefined> = ref()
 
-const cartProducts: Product[] = [
-    {
-        id: 1,
-        name: 'Product1',
-        image: 'img/bgjpg.jpg',
-        price: 150000
-    },
-    {
-        id: 2,
-        name: 'Product2',
-        image: 'img/bgjpg.jpg',
-        price: 1500
-    },
-    {
-        id: 3,
-        name: 'Product3',
-        image: 'img/bgjpg.jpg',
-        price: 1500
-    }
-]
+const cartProducts = cart.getProductsCart
 
 watch(() => route.name, () => {
     handleScroll()

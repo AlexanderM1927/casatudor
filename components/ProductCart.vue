@@ -2,25 +2,30 @@
     <div :class="`card ${childClass}`">
         <div class="card-body cart-item">
             <h5 class="card-title">{{ product.name }}</h5>
-            <a class="add-cart-btn btn btn-danger" @click="removeFromCart(idItem)">
+            <p>Quantity: {{ product.quantity }}</p>
+            <a class="add-cart-btn btn btn-danger" @click="removeFromCart(product)">
                 Remove
             </a>
         </div>
     </div>
-    <Notification type="negative" :toast-id="idItem">
+    <Notification type="negative" :toast-id="'product-cart-' + product.id">
         Item removed
     </Notification>
 </template>
 <script setup lang="ts">
 import ToastHelper from '~/helpers/ToastHelper';
+const cart = useCartStore()
 const props = defineProps({
     childClass: String,
-    product: Object
+    product: {
+        type: Object,
+        required: true
+    }
 })
-const idItem = 'product-cart-' + 123
 
-const removeFromCart = ((id: String) => {
-    ToastHelper.openToast(id)
+const removeFromCart = ((product: ProductCart) => {
+    ToastHelper.openToast('product-cart-' + product.id)
+    cart.removeProducts(product)
 })
 </script>
 

@@ -1,7 +1,7 @@
 <template>
     <div :class="`card ${childClass}`">
         <div class="card-body cart-item">
-            <h5 class="card-title">Card title</h5>
+            <h5 class="card-title">{{ product.name }}</h5>
             <a class="add-cart-btn btn btn-danger" @click="removeFromCart(idItem)">
                 Remove
             </a>
@@ -11,12 +11,15 @@
         Item removed
     </Notification>
 </template>
-<script setup>
+<script setup lang="ts">
 import ToastHelper from '~/helpers/ToastHelper';
-const props = defineProps(['childClass'])
+const props = defineProps({
+    childClass: String,
+    product: Object
+})
 const idItem = 'product-cart-' + 123
 
-const removeFromCart = ((id) => {
+const removeFromCart = ((id: String) => {
     ToastHelper.openToast(id)
 })
 </script>

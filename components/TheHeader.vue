@@ -73,16 +73,19 @@
             </div>
             <div class="cart-content-items">
                 <div class="row">
-                    <ItemCart :childClass="`col-12`"></ItemCart>
-                    <ItemCart :childClass="`col-12`"></ItemCart>
-                    <ItemCart :childClass="`col-12`"></ItemCart>
+                    <ProductCart
+                        v-for="(product, index) in cartProducts"
+                        :key="index"
+                        :product="product"
+                        :childClass="`col-12`"
+                    ></ProductCart>
                 </div>
             </div>
         </div>
     </div>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import { useBreakpoints } from '../composables/getBreakpoints'
 const route = useRoute()
 
@@ -90,6 +93,24 @@ const { type } = useBreakpoints()
 
 const burgerMenu = ref(null)
 const cartContent = ref(null)
+
+const cartProducts: Product[] = [
+    {
+        id: 1,
+        name: 'Product1',
+        image: 'img/bgjpg.jpg'
+    },
+    {
+        id: 2,
+        name: 'Product2',
+        image: 'img/bgjpg.jpg'
+    },
+    {
+        id: 3,
+        name: 'Product3',
+        image: 'img/bgjpg.jpg'
+    }
+]
 
 watch(() => route.name, () => {
     handleScroll()

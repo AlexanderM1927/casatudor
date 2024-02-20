@@ -1,8 +1,8 @@
 <template>
     <div :class="`card ${childClass}`">
-        <img src="/img/bgjpg.jpg" class="card-img-top" alt="...">
+        <img :src="product.image" class="card-img-top" alt="...">
         <div class="card-body">
-            <h5 class="card-title">Card title</h5>
+            <h5 class="card-title">{{ product.name }}</h5>
             <a class="add-cart-btn btn btn-outline-primary" @click="addToCart(idItem)">
                 Add to cart
                 <Icon name="material-symbols:add-shopping-cart" />
@@ -13,12 +13,18 @@
         Item added to cart
     </Notification>
 </template>
-<script setup>
+<script setup lang="ts">
 import ToastHelper from '~/helpers/ToastHelper';
-const props = defineProps(['childClass'])
+const props = defineProps({
+    childClass: String,
+    product: {
+        type: Object,
+        required: true
+    }
+})
 const idItem = 'product-' + 123
 
-const addToCart = ((id) => {
+const addToCart = ((id: String) => {
     ToastHelper.openToast(id)
 })
 </script>

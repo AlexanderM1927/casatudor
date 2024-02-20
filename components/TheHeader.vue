@@ -91,8 +91,8 @@ const route = useRoute()
 
 const { type } = useBreakpoints()
 
-const burgerMenu = ref(null)
-const cartContent = ref(null)
+const burgerMenu: Ref<HTMLDivElement | undefined> = ref()
+const cartContent: Ref<HTMLDivElement | undefined> = ref()
 
 const cartProducts: Product[] = [
     {
@@ -118,26 +118,34 @@ watch(() => route.name, () => {
 })
 
 const closeBurger = (() => {
-    burgerMenu.value.style.opacity = 0
-    burgerMenu.value.style.visibility = 'hidden'
+    if (burgerMenu.value) {
+        burgerMenu.value.style.opacity = '0'
+        burgerMenu.value.style.visibility = 'hidden'
+    }
 })
 
 const openBurger = (() => {
-    burgerMenu.value.style.opacity = 1
-    burgerMenu.value.style.visibility = 'visible'
+    if (burgerMenu.value) {
+        burgerMenu.value.style.opacity = '1'
+        burgerMenu.value.style.visibility = 'visible'
+    }
 })
 
 const closeCart = (() => {
-    cartContent.value.style.opacity = 0
-    cartContent.value.style.visibility = 'hidden'
+    if (cartContent.value) {
+        cartContent.value.style.opacity = '0'
+        cartContent.value.style.visibility = 'hidden'
+    }
 })
 
 const openCart = (() => {
-    cartContent.value.style.opacity = 1
-    cartContent.value.style.visibility = 'visible'
+    if (cartContent.value) {
+        cartContent.value.style.opacity = '1'
+        cartContent.value.style.visibility = 'visible'
+    }
 })
 
-const setMenuItemsColor = ((color) => {
+const setMenuItemsColor = ((color: String) => {
     const menuItems = document.getElementsByClassName('menu-items-anchor')
     for (let i = 0; i < menuItems.length; i++) {
         if (color === 'white') {

@@ -19,7 +19,7 @@
                 :data-bs-interval="`${item.id}000`"
             >
                 <img :src="item.image" class="d-block w-100" alt="...">
-                <div class="carousel-caption d-none d-md-block">
+                <div class="carousel-caption d-md-block">
                     <h5>{{ item.title }}</h5>
                     <p>{{ item.description }}.</p>
                 </div>

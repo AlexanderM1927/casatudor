@@ -15,6 +15,14 @@ html {
     src: url('/assets/contra-slab-2/ContraSlab.ttf') format('truetype');
 }
 
+h1, h2, h3 {
+    font-family: 'contra-slab-bold';
+}
+
+p {
+    font-family: 'contra-slab';
+}
+
 .custom-container {
     padding-top: 5rem;
 }

@@ -8,7 +8,7 @@
             </a>
         </div>
     </div>
-    <Notification type="negative" :toast-id="'product-cart-' + product.id">
+    <Notification type="info" :toast-id="'product-cart-' + product.id">
         Item removed
     </Notification>
 </template>
@@ -25,7 +25,9 @@ const props = defineProps({
 
 const removeFromCart = ((product: ProductCart) => {
     ToastHelper.openToast('product-cart-' + product.id)
-    cart.removeProducts(product)
+    setTimeout(() => {
+        cart.removeProducts(product)
+    }, 500)
 })
 </script>
 

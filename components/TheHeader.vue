@@ -43,6 +43,12 @@
                         >Info</NuxtLink>
                     </li>
                     <li>
+                        <NuxtLink 
+                            class="menu-items-anchor anchor anchor-opacity anchor-underline anchor-black" 
+                            to="/login"
+                        >Login</NuxtLink>
+                    </li>
+                    <li>
                         <div class="cart-icon">
                         <Icon name="material-symbols:garden-cart-outline" @click="openCart" />
                     </div>
@@ -62,6 +68,7 @@
                 <li><NuxtLink class="anchor anchor-black" to="/posts">Posts</NuxtLink></li>
                 <li><NuxtLink class="anchor anchor-black" to="/items">Store</NuxtLink></li>
                 <li><NuxtLink class="anchor anchor-black" to="/info">Info</NuxtLink></li>
+                <li><NuxtLink class="anchor anchor-black" to="/login">Login</NuxtLink></li>
             </ul>
         </div>
         <div class="cart-content" ref="cartContent">
@@ -98,17 +105,20 @@ const cartProducts: Product[] = [
     {
         id: 1,
         name: 'Product1',
-        image: 'img/bgjpg.jpg'
+        image: 'img/bgjpg.jpg',
+        price: 150000
     },
     {
         id: 2,
         name: 'Product2',
-        image: 'img/bgjpg.jpg'
+        image: 'img/bgjpg.jpg',
+        price: 1500
     },
     {
         id: 3,
         name: 'Product3',
-        image: 'img/bgjpg.jpg'
+        image: 'img/bgjpg.jpg',
+        price: 1500
     }
 ]
 

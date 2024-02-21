@@ -1,6 +1,6 @@
 interface Post {
-    id: Number,
-    title: String,
-    summary: String,
-    image: String
+    id: number,
+    title: string,
+    summary: string,
+    image: string
 }

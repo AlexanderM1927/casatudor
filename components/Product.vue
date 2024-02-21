@@ -3,6 +3,7 @@
         <img :src="product.image" class="card-img-top" alt="...">
         <div class="card-body">
             <h5 class="card-title">{{ product.name }}</h5>
+            <p>${{ formatMiles(product.price) }}</p>
             <a class="add-cart-btn btn btn-outline-primary" @click="addToCart(idItem)">
                 Add to cart
                 <Icon name="material-symbols:add-shopping-cart" />
@@ -14,6 +15,9 @@
     </Notification>
 </template>
 <script setup lang="ts">
+import NumberHelper from '~/helpers/NumberHelper';
+
+const formatMiles = NumberHelper.miles
 import ToastHelper from '~/helpers/ToastHelper';
 const props = defineProps({
     childClass: String,

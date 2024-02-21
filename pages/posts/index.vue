@@ -6,6 +6,12 @@
         <div class="row">
             <Post v-for="(post, index) in posts" :key="index" :post="post" :childClass="`col-md-3 col-xs-12`"></Post>
         </div>
+        <div class="row">
+            <Paginator 
+                @getAction="getPosts()"
+                :data="paginator"
+            ></Paginator>
+        </div>
     </div>
 </template>
 <script setup lang="ts">
@@ -36,4 +42,15 @@ const posts: Post[] = [
         image: 'img/bgjpg.jpg'
     }
 ]
+
+const paginator: Paginator = {
+    data: posts,
+    currentPage: 1,
+    lastPage: 20,
+    url: ''
+}
+
+const getPosts = (newPage: number) => {
+    paginator.currentPage = newPage
+}
 </script>

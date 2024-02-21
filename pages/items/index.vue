@@ -17,22 +17,26 @@ const products: Product[] = [
     {
         id: 1,
         name: 'Product1',
-        image: 'img/bgjpg.jpg'
+        image: 'img/bgjpg.jpg',
+        price: 150000
     },
     {
         id: 2,
         name: 'Product2',
-        image: 'img/bgjpg.jpg'
+        image: 'img/bgjpg.jpg',
+        price: 1500
     },
     {
         id: 3,
         name: 'Product3',
-        image: 'img/bgjpg.jpg'
+        image: 'img/bgjpg.jpg',
+        price: 1500
     },
     {
         id: 4,
         name: 'Product4',
-        image: 'img/bgjpg.jpg'
+        image: 'img/bgjpg.jpg',
+        price: 1500
     }
 ]
 </script>

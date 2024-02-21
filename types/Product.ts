@@ -1,5 +1,6 @@
 interface Product {
-    id: Number,
-    name: String,
-    image: String
+    id: number,
+    name: string,
+    image: string,
+    price: number
 }

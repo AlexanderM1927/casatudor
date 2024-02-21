@@ -1,0 +1,27 @@
+{
+  "kind": "collectionType",
+  "collectionName": "contents",
+  "info": {
+    "singularName": "content",
+    "pluralName": "contents",
+    "displayName": "Content"
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "title_home_page": {
+      "type": "string"
+    },
+    "description_home_page": {
+      "type": "text"
+    },
+    "title_info_page": {
+      "type": "string"
+    },
+    "description_info_page": {
+      "type": "text"
+    }
+  }
+}

@@ -165,7 +165,7 @@ const changeHeaderPerDefault = (() => {
 
 const handleScroll = (() => {
     const bodyScrollTop = document.documentElement.scrollTop || document.body.scrollTop
-    if (bodyScrollTop > 100) {
+    if (bodyScrollTop > 70) {
         changeHeaderPerWhite()
     } else {
         if (route.name === 'index') {

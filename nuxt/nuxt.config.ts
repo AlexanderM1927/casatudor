@@ -1,5 +1,10 @@
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
+  runtimeConfig: {
+    public: {
+      apiBase: 'http://localhost:1337/api'
+    }
+  },
   app: {
     head: {
       charset: 'utf-8',

@@ -368,15 +368,16 @@ export interface ApiContentContent extends Schema.CollectionType {
     singularName: 'content';
     pluralName: 'contents';
     displayName: 'Content';
+    description: '';
   };
   options: {
     draftAndPublish: true;
   };
   attributes: {
-    title_home_page: Attribute.String;
-    description_home_page: Attribute.Text;
-    title_info_page: Attribute.String;
-    description_info_page: Attribute.Text;
+    titleHomePage: Attribute.String;
+    descriptionHomePage: Attribute.Text;
+    titleInfoPage: Attribute.String;
+    descriptionInfoPage: Attribute.Text;
     createdAt: Attribute.DateTime;
     updatedAt: Attribute.DateTime;
     publishedAt: Attribute.DateTime;

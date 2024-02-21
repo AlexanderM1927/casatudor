@@ -5,7 +5,7 @@
                 <h2>
                     {{ title }}
                 </h2>
-                <p>{{ description }}</p>
+                <p style="white-space: pre-line;">{{ description }}</p>
             </div>
         </div>
         <div class="container">
@@ -29,8 +29,8 @@ const getContent = async () => {
     const runtimeConfig = useRuntimeConfig()
     const { data }: any = await ContentService.getContent(runtimeConfig)
     console.log('data', data)
-    title.value = data[0]?.attributes.title_home_page
-    description.value = data[0]?.attributes.description_home_page
+    title.value = data[0]?.attributes.titleHomePage
+    description.value = data[0]?.attributes.descriptionHomePage
 }
 
 onMounted(() => {

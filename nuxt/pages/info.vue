@@ -1,11 +1,25 @@
 <template>
     <div class="container custom-container">
-        <h2>CasaTudor</h2>
-        <p>Lorem ipsum dolor sit, amet consectetur adipisicing elit. Possimus a iusto illum, ratione molestias eius eaque praesentium aut sint quam dignissimos libero commodi nobis, autem rem voluptates debitis cumque exercitationem. Lorem ipsum dolor, sit amet consectetur adipisicing elit. Blanditiis laboriosam dolor ad vero saepe et natus ipsa accusamus ipsum quibusdam. Aliquam perspiciatis est eius et. Nulla suscipit repudiandae laboriosam enim.</p>
-        <br>
-        <p>Lorem ipsum dolor sit, amet consectetur adipisicing elit. Possimus a iusto illum, ratione molestias eius eaque praesentium aut sint quam dignissimos libero commodi nobis, autem rem voluptates debitis cumque exercitationem.</p>
-        <br>
-        <br>
-        <p>Lorem ipsum dolor sit, amet consectetur adipisicing elit. Possimus a iusto illum, ratione molestias eius eaque praesentium aut sint quam dignissimos libero commodi nobis, autem rem voluptates debitis cumque exercitationem.</p>
+        <h2>{{ title }}</h2>
+        <span style="white-space: pre-line;">{{ description }}</span>
     </div>
 </template>
+
+<script setup lang="ts">
+import ContentService from '../services/ContentService'
+
+const title: Ref<any> = ref(null)
+const description: Ref<any> = ref(null)
+
+const getContent = async () => {
+    const runtimeConfig = useRuntimeConfig()
+    const { data }: any = await ContentService.getContent(runtimeConfig)
+    console.log('data', data)
+    title.value = data[0]?.attributes.titleInfoPage
+    description.value = data[0]?.attributes.descriptionInfoPage
+}
+
+onMounted(() => {
+    getContent()
+})
+</script>

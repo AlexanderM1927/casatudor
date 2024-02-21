@@ -73,7 +73,7 @@
         </div>
         <div class="cart-content" ref="cartContent">
             <div class="cart-content-header">
-                <h1>My Cart</h1>
+                <h2>My Cart</h2>
                 <div class="close-btn">
                     <Icon name="material-symbols:close" @click="closeCart()" color="black" />
                 </div>

@@ -4,23 +4,24 @@
   "info": {
     "singularName": "content",
     "pluralName": "contents",
-    "displayName": "Content"
+    "displayName": "Content",
+    "description": ""
   },
   "options": {
     "draftAndPublish": true
   },
   "pluginOptions": {},
   "attributes": {
-    "title_home_page": {
+    "titleHomePage": {
       "type": "string"
     },
-    "description_home_page": {
+    "descriptionHomePage": {
       "type": "text"
     },
-    "title_info_page": {
+    "titleInfoPage": {
       "type": "string"
     },
-    "description_info_page": {
+    "descriptionInfoPage": {
       "type": "text"
     }
   }

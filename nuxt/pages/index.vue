@@ -1,6 +1,10 @@
 <template>
     <div v-if="!isLoading">
-        <div class="container-index">
+        <div class="container-index"  :style="`background: url(
+                ${
+                    image
+                }
+            ); background-size: cover;`">
             <div :class="`hero-text ${type === 'xs' ? 'hero-text-center' : ''}`">
                 <h2>
                     {{ title }}
@@ -28,14 +32,17 @@ const { type } = useBreakpoints()
 
 const title: Ref<any> = ref(null)
 const description: Ref<any> = ref(null)
+const image: Ref<any> = ref(null)
 const posts: Ref<[]> = ref([])
 const isLoading = ref(true)
 
 const getContent = async () => {
     const runtimeConfig = useRuntimeConfig()
     const { data }: any = await ContentService.getContent(runtimeConfig)
-    title.value = data[0]?.attributes.titleHomePage
-    description.value = data[0]?.attributes.descriptionHomePage
+    const { attributes } = data[0]
+    title.value = attributes.titleHomePage
+    description.value = attributes.descriptionHomePage
+    image.value = runtimeConfig.public.strapiAssets + '' + attributes.imageHomePage.data.attributes.url
 }
 
 const getPosts = async () => {

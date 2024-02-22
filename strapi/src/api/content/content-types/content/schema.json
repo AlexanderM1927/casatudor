@@ -23,6 +23,13 @@
     },
     "descriptionInfoPage": {
       "type": "text"
+    },
+    "imageHomePage": {
+      "allowedTypes": [
+        "images"
+      ],
+      "type": "media",
+      "multiple": false
     }
   }
 }

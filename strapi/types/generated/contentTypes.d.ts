@@ -799,6 +799,7 @@ export interface ApiContentContent extends Schema.CollectionType {
     descriptionHomePage: Attribute.Text;
     titleInfoPage: Attribute.String;
     descriptionInfoPage: Attribute.Text;
+    imageHomePage: Attribute.Media;
     createdAt: Attribute.DateTime;
     updatedAt: Attribute.DateTime;
     publishedAt: Attribute.DateTime;

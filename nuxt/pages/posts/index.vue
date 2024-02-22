@@ -1,56 +1,59 @@
 <template>
-    <div class="container custom-container">
+    <div v-if="!isLoading" class="container custom-container">
         <h2>Posts</h2>
-        <SliderPosts :posts="posts"></SliderPosts>
+        <SliderPosts :posts="sliderPosts"></SliderPosts>
         <hr>    
         <div class="row">
             <Post v-for="(post, index) in posts" :key="index" :post="post" :childClass="`col-md-3 col-xs-12`"></Post>
         </div>
         <div class="row">
             <Paginator 
-                @getAction="getPosts()"
+                @getAction="getPosts"
                 :data="paginator"
             ></Paginator>
         </div>
     </div>
 </template>
 <script setup lang="ts">
+import PostService from '../../services/PostService';
 
-const posts: Post[] = [
-    {
-        id: 1,
-        title: 'Card title1',
-        summary: "Some quick example text to build on the card title and make up the bulk of the card's content.",
-        image: 'img/bgjpg.jpg'
-    },
-    {
-        id: 2,
-        title: 'Card title2',
-        summary: "Some quick example text to build on the card title and make up the bulk of the card's content.",
-        image: 'img/bgjpg.jpg'
-    },
-    {
-        id: 3,
-        title: 'Card title3',
-        summary: "Some quick example text to build on the card title and make up the bulk of the card's content.",
-        image: 'img/bgjpg.jpg'
-    },
-    {
-        id: 4,
-        title: 'Card title4',
-        summary: "Some quick example text to build on the card title and make up the bulk of the card's content.",
-        image: 'img/bgjpg.jpg'
-    }
-]
+const isLoading: Ref<Boolean> = ref(true);
 
-const paginator: Paginator = {
-    data: posts,
+const posts: Ref<[]> = ref([])
+const sliderPosts: Ref<[]> = ref([])
+
+const paginator: Ref<Paginator> = ref({
     currentPage: 1,
-    lastPage: 20,
-    url: ''
+    lastPage: 0,
+    url: '',
+    data: []
+})
+
+
+const getPosts = async (newPage: number = 1) => {
+    isLoading.value = true
+    const runtimeConfig = useRuntimeConfig()
+    const { data, meta }: any = await PostService.getPosts(runtimeConfig, newPage)
+    posts.value = data.map(({ id, attributes }) => {
+        const post: Post = {
+            ...attributes,
+            image: runtimeConfig.public.strapiAssets + '' + attributes.image.data.attributes.url,
+            id: id
+        }
+        return post
+    })
+    paginator.value = {
+        currentPage: newPage,
+        lastPage: meta.pagination.pageCount,
+        data: posts.value,
+        url: ''
+    }
+    sliderPosts.value = posts.value.slice(0, 4)
+
+    isLoading.value = false
 }
 
-const getPosts = (newPage: number) => {
-    paginator.currentPage = newPage
-}
+onMounted(() => {
+    getPosts()
+})
 </script>

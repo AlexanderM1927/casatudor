@@ -1,6 +1,6 @@
 <template>
     <div :class="`card ${childClass}`">
-        <img :src="post.image" class="card-img-top" alt="...">
+        <img :src="post.image" class="card-img-top post-img" alt="...">
         <div class="card-body">
             <h5 class="card-title">{{ post.title }}</h5>
             <p class="card-text">{{ post.summary }}</p>
@@ -19,3 +19,9 @@ const props = defineProps(
     }
 )
 </script>
+<style scoped>
+.post-img {
+    width: 100%;
+    height: 10rem;
+}
+</style>

@@ -12,6 +12,7 @@
             <h2>Latest posts</h2>
             <hr />
             <SliderPosts :posts="posts"></SliderPosts>
+            <br>
             <div class="row">
                 <Post v-for="(post, index) in posts" :key="index" :post="post" :childClass="`col-md-3 col-xs-12`"></Post>
             </div>
@@ -19,7 +20,7 @@
     </div>
 </template>
 <script setup lang="ts">
-import PostService from '~/services/PostService';
+import PostService from '../services/PostService';
 import { useBreakpoints } from '../composables/getBreakpoints'
 import ContentService from '../services/ContentService'
 
@@ -40,7 +41,7 @@ const getContent = async () => {
 const getPosts = async () => {
     isLoading.value = true
     const runtimeConfig = useRuntimeConfig()
-    const { data }: any = await PostService.getPosts(runtimeConfig)
+    const { data }: any = await PostService.getHomePosts(runtimeConfig)
     posts.value = data.map(({ id, attributes }) => {
         const post: Post = {
             ...attributes,

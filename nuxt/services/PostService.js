@@ -22,5 +22,14 @@ export default {
             },
         })
         return await $fetch(config.public.apiBase + '/posts?' + query)
+    },
+    async getSinglePost(config, id) {
+        const query = qs.stringify({
+            populate: '*',
+            filters: {
+                id: id
+            }
+        })
+        return await $fetch(config.public.apiBase + '/posts?' + query)
     }
 }

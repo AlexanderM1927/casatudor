@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <div v-if="!isLoading">
         <div class="container-index">
             <div :class="`hero-text ${type === 'xs' ? 'hero-text-center' : ''}`">
                 <h2>
@@ -19,51 +19,44 @@
     </div>
 </template>
 <script setup lang="ts">
+import PostService from '~/services/PostService';
 import { useBreakpoints } from '../composables/getBreakpoints'
 import ContentService from '../services/ContentService'
 
+const { type } = useBreakpoints()
+
 const title: Ref<any> = ref(null)
 const description: Ref<any> = ref(null)
+const posts: Ref<[]> = ref([])
+const isLoading = ref(true)
 
 const getContent = async () => {
     const runtimeConfig = useRuntimeConfig()
     const { data }: any = await ContentService.getContent(runtimeConfig)
-    console.log('data', data)
     title.value = data[0]?.attributes.titleHomePage
     description.value = data[0]?.attributes.descriptionHomePage
 }
 
+const getPosts = async () => {
+    isLoading.value = true
+    const runtimeConfig = useRuntimeConfig()
+    const { data }: any = await PostService.getPosts(runtimeConfig)
+    posts.value = data.map(({ id, attributes }) => {
+        const post: Post = {
+            ...attributes,
+            image: runtimeConfig.public.strapiAssets + '' + attributes.image.data.attributes.url,
+            id: id
+        }
+        return post
+    })
+    isLoading.value = false
+}
+
 onMounted(() => {
     getContent()
+    getPosts()
 })
 
-const { type } = useBreakpoints()
-const posts: Post[] = [
-    {
-        id: 1,
-        title: 'Card title1',
-        summary: "Some quick example text to build on the card title and make up the bulk of the card's content.",
-        image: 'img/bgjpg.jpg'
-    },
-    {
-        id: 2,
-        title: 'Card title2',
-        summary: "Some quick example text to build on the card title and make up the bulk of the card's content.",
-        image: 'img/bgjpg.jpg'
-    },
-    {
-        id: 3,
-        title: 'Card title3',
-        summary: "Some quick example text to build on the card title and make up the bulk of the card's content.",
-        image: 'img/bgjpg.jpg'
-    },
-    {
-        id: 4,
-        title: 'Card title4',
-        summary: "Some quick example text to build on the card title and make up the bulk of the card's content.",
-        image: 'img/bgjpg.jpg'
-    }
-]
 </script>
 
 <style lang="scss" scoped>

@@ -1,5 +1,5 @@
 <template>
-  <div class="toast-container position-fixed top-0 end-0 p-3">
+  <div class="toast-container position-fixed bottom-0 end-0 p-3">
     <div :id="toastId" :class="`toast align-items-center border-0 ${toastColor}`" role="alert" aria-live="assertive" aria-atomic="true">
       <div class="d-flex">
         <div class="toast-body">

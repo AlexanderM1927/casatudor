@@ -1,5 +1,5 @@
 <template>
-    <div class="container custom-container">
+    <div v-if="!isLoading" class="container custom-container">
         <h2>Store</h2>
         <div class="row">
             <Product 
@@ -9,34 +9,51 @@
                 :key="index"
             ></Product>
         </div>
+        <div class="row">
+            <Paginator 
+                @getAction="getProducts"
+                :data="paginator"
+            ></Paginator>
+        </div>
     </div>
 </template>
 <script setup lang="ts">
+import ProductService from '../../services/ProductService';
 
-const products: Product[] = [
-    {
-        id: 1,
-        name: 'Product1',
-        image: 'img/bgjpg.jpg',
-        price: 150000
-    },
-    {
-        id: 2,
-        name: 'Product2',
-        image: 'img/bgjpg.jpg',
-        price: 1500
-    },
-    {
-        id: 3,
-        name: 'Product3',
-        image: 'img/bgjpg.jpg',
-        price: 1500
-    },
-    {
-        id: 4,
-        name: 'Product4',
-        image: 'img/bgjpg.jpg',
-        price: 1500
+const isLoading: Ref<Boolean> = ref(true);
+
+const products: Ref<[]> = ref([])
+
+const paginator: Ref<Paginator> = ref({
+    currentPage: 1,
+    lastPage: 0,
+    url: '',
+    data: []
+})
+
+const getProducts = async (newPage: number = 1) => {
+    isLoading.value = true
+    const runtimeConfig = useRuntimeConfig()
+    const { data, meta }: any = await ProductService.getProducts(runtimeConfig, newPage)
+    products.value = data.map(({ id, attributes }) => {
+        const post: Post = {
+            ...attributes,
+            image: runtimeConfig.public.strapiAssets + '' + attributes.image.data.attributes.url,
+            id: id
+        }
+        return post
+    })
+    paginator.value = {
+        currentPage: newPage,
+        lastPage: meta.pagination.pageCount,
+        data: products.value,
+        url: ''
     }
-]
+
+    isLoading.value = false
+}
+
+onMounted(() => {
+    getProducts()
+})
 </script>

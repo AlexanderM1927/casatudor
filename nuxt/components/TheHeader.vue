@@ -71,43 +71,30 @@
                 <li><NuxtLink class="anchor anchor-black" to="/login">Login</NuxtLink></li>
             </ul>
         </div>
-        <div class="cart-content" ref="cartContent">
-            <div class="cart-content-header">
-                <h2>My Cart</h2>
-                <div class="close-btn">
-                    <Icon name="material-symbols:close" @click="closeCart()" color="black" />
-                </div>
-            </div>
-            <div class="cart-content-items">
-                <div class="row">
-                    <ProductCart
-                        v-for="(product, index) in cartProducts"
-                        :key="index"
-                        :product="product"
-                        :childClass="`col-12`"
-                    ></ProductCart>
-                </div>
-            </div>
-        </div>
-        <div id="overlay"></div>
+        <TheCart :isCartOpen="isCartOpen" @closeCart="closeCart()"></TheCart>
     </div>
 </template>
 
 <script setup lang="ts">
 import { useBreakpoints } from '../composables/getBreakpoints'
-const cart = useCartStore()
 const route = useRoute()
 
 const { type } = useBreakpoints()
 
 const burgerMenu: Ref<HTMLDivElement | undefined> = ref()
-const cartContent: Ref<HTMLDivElement | undefined> = ref()
-
-const cartProducts = cart.getProductsCart
+const isCartOpen: Ref<Boolean> = ref(false)
 
 watch(() => route.name, () => {
     handleScroll()
     closeBurger()
+})
+
+const openCart = (() => {
+    isCartOpen.value = true
+})
+
+const closeCart = (() => {
+    isCartOpen.value = false
 })
 
 const closeBurger = (() => {
@@ -121,24 +108,6 @@ const openBurger = (() => {
     if (burgerMenu.value) {
         burgerMenu.value.style.opacity = '1'
         burgerMenu.value.style.visibility = 'visible'
-    }
-})
-
-const closeCart = (() => {
-    const overlayItem = document.getElementById("overlay")
-    if (overlayItem) overlayItem.style.display = "none";
-    if (cartContent.value) {
-        cartContent.value.style.opacity = '0'
-        cartContent.value.style.visibility = 'hidden'
-    }
-})
-
-const openCart = (() => {
-    const overlayItem = document.getElementById("overlay")
-    if (overlayItem) overlayItem.style.display = "block";
-    if (cartContent.value) {
-        cartContent.value.style.opacity = '1'
-        cartContent.value.style.visibility = 'visible'
     }
 })
 
@@ -196,7 +165,6 @@ onUnmounted(() => {
 </script>
 
 <style lang="scss" scoped>
-@import "../styles/_breakpoints.scss";
 .header-white {
     background: white;
     border-bottom: 1px solid rgba(60, 60, 60, .12);
@@ -329,53 +297,5 @@ onUnmounted(() => {
 
 .close-btn {
     font-size: 2rem;
-}
-
-#overlay {
-  position: fixed; /* Sit on top of the page content */
-  display: none; /* Hidden by default */
-  width: 100%; /* Full width (cover the whole page) */
-  height: 100%; /* Full height (cover the whole page) */
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background-color: rgba(0,0,0,0.5); /* Black background with opacity */
-  z-index: 4; /* Specify a stack order in case you're using a different order for other elements */
-  cursor: pointer; /* Add a pointer on hover */
-}
-
-.cart-content {
-    position: fixed;
-    width: 30%;
-    right: 0;
-    height: 100vh;
-    background: white;
-    visibility: hidden;
-    opacity: 0;
-    padding: 1rem;
-    z-index: 5;
-    transition: visibility 0s, opacity 0.5s linear;
-}
-
-@media only screen and (max-width: $grid-breakpoints-sm) {
-    .cart-content {
-        width: 100%;
-    }
-}
-.cart-content-header {
-    display: flex;
-    justify-content: space-between;
-    border-bottom: 1px solid #000;
-}
-
-.cart-content h1 {
-    font-family: 'contra-slab-bold';
-    font-size: 3rem;
-}
-
-.cart-content-items {
-    overflow-y: auto;
-    overflow-x: hidden;
 }
 </style>

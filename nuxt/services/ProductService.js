@@ -7,7 +7,7 @@ export default {
             sort: ['id:desc'],
             pagination: {
                 page: page,
-                pageSize: 3
+                pageSize: 20
             },
         })
         return await $fetch(config.public.apiBase + '/products?' + query)

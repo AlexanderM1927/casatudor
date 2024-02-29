@@ -1,6 +1,6 @@
 <template>
     <div :class="`card ${childClass}`">
-        <img :src="product.image" class="card-img-top" alt="...">
+        <img :src="product.image" class="card-img-top product-img" alt="...">
         <div class="card-body">
             <h5 class="card-title">{{ product.name }}</h5>
             <p>${{ formatMiles(product.price) }}</p>
@@ -44,5 +44,10 @@ const addToCart = ((product: Product) => {
     align-items: center;
     vertical-align: middle;
     justify-content: space-between;
+}
+
+.product-img {
+    width: 100%;
+    height: 10rem;
 }
 </style>

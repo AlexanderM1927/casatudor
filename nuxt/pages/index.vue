@@ -13,7 +13,7 @@
             </div>
         </div>
         <div class="container">
-            <h2>Latest posts</h2>
+            <h2>Últimas publicaciones</h2>
             <hr />
             <SliderPosts :posts="posts"></SliderPosts>
             <br>

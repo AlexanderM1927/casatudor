@@ -22,25 +22,25 @@
                         <NuxtLink 
                             class="menu-items-anchor anchor anchor-opacity anchor-underline anchor-black" 
                             to="/"
-                        >Home</NuxtLink>
+                        >Inicio</NuxtLink>
                     </li>
                     <li>
                         <NuxtLink 
                             class="menu-items-anchor anchor anchor-opacity anchor-underline anchor-black" 
                             to="/posts"
-                        >Posts</NuxtLink>
+                        >Publicaciones</NuxtLink>
                     </li>
                     <li>
                         <NuxtLink 
                             class="menu-items-anchor anchor anchor-opacity anchor-underline anchor-black" 
                             to="/items"
-                        >Store</NuxtLink>
+                        >Tienda</NuxtLink>
                     </li>
                     <li>
                         <NuxtLink 
                             class="menu-items-anchor anchor anchor-opacity anchor-underline anchor-black" 
                             to="/info"
-                        >Info</NuxtLink>
+                        >Quienes somos?</NuxtLink>
                     </li>
                     <li>
                         <NuxtLink 
@@ -64,10 +64,10 @@
                 </div>
             </div>
             <ul class="items">
-                <li><NuxtLink class="anchor anchor-black" to="/">Home</NuxtLink></li>
-                <li><NuxtLink class="anchor anchor-black" to="/posts">Posts</NuxtLink></li>
-                <li><NuxtLink class="anchor anchor-black" to="/items">Store</NuxtLink></li>
-                <li><NuxtLink class="anchor anchor-black" to="/info">Info</NuxtLink></li>
+                <li><NuxtLink class="anchor anchor-black" to="/">Inicio</NuxtLink></li>
+                <li><NuxtLink class="anchor anchor-black" to="/posts">Publicaciones</NuxtLink></li>
+                <li><NuxtLink class="anchor anchor-black" to="/items">Tienda</NuxtLink></li>
+                <li><NuxtLink class="anchor anchor-black" to="/info">Quienes somos?</NuxtLink></li>
                 <li><NuxtLink class="anchor anchor-black" to="/login">Login</NuxtLink></li>
             </ul>
         </div>

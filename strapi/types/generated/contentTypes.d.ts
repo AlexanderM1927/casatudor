@@ -397,6 +397,30 @@ export interface ApiContentContent extends Schema.CollectionType {
   };
 }
 
+export interface ApiPagePage extends Schema.CollectionType {
+  collectionName: 'pages';
+  info: {
+    singularName: 'page';
+    pluralName: 'pages';
+    displayName: 'Page';
+  };
+  options: {
+    draftAndPublish: true;
+  };
+  attributes: {
+    titleUrl: Attribute.String;
+    title: Attribute.String;
+    description: Attribute.String;
+    createdAt: Attribute.DateTime;
+    updatedAt: Attribute.DateTime;
+    publishedAt: Attribute.DateTime;
+    createdBy: Attribute.Relation<'api::page.page', 'oneToOne', 'admin::user'> &
+      Attribute.Private;
+    updatedBy: Attribute.Relation<'api::page.page', 'oneToOne', 'admin::user'> &
+      Attribute.Private;
+  };
+}
+
 export interface ApiPostPost extends Schema.CollectionType {
   collectionName: 'posts';
   info: {
@@ -889,6 +913,7 @@ declare module '@strapi/types' {
       'admin::transfer-token': AdminTransferToken;
       'admin::transfer-token-permission': AdminTransferTokenPermission;
       'api::content.content': ApiContentContent;
+      'api::page.page': ApiPagePage;
       'api::post.post': ApiPostPost;
       'api::product.product': ApiProductProduct;
       'plugin::upload.file': PluginUploadFile;

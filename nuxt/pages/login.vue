@@ -11,7 +11,9 @@
                 <label for="exampleInputPassword1" class="form-label">Password</label>
                 <input type="password" class="form-control" id="exampleInputPassword1">
             </div>
-            <button type="submit" class="btn btn-primary">Submit</button>
+            <button type="submit" class="btn btn-success">Login</button>
+            <br>
+            Don't you have an account? <NuxtLink to="/register">Register</NuxtLink>
         </form>
     </div>
 </template>

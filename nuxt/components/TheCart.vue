@@ -17,7 +17,7 @@
             </div>
         </div>
     </div>
-    <div id="overlay"></div>
+    <div id="overlay" @click="closeCart()"></div>
 </template>
 <script setup lang="ts">
 const emit = defineEmits(['closeCart'])

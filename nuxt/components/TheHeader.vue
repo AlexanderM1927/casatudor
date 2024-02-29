@@ -164,7 +164,7 @@ onUnmounted(() => {
 })
 </script>
 
-<style lang="scss" scoped>
+<style lang="scss">
 .header-white {
     background: white;
     border-bottom: 1px solid rgba(60, 60, 60, .12);
@@ -296,6 +296,13 @@ onUnmounted(() => {
 }
 
 .close-btn {
+    display: flex;
+    align-items: center;
     font-size: 2rem;
+    cursor: pointer;
+}
+
+.cart-icon {
+    cursor: pointer;
 }
 </style>

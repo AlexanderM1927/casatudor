@@ -34,11 +34,15 @@ const { type } = useBreakpoints()
 const title: Ref<any> = ref(null)
 const description: Ref<any> = ref(null)
 const image: Ref<any> = ref(null)
-const posts: Ref<[]> = ref([])
+const posts: Ref<[Post]> = ref([{}])
 const isLoading = ref(true)
 
+const postService = new PostService(useRuntimeConfig())
+const contentService = new ContentService(useRuntimeConfig())
+
+
 const getContent = async () => {
-    const { data }: any = await ContentService.getContent()
+    const { data }: any = await contentService.getContent()
     const { attributes } = data[0]
     title.value = attributes.titleHomePage
     description.value = attributes.descriptionHomePage
@@ -47,7 +51,7 @@ const getContent = async () => {
 
 const getPosts = async () => {
     isLoading.value = true
-    const { data }: any = await PostService.getHomePosts()
+    const { data }: any = await postService.getHomePosts()
     posts.value = data.map(({ id, attributes }) => {
         const post: Post = {
             ...attributes,

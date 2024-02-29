@@ -37,6 +37,8 @@
 import ToastHelper from '~/helpers/ToastHelper';
 import UserService from '~/services/UserService';
 
+const userService = new UserService(useRuntimeConfig())
+
 const router = useRouter()
 
 const username: Ref<string> = ref('')
@@ -59,7 +61,7 @@ const submit = async (e: Event) => {
     try {
         notificationType.value = 'positive'
         notificationMessage.value = 'User created'
-        await UserService.createUser(user)
+        await userService.createUser(user)
         ToastHelper.openToast('user-created')
         setTimeout(() => {
             router.push('/login')

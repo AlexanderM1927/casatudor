@@ -18,6 +18,7 @@
 import PostService from '../../services/PostService';
 import { useImageFromStrapi } from '../../composables/useImageFromStrapi'
 
+const postService = new PostService(useRuntimeConfig())
 const isLoading: Ref<Boolean> = ref(true);
 
 const posts: Ref<[]> = ref([])
@@ -33,7 +34,7 @@ const paginator: Ref<Paginator> = ref({
 
 const getPosts = async (newPage: number = 1) => {
     isLoading.value = true
-    const { data, meta }: any = await PostService.getPosts(newPage)
+    const { data, meta }: any = await postService.getPosts(newPage)
     posts.value = data.map(({ id, attributes }) => {
         const post: Post = {
             ...attributes,

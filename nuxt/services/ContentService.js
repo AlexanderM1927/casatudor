@@ -1,7 +1,10 @@
 import qs from 'qs'
-const config = useRuntimeConfig()
 
-export default {
+export default class ContentService {
+    config = null
+    constructor (config) {
+        this.config = config
+    }
     async getContent() {
         const query = qs.stringify({
             populate: '*',
@@ -11,6 +14,6 @@ export default {
                 pageSize: 1
             }
         })
-        return await $fetch(config.public.apiBase + '/contents?' + query)
+        return await $fetch(this.config.public.apiBase + '/contents?' + query)
     }
 }

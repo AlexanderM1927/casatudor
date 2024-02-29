@@ -4,21 +4,25 @@
   "info": {
     "singularName": "page",
     "pluralName": "pages",
-    "displayName": "Page"
+    "displayName": "Page",
+    "description": ""
   },
   "options": {
     "draftAndPublish": true
   },
   "pluginOptions": {},
   "attributes": {
-    "titleUrl": {
+    "urlTitle": {
       "type": "string"
     },
     "title": {
       "type": "string"
     },
-    "description": {
+    "urlId": {
       "type": "string"
+    },
+    "content": {
+      "type": "richtext"
     }
   }
 }

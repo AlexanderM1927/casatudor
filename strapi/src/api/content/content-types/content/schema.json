@@ -18,18 +18,13 @@
     "descriptionHomePage": {
       "type": "text"
     },
-    "titleInfoPage": {
-      "type": "string"
-    },
-    "descriptionInfoPage": {
-      "type": "text"
-    },
     "imageHomePage": {
+      "type": "media",
+      "multiple": false,
+      "required": false,
       "allowedTypes": [
         "images"
-      ],
-      "type": "media",
-      "multiple": false
+      ]
     }
   }
 }

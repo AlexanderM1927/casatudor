@@ -36,11 +36,11 @@
                             to="/items"
                         >Tienda</NuxtLink>
                     </li>
-                    <li>
+                    <li v-for="(page, index) in pages" :key="index">
                         <NuxtLink 
                             class="menu-items-anchor anchor anchor-opacity anchor-underline anchor-black" 
-                            to="/info"
-                        >Quienes somos?</NuxtLink>
+                            :to="`/pages/${page.urlId}`"
+                        >{{ page.urlTitle }}</NuxtLink>
                     </li>
                     <li>
                         <NuxtLink 
@@ -67,7 +67,12 @@
                 <li><NuxtLink class="anchor anchor-black" to="/">Inicio</NuxtLink></li>
                 <li><NuxtLink class="anchor anchor-black" to="/posts">Publicaciones</NuxtLink></li>
                 <li><NuxtLink class="anchor anchor-black" to="/items">Tienda</NuxtLink></li>
-                <li><NuxtLink class="anchor anchor-black" to="/info">Quienes somos?</NuxtLink></li>
+                <li v-for="(page, index) in pages" :key="index">
+                    <NuxtLink 
+                        class="anchor anchor-black" 
+                        :to="`/pages/${page.urlId}`"
+                    >{{ page.urlTitle }}</NuxtLink>
+                </li>
                 <li><NuxtLink class="anchor anchor-black" to="/login">Login</NuxtLink></li>
             </ul>
         </div>
@@ -76,6 +81,7 @@
 </template>
 
 <script setup lang="ts">
+import PageService from '~/services/PageService';
 import { useBreakpoints } from '../composables/useBreakpoints'
 const route = useRoute()
 
@@ -83,6 +89,23 @@ const { type } = useBreakpoints()
 
 const burgerMenu: Ref<HTMLDivElement | undefined> = ref()
 const isCartOpen: Ref<Boolean> = ref(false)
+const pages: Ref<[Page]> = ref([{}])
+const isLoading: Ref<Boolean> = ref(false)
+
+const pageService = new PageService(useRuntimeConfig())
+
+const getPages = async () => {
+    isLoading.value = true
+    const { data }: any = await pageService.getPages()
+    pages.value = data.map(({ id, attributes }) => {
+        const page: Page = {
+            ...attributes,
+            id: id
+        }
+        return page
+    })
+    isLoading.value = false
+}
 
 watch(() => route.name, () => {
     handleScroll()
@@ -155,6 +178,7 @@ onMounted(() => {
     window.addEventListener('scroll', () => {
         handleScroll()
     })
+    getPages()
 })
 
 onUnmounted(() => {

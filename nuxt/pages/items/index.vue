@@ -21,6 +21,8 @@
 import ProductService from '../../services/ProductService';
 import { useImageFromStrapi } from '../../composables/useImageFromStrapi'
 
+const productService = new ProductService(useRuntimeConfig())
+
 const isLoading: Ref<Boolean> = ref(true);
 
 const products: Ref<[]> = ref([])
@@ -34,7 +36,7 @@ const paginator: Ref<Paginator> = ref({
 
 const getProducts = async (newPage: number = 1) => {
     isLoading.value = true
-    const { data, meta }: any = await ProductService.getProducts(newPage)
+    const { data, meta }: any = await productService.getProducts(newPage)
     products.value = data.map(({ id, attributes }) => {
         const post: Post = {
             ...attributes,

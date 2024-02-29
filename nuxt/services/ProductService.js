@@ -1,7 +1,10 @@
 import qs from 'qs'
-const config = useRuntimeConfig()
 
-export default {
+export default class ProductService {
+    config = null
+    constructor (config) {
+        this.config = config
+    }
     async getProducts(page = 1) {
         const query = qs.stringify({
             populate: '*',
@@ -11,8 +14,8 @@ export default {
                 pageSize: 20
             },
         })
-        return await $fetch(config.public.apiBase + '/products?' + query)
-    },
+        return await $fetch(this.config.public.apiBase + '/products?' + query)
+    }
     async getSingleProduct(id) {
         const query = qs.stringify({
             populate: '*',
@@ -20,6 +23,6 @@ export default {
                 id: id
             }
         })
-        return await $fetch(config.public.apiBase + '/products?' + query)
+        return await $fetch(this.config.public.apiBase + '/products?' + query)
     }
 }

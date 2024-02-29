@@ -22,10 +22,12 @@ const post: Ref<Post> = ref({
     image: ''
 })
 
+const postService = new PostService(useRuntimeConfig())
+
 
 const getPost = async (newPage: number = 1) => {
     isLoading.value = true
-    const { data }: any = await PostService.getSinglePost(route.params.id)
+    const { data }: any = await postService.getSinglePost(route.params.id)
     post.value = data.map(({ id, attributes }) => {
         const post: Post = {
             ...attributes,

@@ -89,6 +89,7 @@
                 </div>
             </div>
         </div>
+        <div id="overlay"></div>
     </div>
 </template>
 
@@ -124,6 +125,8 @@ const openBurger = (() => {
 })
 
 const closeCart = (() => {
+    const overlayItem = document.getElementById("overlay")
+    if (overlayItem) overlayItem.style.display = "none";
     if (cartContent.value) {
         cartContent.value.style.opacity = '0'
         cartContent.value.style.visibility = 'hidden'
@@ -131,6 +134,8 @@ const closeCart = (() => {
 })
 
 const openCart = (() => {
+    const overlayItem = document.getElementById("overlay")
+    if (overlayItem) overlayItem.style.display = "block";
     if (cartContent.value) {
         cartContent.value.style.opacity = '1'
         cartContent.value.style.visibility = 'visible'
@@ -191,6 +196,7 @@ onUnmounted(() => {
 </script>
 
 <style lang="scss" scoped>
+@import "../styles/_breakpoints.scss";
 .header-white {
     background: white;
     border-bottom: 1px solid rgba(60, 60, 60, .12);
@@ -325,16 +331,37 @@ onUnmounted(() => {
     font-size: 2rem;
 }
 
+#overlay {
+  position: fixed; /* Sit on top of the page content */
+  display: none; /* Hidden by default */
+  width: 100%; /* Full width (cover the whole page) */
+  height: 100%; /* Full height (cover the whole page) */
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0,0,0,0.5); /* Black background with opacity */
+  z-index: 4; /* Specify a stack order in case you're using a different order for other elements */
+  cursor: pointer; /* Add a pointer on hover */
+}
+
 .cart-content {
     position: fixed;
-    width: 100%;
+    width: 30%;
+    right: 0;
     height: 100vh;
     background: white;
     visibility: hidden;
     opacity: 0;
     padding: 1rem;
-    z-index: 3;
+    z-index: 5;
     transition: visibility 0s, opacity 0.5s linear;
+}
+
+@media only screen and (max-width: $grid-breakpoints-sm) {
+    .cart-content {
+        width: 100%;
+    }
 }
 .cart-content-header {
     display: flex;

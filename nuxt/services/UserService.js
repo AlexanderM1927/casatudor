@@ -3,7 +3,7 @@ const config = useRuntimeConfig()
 
 export default {
     async createUser(params) {
-        return await $fetch(config.public.apiBase + '/users', {
+        return await $fetch(config.public.apiBase + '/auth/local/register', {
             method: 'POST',
             body: params
         })

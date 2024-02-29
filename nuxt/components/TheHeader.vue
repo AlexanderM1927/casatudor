@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <div v-if="!isLoading">
         <template v-if="type === 'xs'">
             <div 
                 id="header-mobile" 
@@ -174,11 +174,13 @@ const handleScroll = (() => {
 })
 
 onMounted(() => {
-    handleScroll()
-    window.addEventListener('scroll', () => {
-        handleScroll()
-    })
     getPages()
+    setTimeout(() => {
+        handleScroll()
+        window.addEventListener('scroll', () => {
+            handleScroll()
+        })
+    }, 100)
 })
 
 onUnmounted(() => {

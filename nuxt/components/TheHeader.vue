@@ -42,11 +42,30 @@
                             :to="`/pages/${page.urlId}`"
                         >{{ page.urlTitle }}</NuxtLink>
                     </li>
-                    <li>
-                        <NuxtLink 
+                    <li
+                        v-if="!user.logged"
+                    >
+                        <NuxtLink
                             class="menu-items-anchor anchor anchor-opacity anchor-underline anchor-black" 
                             to="/login"
                         >Login</NuxtLink>
+                    </li>
+                    <li
+                        v-if="user.logged"
+                    >
+                        <NuxtLink
+                            class="menu-items-anchor anchor anchor-opacity anchor-underline anchor-black" 
+                            to="/orders"
+                        >Pedidos</NuxtLink>
+                    </li>
+                    <li
+                        v-if="user.logged"
+                    >
+                        <a
+                            class="menu-items-anchor anchor anchor-opacity anchor-underline anchor-black" 
+                            @click="logout"
+                            href="#"
+                        >Logout</a>
                     </li>
                     <li>
                         <div class="cart-icon">
@@ -73,7 +92,21 @@
                         :to="`/pages/${page.urlId}`"
                     >{{ page.urlTitle }}</NuxtLink>
                 </li>
-                <li><NuxtLink class="anchor anchor-black" to="/login">Login</NuxtLink></li>
+                <li
+                    v-if="!user.logged"
+                >
+                    <NuxtLink class="anchor anchor-black" to="/login">Login</NuxtLink>
+                </li>
+                <li
+                    v-if="user.logged"
+                >
+                    <NuxtLink class="anchor anchor-black" to="/orders">Pedidos</NuxtLink>
+                </li>
+                <li
+                    v-if="user.logged"
+                >
+                    <a class="anchor anchor-black" @click="logout" href="#">Logout</a>
+                </li>
             </ul>
         </div>
         <TheCart :isCartOpen="isCartOpen" @closeCart="closeCart()"></TheCart>
@@ -86,10 +119,13 @@ import { useBreakpoints } from '../composables/useBreakpoints'
 const route = useRoute()
 
 const { type } = useBreakpoints()
+const userState = useUserStore()
+
+const user = storeToRefs(userState).getUser
 
 const burgerMenu: Ref<HTMLDivElement | undefined> = ref()
 const isCartOpen: Ref<Boolean> = ref(false)
-const pages: Ref<[Page]> = ref([{}])
+const pages: Ref<[]> = ref([])
 const isLoading: Ref<Boolean> = ref(false)
 
 const pageService = new PageService(useRuntimeConfig())
@@ -110,6 +146,12 @@ const getPages = async () => {
 watch(() => route.name, () => {
     handleScroll()
     closeBurger()
+})
+
+const logout = (() => {
+    userState.removeUser()
+    localStorage.removeItem('userData')
+    localStorage.removeItem('jwt')
 })
 
 const openCart = (() => {
@@ -173,7 +215,16 @@ const handleScroll = (() => {
     }
 })
 
+const checkLogin = (() => {
+    if (!user.logged) {
+        if (localStorage.getItem('userData')) {
+            userState.setUser(JSON.parse(localStorage.getItem('userData')))
+        }
+    }
+})
+
 onMounted(() => {
+    checkLogin()
     getPages()
     setTimeout(() => {
         handleScroll()

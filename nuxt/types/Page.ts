@@ -1,4 +1,4 @@
-interface User {
+interface Page {
     id: number,
     urlId: string,
     urlTitle: string,

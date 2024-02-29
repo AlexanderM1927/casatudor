@@ -2,7 +2,7 @@ import qs from 'qs'
 const config = useRuntimeConfig()
 
 export default {
-    async getPosts(page = 1) {
+    async getPages(page = 1) {
         const query = qs.stringify({
             populate: '*',
             sort: ['id:desc'],
@@ -11,15 +11,15 @@ export default {
                 pageSize: 20
             },
         })
-        return await $fetch(config.public.apiBase + '/posts?' + query)
+        return await $fetch(config.public.apiBase + '/pages?' + query)
     },
-    async getSinglePost(id) {
+    async getSinglePage(id) {
         const query = qs.stringify({
             populate: '*',
             filters: {
                 id: id
             }
         })
-        return await $fetch(config.public.apiBase + '/posts?' + query)
+        return await $fetch(config.public.apiBase + '/pages?' + query)
     }
 }

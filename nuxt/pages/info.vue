@@ -12,8 +12,7 @@ const title: Ref<any> = ref(null)
 const description: Ref<any> = ref(null)
 
 const getContent = async () => {
-    const runtimeConfig = useRuntimeConfig()
-    const { data }: any = await ContentService.getContent(runtimeConfig)
+    const { data }: any = await ContentService.getContent()
     console.log('data', data)
     title.value = data[0]?.attributes.titleInfoPage
     description.value = data[0]?.attributes.descriptionInfoPage

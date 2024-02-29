@@ -9,6 +9,7 @@
 </template>
 <script setup lang="ts">
 import PostService from '../../services/PostService';
+import { useImageFromStrapi } from '../../composables/useImageFromStrapi'
 
 const route = useRoute()
 
@@ -24,12 +25,11 @@ const post: Ref<Post> = ref({
 
 const getPost = async (newPage: number = 1) => {
     isLoading.value = true
-    const runtimeConfig = useRuntimeConfig()
-    const { data }: any = await PostService.getSinglePost(runtimeConfig, route.params.id)
+    const { data }: any = await PostService.getSinglePost(route.params.id)
     post.value = data.map(({ id, attributes }) => {
         const post: Post = {
             ...attributes,
-            image: runtimeConfig.public.strapiAssets + '' + attributes.image.data.attributes.url,
+            image: useImageFromStrapi(attributes.image.data.attributes.url),
             id: id
         }
         return post

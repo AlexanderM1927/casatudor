@@ -1,7 +1,8 @@
 import qs from 'qs'
+const config = useRuntimeConfig()
 
 export default {
-    async getContent(config) {
+    async getContent() {
         const query = qs.stringify({
             populate: '*',
             sort: ['id:desc'],

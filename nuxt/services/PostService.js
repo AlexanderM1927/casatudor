@@ -1,7 +1,8 @@
 import qs from 'qs'
+const config = useRuntimeConfig()
 
 export default {
-    async getHomePosts(config, page = 1) {
+    async getHomePosts(page = 1) {
         const query = qs.stringify({
             populate: '*',
             sort: ['id:desc'],
@@ -12,7 +13,7 @@ export default {
         })
         return await $fetch(config.public.apiBase + '/posts?' + query)
     },
-    async getPosts(config, page = 1) {
+    async getPosts(page = 1) {
         const query = qs.stringify({
             populate: '*',
             sort: ['id:desc'],
@@ -23,7 +24,7 @@ export default {
         })
         return await $fetch(config.public.apiBase + '/posts?' + query)
     },
-    async getSinglePost(config, id) {
+    async getSinglePost(id) {
         const query = qs.stringify({
             populate: '*',
             filters: {

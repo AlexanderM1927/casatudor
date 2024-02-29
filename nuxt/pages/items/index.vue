@@ -19,6 +19,7 @@
 </template>
 <script setup lang="ts">
 import ProductService from '../../services/ProductService';
+import { useImageFromStrapi } from '../../composables/useImageFromStrapi'
 
 const isLoading: Ref<Boolean> = ref(true);
 
@@ -33,12 +34,11 @@ const paginator: Ref<Paginator> = ref({
 
 const getProducts = async (newPage: number = 1) => {
     isLoading.value = true
-    const runtimeConfig = useRuntimeConfig()
-    const { data, meta }: any = await ProductService.getProducts(runtimeConfig, newPage)
+    const { data, meta }: any = await ProductService.getProducts(newPage)
     products.value = data.map(({ id, attributes }) => {
         const post: Post = {
             ...attributes,
-            image: runtimeConfig.public.strapiAssets + '' + attributes.image.data.attributes.url,
+            image: useImageFromStrapi(attributes.image.data.attributes.url),
             id: id
         }
         return post

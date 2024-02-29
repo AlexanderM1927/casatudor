@@ -2,7 +2,7 @@
     <div v-if="!isLoading">
         <div class="container-index"  :style="`background: url(
                 ${
-                    image
+                    useImageFromStrapi(image)
                 }
             ); background-size: cover;`">
             <div :class="`hero-text ${type === 'xs' ? 'hero-text-center' : ''}`">
@@ -25,7 +25,8 @@
 </template>
 <script setup lang="ts">
 import PostService from '../services/PostService';
-import { useBreakpoints } from '../composables/getBreakpoints'
+import { useBreakpoints } from '../composables/useBreakpoints'
+import { useImageFromStrapi } from '../composables/useImageFromStrapi'
 import ContentService from '../services/ContentService'
 
 const { type } = useBreakpoints()
@@ -37,22 +38,20 @@ const posts: Ref<[]> = ref([])
 const isLoading = ref(true)
 
 const getContent = async () => {
-    const runtimeConfig = useRuntimeConfig()
-    const { data }: any = await ContentService.getContent(runtimeConfig)
+    const { data }: any = await ContentService.getContent()
     const { attributes } = data[0]
     title.value = attributes.titleHomePage
     description.value = attributes.descriptionHomePage
-    image.value = runtimeConfig.public.strapiAssets + '' + attributes.imageHomePage.data.attributes.url
+    image.value = attributes.imageHomePage.data.attributes.url
 }
 
 const getPosts = async () => {
     isLoading.value = true
-    const runtimeConfig = useRuntimeConfig()
-    const { data }: any = await PostService.getHomePosts(runtimeConfig)
+    const { data }: any = await PostService.getHomePosts()
     posts.value = data.map(({ id, attributes }) => {
         const post: Post = {
             ...attributes,
-            image: runtimeConfig.public.strapiAssets + '' + attributes.image.data.attributes.url,
+            image: useImageFromStrapi(attributes.image.data.attributes.url),
             id: id
         }
         return post

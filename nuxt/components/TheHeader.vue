@@ -76,7 +76,7 @@
 </template>
 
 <script setup lang="ts">
-import { useBreakpoints } from '../composables/getBreakpoints'
+import { useBreakpoints } from '../composables/useBreakpoints'
 const route = useRoute()
 
 const { type } = useBreakpoints()

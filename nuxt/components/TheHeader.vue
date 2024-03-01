@@ -121,7 +121,8 @@ const route = useRoute()
 const { type } = useBreakpoints()
 const userState = useUserStore()
 
-const user = storeToRefs(userState).getUser
+const userStore = storeToRefs(userState)
+const user = userStore.getUser
 
 const burgerMenu: Ref<HTMLDivElement | undefined> = ref()
 const isCartOpen: Ref<Boolean> = ref(false)

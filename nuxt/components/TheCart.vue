@@ -33,7 +33,8 @@ watch(() => props.isCartOpen, (val) => {
     }
 })
 
-const cartProducts = storeToRefs(cart).getProductsCart
+const cartStoreComputed = storeToRefs(cart)
+const cartProducts = cartStoreComputed.getProductsCart
 
 const closeCartHTML = (() => {
     const overlayItem = document.getElementById("overlay")

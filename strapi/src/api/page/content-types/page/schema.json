@@ -23,6 +23,9 @@
     },
     "content": {
       "type": "richtext"
+    },
+    "sort": {
+      "type": "integer"
     }
   }
 }

@@ -8,7 +8,7 @@ export default class PageService {
     async getPages(page = 1) {
         const query = qs.stringify({
             populate: '*',
-            sort: ['id:asc'],
+            sort: ['sort:asc'],
             pagination: {
                 page: page,
                 pageSize: 20

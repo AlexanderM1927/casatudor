@@ -900,6 +900,7 @@ export interface ApiPagePage extends Schema.CollectionType {
     title: Attribute.String;
     urlId: Attribute.String;
     content: Attribute.RichText;
+    sort: Attribute.Integer;
     createdAt: Attribute.DateTime;
     updatedAt: Attribute.DateTime;
     publishedAt: Attribute.DateTime;

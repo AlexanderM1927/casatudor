@@ -67,7 +67,11 @@ const submit = async (e: Event) => {
             router.push('/login')
         }, 500)
     } catch (error) {
-        notificationMessage.value = error.response._data.error.message
+        if (error) {
+            notificationMessage.value = error.response._data.error.message
+        } else {
+            notificationMessage.value = 'Unexpected error appears'
+        }
         notificationType.value = 'negative'
         ToastHelper.openToast('user-created')
     }

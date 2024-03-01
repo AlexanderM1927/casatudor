@@ -126,7 +126,13 @@ const user = userStore.getUser
 
 const burgerMenu: Ref<HTMLDivElement | undefined> = ref()
 const isCartOpen: Ref<Boolean> = ref(false)
-const pages: Ref<[]> = ref([])
+const pages: Ref<[Page]> = ref([{
+    id: 0,
+    urlId: '',
+    urlTitle: '',
+    title: '',
+    content: ''
+}])
 const isLoading: Ref<Boolean> = ref(false)
 
 const pageService = new PageService(useRuntimeConfig())
@@ -134,7 +140,7 @@ const pageService = new PageService(useRuntimeConfig())
 const getPages = async () => {
     isLoading.value = true
     const { data }: any = await pageService.getPages()
-    pages.value = data.map(({ id, attributes }) => {
+    pages.value = data.map(({ id, attributes }: { id: number, attributes: any }) => {
         const page: Page = {
             ...attributes,
             id: id
@@ -217,9 +223,9 @@ const handleScroll = (() => {
 })
 
 const checkLogin = (() => {
-    if (!user.logged) {
+    if (!user.value.logged) {
         if (localStorage.getItem('userData')) {
-            userState.setUser(JSON.parse(localStorage.getItem('userData')))
+            userState.setUser(JSON.parse(localStorage.getItem('userData') || '{}'))
         }
     }
 })

@@ -52,7 +52,7 @@ const getContent = async () => {
 const getPosts = async () => {
     isLoading.value = true
     const { data }: any = await postService.getHomePosts()
-    posts.value = data.map(({ id, attributes }) => {
+    posts.value = data.map(({ id, attributes }: { id: number, attributes: any }) => {
         const post: Post = {
             ...attributes,
             image: useImageFromStrapi(attributes.image.data.attributes.url),

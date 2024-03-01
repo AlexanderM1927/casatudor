@@ -35,7 +35,7 @@ const paginator: Ref<Paginator> = ref({
 const getPosts = async (newPage: number = 1) => {
     isLoading.value = true
     const { data, meta }: any = await postService.getPosts(newPage)
-    posts.value = data.map(({ id, attributes }) => {
+    posts.value = data.map(({ id, attributes }: { id: number, attributes: any }) => {
         const post: Post = {
             ...attributes,
             image: useImageFromStrapi(attributes.image.data.attributes.url),
@@ -49,7 +49,9 @@ const getPosts = async (newPage: number = 1) => {
         data: posts.value,
         url: ''
     }
-    sliderPosts.value = posts.value.slice(0, 4)
+    if (posts.value.length > 4) {
+        sliderPosts.value = [...posts.value.slice(0, 4)]
+    }
 
     isLoading.value = false
 }

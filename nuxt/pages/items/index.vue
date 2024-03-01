@@ -37,7 +37,7 @@ const paginator: Ref<Paginator> = ref({
 const getProducts = async (newPage: number = 1) => {
     isLoading.value = true
     const { data, meta }: any = await productService.getProducts(newPage)
-    products.value = data.map(({ id, attributes }) => {
+    products.value = data.map(({ id, attributes }: { id: number, attributes: any }) => {
         const post: Post = {
             ...attributes,
             image: useImageFromStrapi(attributes.image.data.attributes.url),

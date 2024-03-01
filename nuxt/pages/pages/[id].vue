@@ -24,7 +24,7 @@ const pageService = new PageService(useRuntimeConfig())
 const getPage = async (newPage: number = 1) => {
     isLoading.value = true
     const { data }: any = await pageService.getSinglePageByUrlId(route.params.id)
-    page.value = data.map(({ id, attributes }) => {
+    page.value = data.map(({ id, attributes }: { id: number, attributes: any }) => {
         const page: Page = {
             ...attributes,
             id: id

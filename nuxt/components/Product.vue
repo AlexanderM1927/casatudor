@@ -1,5 +1,5 @@
 <template>
-    <div :class="`card ${childClass}`">
+    <div v-if="product" :class="`card ${childClass}`">
         <img :src="product.image" class="card-img-top product-img" alt="...">
         <div class="card-body">
             <h5 class="card-title">{{ product.name }}</h5>
@@ -10,21 +10,24 @@
             </a>
         </div>
     </div>
-    <Notification type="positive" :toast-id="'product-' + product.id">
+    <Notification v-if="product" type="positive" :toast-id="'product-' + product.id">
         Item added to cart
     </Notification>
 </template>
 <script setup lang="ts">
+import type { PropType } from 'vue';
 import NumberHelper from '~/helpers/NumberHelper';
 const cart = useCartStore()
 
 const formatMiles = NumberHelper.miles
 import ToastHelper from '~/helpers/ToastHelper';
+
 const props = defineProps({
-    childClass: String,
+    childClass: {
+        type: String as PropType<String>
+    },
     product: {
-        type: Object,
-        required: true
+        type: Object as PropType<Product>
     }
 })
 

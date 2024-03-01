@@ -13,7 +13,7 @@ const props = defineProps(
     {
         childClass: String,
         post: {
-            type: Object,
+            type: Object as PropType<Post>,
             required: true
         }
     }

@@ -50,7 +50,7 @@ const getPosts = async (newPage: number = 1) => {
         url: ''
     }
     if (posts.value.length > 4) {
-        sliderPosts.value = [...posts.value.slice(0, 4)]
+        sliderPosts.value = posts.value.slice(0, 4)
     }
 
     isLoading.value = false

@@ -36,11 +36,20 @@
                             to="/items"
                         >Tienda</NuxtLink>
                     </li>
-                    <li v-for="(page, index) in pages" :key="index">
+                    <li class="subnav" v-for="(page, index) in pages" :key="index">
                         <NuxtLink 
                             class="menu-items-anchor anchor anchor-opacity anchor-underline anchor-black" 
                             :to="`/pages/${page.urlId}`"
                         >{{ page.urlTitle }}</NuxtLink>
+                        <div class="subnav-content" v-if="page.subpages">
+                            <NuxtLink 
+                                v-for="(subpage, index) in page.subpages"
+                                class="menu-items-anchor anchor anchor-opacity anchor-underline anchor-black" 
+                                :to="`/subpages/${subpage.urlId}`"
+                            >
+                                {{ subpage.urlTitle }}
+                            </NuxtLink>
+                        </div>
                     </li>
                     <li
                         v-if="!user.logged"
@@ -143,7 +152,15 @@ const getPages = async () => {
     pages.value = data.map(({ id, attributes }: { id: number, attributes: any }) => {
         const page: Page = {
             ...attributes,
-            id: id
+            id: id,
+        }
+        if (attributes.subpages && attributes.subpages.data.length > 0) {
+            page.subpages = attributes.subpages.data.map(({ id, attributes }: { id: number, attributes: any }) => {
+                return {
+                    ...attributes,
+                    id: id
+                }
+            })
         }
         return page
     })
@@ -249,10 +266,11 @@ onUnmounted(() => {
 </script>
 
 <style lang="scss">
+
 .header-white {
     background: white;
     border-bottom: 1px solid rgba(60, 60, 60, .12);
-    color: black
+    color: black;
 }
 
 .header-transparent {
@@ -388,5 +406,22 @@ onUnmounted(() => {
 
 .cart-icon {
     cursor: pointer;
+}
+
+.subnav {
+    position: relative;
+    display: inline-block;
+}
+
+.subnav .subnav-content {
+    display: none;
+}
+
+.subnav:hover .subnav-content {
+    display: block;
+}
+
+.subnav:hover .subnav-content a {
+    display: block;
 }
 </style>

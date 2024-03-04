@@ -1,6 +1,6 @@
 import qs from 'qs'
 
-export default class PageService {
+export default class SubPageService {
     config = null
     constructor (config) {
         this.config = config
@@ -13,13 +13,8 @@ export default class PageService {
                 page: page,
                 pageSize: 20
             },
-            populate: {
-                subpages: {
-                  fields: ['urlTitle', 'urlId']
-                }
-            }
         })
-        return await $fetch(this.config.public.apiBase + '/pages?' + query)
+        return await $fetch(this.config.public.apiBase + '/subpages?' + query)
     }
     async getSinglePageByUrlId(id) {
         const query = qs.stringify({
@@ -28,6 +23,6 @@ export default class PageService {
                 urlId: id
             }
         })
-        return await $fetch(this.config.public.apiBase + '/pages?' + query)
+        return await $fetch(this.config.public.apiBase + '/subpages?' + query)
     }
 }

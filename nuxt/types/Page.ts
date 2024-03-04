@@ -3,5 +3,6 @@ interface Page {
     urlId: string,
     urlTitle: string,
     title: string,
-    content: string
+    content: string,
+    subpages?: []
 }

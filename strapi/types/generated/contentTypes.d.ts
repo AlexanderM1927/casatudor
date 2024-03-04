@@ -812,6 +812,41 @@ export interface ApiCartCart extends Schema.CollectionType {
   };
 }
 
+export interface ApiCategoryCategory extends Schema.CollectionType {
+  collectionName: 'categories';
+  info: {
+    singularName: 'category';
+    pluralName: 'categories';
+    displayName: 'Category';
+  };
+  options: {
+    draftAndPublish: true;
+  };
+  attributes: {
+    name: Attribute.String;
+    products: Attribute.Relation<
+      'api::category.category',
+      'oneToMany',
+      'api::product.product'
+    >;
+    createdAt: Attribute.DateTime;
+    updatedAt: Attribute.DateTime;
+    publishedAt: Attribute.DateTime;
+    createdBy: Attribute.Relation<
+      'api::category.category',
+      'oneToOne',
+      'admin::user'
+    > &
+      Attribute.Private;
+    updatedBy: Attribute.Relation<
+      'api::category.category',
+      'oneToOne',
+      'admin::user'
+    > &
+      Attribute.Private;
+  };
+}
+
 export interface ApiContentContent extends Schema.CollectionType {
   collectionName: 'contents';
   info: {
@@ -901,6 +936,11 @@ export interface ApiPagePage extends Schema.CollectionType {
     urlId: Attribute.String;
     content: Attribute.RichText;
     sort: Attribute.Integer;
+    subpages: Attribute.Relation<
+      'api::page.page',
+      'oneToMany',
+      'api::subpage.subpage'
+    >;
     createdAt: Attribute.DateTime;
     updatedAt: Attribute.DateTime;
     publishedAt: Attribute.DateTime;
@@ -951,6 +991,11 @@ export interface ApiProductProduct extends Schema.CollectionType {
     name: Attribute.String;
     image: Attribute.Media;
     price: Attribute.Integer;
+    category: Attribute.Relation<
+      'api::product.product',
+      'manyToOne',
+      'api::category.category'
+    >;
     createdAt: Attribute.DateTime;
     updatedAt: Attribute.DateTime;
     publishedAt: Attribute.DateTime;
@@ -962,6 +1007,46 @@ export interface ApiProductProduct extends Schema.CollectionType {
       Attribute.Private;
     updatedBy: Attribute.Relation<
       'api::product.product',
+      'oneToOne',
+      'admin::user'
+    > &
+      Attribute.Private;
+  };
+}
+
+export interface ApiSubpageSubpage extends Schema.CollectionType {
+  collectionName: 'subpages';
+  info: {
+    singularName: 'subpage';
+    pluralName: 'subpages';
+    displayName: 'Subpage';
+    description: '';
+  };
+  options: {
+    draftAndPublish: true;
+  };
+  attributes: {
+    title: Attribute.String;
+    urlTitle: Attribute.String;
+    urlId: Attribute.String;
+    content: Attribute.RichText;
+    page: Attribute.Relation<
+      'api::subpage.subpage',
+      'manyToOne',
+      'api::page.page'
+    >;
+    sort: Attribute.Integer;
+    createdAt: Attribute.DateTime;
+    updatedAt: Attribute.DateTime;
+    publishedAt: Attribute.DateTime;
+    createdBy: Attribute.Relation<
+      'api::subpage.subpage',
+      'oneToOne',
+      'admin::user'
+    > &
+      Attribute.Private;
+    updatedBy: Attribute.Relation<
+      'api::subpage.subpage',
       'oneToOne',
       'admin::user'
     > &
@@ -988,11 +1073,13 @@ declare module '@strapi/types' {
       'plugin::users-permissions.user': PluginUsersPermissionsUser;
       'plugin::i18n.locale': PluginI18NLocale;
       'api::cart.cart': ApiCartCart;
+      'api::category.category': ApiCategoryCategory;
       'api::content.content': ApiContentContent;
       'api::order.order': ApiOrderOrder;
       'api::page.page': ApiPagePage;
       'api::post.post': ApiPostPost;
       'api::product.product': ApiProductProduct;
+      'api::subpage.subpage': ApiSubpageSubpage;
     }
   }
 }

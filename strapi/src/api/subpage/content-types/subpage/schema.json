@@ -1,10 +1,10 @@
 {
   "kind": "collectionType",
-  "collectionName": "pages",
+  "collectionName": "subpages",
   "info": {
-    "singularName": "page",
-    "pluralName": "pages",
-    "displayName": "Page",
+    "singularName": "subpage",
+    "pluralName": "subpages",
+    "displayName": "Subpage",
     "description": ""
   },
   "options": {
@@ -12,10 +12,10 @@
   },
   "pluginOptions": {},
   "attributes": {
-    "urlTitle": {
+    "title": {
       "type": "string"
     },
-    "title": {
+    "urlTitle": {
       "type": "string"
     },
     "urlId": {
@@ -24,14 +24,14 @@
     "content": {
       "type": "richtext"
     },
+    "page": {
+      "type": "relation",
+      "relation": "manyToOne",
+      "target": "api::page.page",
+      "inversedBy": "subpages"
+    },
     "sort": {
       "type": "integer"
-    },
-    "subpages": {
-      "type": "relation",
-      "relation": "oneToMany",
-      "target": "api::subpage.subpage",
-      "mappedBy": "page"
     }
   }
 }

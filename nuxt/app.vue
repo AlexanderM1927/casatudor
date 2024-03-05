@@ -2,6 +2,7 @@
   <TheHeader />
   <NuxtPage />
   <TheWhatsAppBtn />
+  <TheFooter />
 </template>
 <script setup lang="ts">
 import '~/node_modules/bootstrap/dist/js/bootstrap.bundle.min.js'

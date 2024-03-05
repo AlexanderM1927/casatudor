@@ -41,8 +41,9 @@
 @import "../styles/_colors.scss";
 @import "../styles/_breakpoints.scss";
 .footer {
-    min-height: 10rem;
     padding: 5rem;
+    padding-top: 7rem;
+    padding-bottom: 7rem;
     color: white;
     width: 100%;
     display: flex;

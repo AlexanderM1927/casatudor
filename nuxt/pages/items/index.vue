@@ -106,6 +106,7 @@ onMounted(() => {
 
 .store__filters-price {
     display: flex;
+    align-items: center;
 }
 
 .store__filters-price input{

@@ -1,7 +1,7 @@
 <template>
     <div class="footer">
         <div class="footer__column">
-            <h4>CasaTudor</h4>
+            <h4 class="text-centered">CasaTudor</h4>
             <p>Lorem ipsum dolor sit, amet consectetur adipisicing elit. Inventore totam excepturi, dicta voluptates dignissimos enim accusantium sequi mollitia corporis ab in sit quia nesciunt ipsam commodi voluptas iusto, nihil nisi?</p>
         </div>
         <div class="footer__column text-centered">
@@ -19,7 +19,7 @@
             </ul>
         </div>
         <div class="footer__column">
-            <h4>Redes sociales</h4>
+            <h4 class="text-centered">Redes sociales</h4>
             <div class="footer__social-media">
                 <a href="https://wa.me/573164510766" target="_blank">
                     <Icon name="mdi:whatsapp" />
@@ -65,6 +65,7 @@
 .footer__social-media {
     font-size: 2rem;
     display: flex;
+    justify-content: center;
 }
 
 .footer__social-media a {
@@ -74,10 +75,15 @@
 
 .footer__links {
     list-style: none;
+    padding-left: 0;
 }
 
 .footer__links li a {
     color: white;
     opacity: 0.5;
+}
+
+.footer__links li a:hover {
+    opacity: 1;
 }
 </style>

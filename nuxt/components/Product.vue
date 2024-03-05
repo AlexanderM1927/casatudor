@@ -1,13 +1,17 @@
 <template>
     <div v-if="product" :class="`card ${childClass}`">
-        <img :src="product.image" class="card-img-top product-img" alt="...">
+        <img :src="product.image" class="card-img-top product__img" alt="...">
         <div class="card-body">
             <h5 class="card-title">{{ product.name }}</h5>
             <p>${{ formatMiles(product.price) }}</p>
-            <a class="add-cart-btn btn btn-outline-primary" @click="addToCart(product)">
-                Add to cart
-                <Icon name="material-symbols:add-shopping-cart" />
-            </a>
+            <div class="product__btns">
+                <a class="add-cart-btn btn btn-outline-primary" @click="addToCart(product)">
+                    <Icon name="material-symbols:add-shopping-cart" />
+                </a>
+                <a class="add-cart-btn btn btn-outline-danger" @click="addToCart(product)">
+                    <Icon name="material-symbols:favorite" />
+                </a>
+            </div>
         </div>
     </div>
     <Notification v-if="product" type="positive" :toast-id="'product-' + product.id">
@@ -49,8 +53,13 @@ const addToCart = ((product: Product) => {
     justify-content: space-between;
 }
 
-.product-img {
+.product__img {
     width: 100%;
     height: 10rem;
+}
+
+.product__btns {
+    display: flex;
+    justify-content: space-between;
 }
 </style>

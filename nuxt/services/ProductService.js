@@ -16,6 +16,24 @@ export default class ProductService {
         })
         return await $fetch(this.config.public.apiBase + '/products?' + query)
     }
+    async getProductsByCategory(page = 1, categoryId) {
+        const query = qs.stringify({
+            populate: '*',
+            sort: ['id:desc'],
+            pagination: {
+                page: page,
+                pageSize: 20
+            },
+            filters: {
+                category: {
+                    id: {
+                        $eq: categoryId
+                    }
+                }
+            }
+        })
+        return await $fetch(this.config.public.apiBase + '/products?' + query)
+    }
     async getSingleProduct(id) {
         const query = qs.stringify({
             populate: '*',

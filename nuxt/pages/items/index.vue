@@ -8,7 +8,7 @@
                     <li 
                         v-for="(category, index) in categories" 
                         :key="index"
-                        class="store__category"
+                        :class="`store__category ${categoryFiltered?.id === category.id ? 'category-selected' : ''}`"
                         @click="filterByCategory(category)"
                     >
                         {{ category.name }}
@@ -128,9 +128,12 @@ const filterProducts = () => {
     productsFiltered.value = productsFilteredToShow
 }
 
-const getProducts = async (newPage: number = 1) => {
+const getProducts = async (newPage) => {
+    if (newPage) {
+        paginator.value.currentPage = newPage
+    }
     isLoading.value = true
-    const { data, meta }: any = await productService.getProducts(newPage)
+    const { data, meta }: any = await productService.getProducts(paginator.value.currentPage)
     products.value = data.map(({ id, attributes }: { id: number, attributes: any }) => {
         const product: Product = {
             ...attributes,
@@ -140,12 +143,33 @@ const getProducts = async (newPage: number = 1) => {
         return product
     })
     paginator.value = {
-        currentPage: newPage,
+        currentPage: meta.pagination.page,
         lastPage: meta.pagination.pageCount,
         data: products.value,
         url: ''
     }
 
+    isLoading.value = false
+}
+
+const getProductsByCategory = async (categoryId) => {
+    isLoading.value = true
+    const { data, meta }: any = await productService.getProductsByCategory(paginator.value.currentPage, categoryId)
+    products.value = data.map(({ id, attributes }: { id: number, attributes: any }) => {
+        const product: Product = {
+            ...attributes,
+            image: useImageFromStrapi(attributes.image.data.attributes.url),
+            id: id
+        }
+        return product
+    })
+    paginator.value = {
+        currentPage: meta.pagination.page,
+        lastPage: meta.pagination.pageCount,
+        data: products.value,
+        url: ''
+    }
+    filterProducts()
     isLoading.value = false
 }
 
@@ -165,14 +189,15 @@ const getCategories = async (newPage: number = 1) => {
 
 const filterByCategory = (category) => {
     categoryFiltered.value = category
-    filterProducts()
+    getProductsByCategory(categoryFiltered.value.id)
 }
 
 const setDefaultProducts = () => {
     categoryFiltered.value = null
     priceFilterMax.value = ''
     priceFilterMin.value = ''
-    productsFiltered.value = [...products.value]
+    productsFiltered.value = null
+    getProducts()
 }
 
 onMounted(() => {
@@ -227,6 +252,10 @@ onMounted(() => {
 }
 
 .store__category:hover {
+    opacity: 1;
+}
+
+.category-selected {
     opacity: 1;
 }
 </style>

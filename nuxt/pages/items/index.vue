@@ -5,17 +5,11 @@
             <div class="store__filters">
                 <h4>Categorias</h4>
                 <ul>
-                    <li
-                        class="store__category"
-                        @click="setDefaultProducts"
-                    >
-                        Todos
-                    </li>
                     <li 
                         v-for="(category, index) in categories" 
                         :key="index"
                         class="store__category"
-                        @click="filterProducts(category)"
+                        @click="filterByCategory(category)"
                     >
                         {{ category.name }}
                     </li>
@@ -36,6 +30,8 @@
                         v-model="priceFilterMax"
                     > 
                 </div> 
+                <br>
+                <button class="btn btn-danger" @click="setDefaultProducts">Quitar filtros</button>
             </div>
             <div class="store__products">
                 <div class="row" v-if="!productsFiltered">
@@ -48,7 +44,7 @@
                 </div>
                 <div class="row" v-else-if="productsFiltered.length === 0">
                     <div class="col-12">
-                        <b>No hay productos en esta categoria</b>
+                        <b>No hay productos con estos filtros</b>
                     </div>
                     <Product 
                         v-for="(product, index) in products"
@@ -90,6 +86,7 @@ const categories: Ref<[]> = ref([])
 const priceFilterMin: Ref<string> = ref('')
 const priceFilterMax: Ref<string> = ref('')
 const productsFiltered: Ref<[]> = ref(null)
+const categoryFiltered: Ref<{}> = ref(null)
 
 const paginator: Ref<Paginator> = ref({
     currentPage: 1,
@@ -97,6 +94,39 @@ const paginator: Ref<Paginator> = ref({
     url: '',
     data: []
 })
+
+watch(priceFilterMin, (val) => {
+    filterProducts()
+})
+
+watch(priceFilterMax, (val) => {
+    filterProducts()
+})
+
+const filterProducts = () => {
+    const minPrice = priceFilterMin.value ? parseFloat(priceFilterMin.value) : 0
+    const maxPrice = priceFilterMax.value ? parseFloat(priceFilterMax.value) : 0
+    const category = categoryFiltered.value
+
+    let productsFilteredToShow = products.value.filter((product) => {
+        const productPrice = product.price
+
+        let validate = true
+        if (minPrice != '' && maxPrice == '') validate = productPrice >= minPrice
+        else if (minPrice == '' && maxPrice != '') validate = productPrice <= maxPrice
+        else if (minPrice != '' && maxPrice != '') validate = productPrice >= minPrice && productPrice <= maxPrice
+
+        return validate
+    })
+
+    if (category && category != '') {
+        productsFilteredToShow = productsFilteredToShow.filter((product) => {
+            return product.category.data?.id === category.id
+        })
+    }
+
+    productsFiltered.value = productsFilteredToShow
+}
 
 const getProducts = async (newPage: number = 1) => {
     isLoading.value = true
@@ -133,14 +163,16 @@ const getCategories = async (newPage: number = 1) => {
     isLoading.value = false
 }
 
-const filterProducts = (category) => {
-    productsFiltered.value = products.value.filter((product) => {
-        return product.category.data?.id === category.id
-    })
+const filterByCategory = (category) => {
+    categoryFiltered.value = category
+    filterProducts()
 }
 
 const setDefaultProducts = () => {
-    productsFiltered.value = products.value
+    categoryFiltered.value = null
+    priceFilterMax.value = ''
+    priceFilterMin.value = ''
+    productsFiltered.value = [...products.value]
 }
 
 onMounted(() => {

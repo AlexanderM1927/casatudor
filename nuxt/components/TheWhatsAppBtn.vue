@@ -1,11 +1,16 @@
 <template>
     <div class="btn-whatsapp">
-        <a href="https://wa.me/573164510766" target="_blank">
+        <a :href="`https://wa.me/${data.whatsappPhone}`" target="_blank">
             <Icon name="logos:whatsapp-icon" />
         </a>
     </div>
 </template>
-<script>
+<script setup>
+const props = defineProps({
+    data: {
+        required: true
+    }
+})
 </script>
 
 <style>

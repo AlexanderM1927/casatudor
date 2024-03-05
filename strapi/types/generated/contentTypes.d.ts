@@ -880,6 +880,41 @@ export interface ApiContentContent extends Schema.CollectionType {
   };
 }
 
+export interface ApiFooterFooter extends Schema.CollectionType {
+  collectionName: 'footers';
+  info: {
+    singularName: 'footer';
+    pluralName: 'footers';
+    displayName: 'Footer';
+  };
+  options: {
+    draftAndPublish: true;
+  };
+  attributes: {
+    facebookUrl: Attribute.String;
+    instagramUrl: Attribute.String;
+    whatsappPhone: Attribute.String;
+    title: Attribute.String;
+    description: Attribute.Text;
+    urls: Attribute.JSON;
+    createdAt: Attribute.DateTime;
+    updatedAt: Attribute.DateTime;
+    publishedAt: Attribute.DateTime;
+    createdBy: Attribute.Relation<
+      'api::footer.footer',
+      'oneToOne',
+      'admin::user'
+    > &
+      Attribute.Private;
+    updatedBy: Attribute.Relation<
+      'api::footer.footer',
+      'oneToOne',
+      'admin::user'
+    > &
+      Attribute.Private;
+  };
+}
+
 export interface ApiOrderOrder extends Schema.CollectionType {
   collectionName: 'orders';
   info: {
@@ -1075,6 +1110,7 @@ declare module '@strapi/types' {
       'api::cart.cart': ApiCartCart;
       'api::category.category': ApiCategoryCategory;
       'api::content.content': ApiContentContent;
+      'api::footer.footer': ApiFooterFooter;
       'api::order.order': ApiOrderOrder;
       'api::page.page': ApiPagePage;
       'api::post.post': ApiPostPost;

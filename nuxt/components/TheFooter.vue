@@ -1,40 +1,39 @@
 <template>
     <div class="footer">
         <div class="footer__column">
-            <h4 class="text-centered">CasaTudor</h4>
-            <p>Lorem ipsum dolor sit, amet consectetur adipisicing elit. Inventore totam excepturi, dicta voluptates dignissimos enim accusantium sequi mollitia corporis ab in sit quia nesciunt ipsam commodi voluptas iusto, nihil nisi?</p>
+            <h4 class="text-centered">{{ data.title }}</h4>
+            <p style="white-space: pre-line;">{{ data.description }}</p>
         </div>
         <div class="footer__column text-centered">
-            <h4>Enlaces de interes</h4>
+            <h4>Links</h4>
             <ul class="footer__links">
-                <li>
-                    <a href="">Quienes somos?</a>
-                </li>
-                <li>
-                    <a href="">Tienda</a>
-                </li>
-                <li>
-                    <a href="">Login</a>
+                <li v-for="(url, index) in data.urls" :key="index">
+                    <a :href="url.url">{{ url.title }}</a>
                 </li>
             </ul>
         </div>
         <div class="footer__column">
             <h4 class="text-centered">Redes sociales</h4>
             <div class="footer__social-media">
-                <a href="https://wa.me/573164510766" target="_blank">
+                <a :href="`https://wa.me/${data.whatsappPhone}`" target="_blank">
                     <Icon name="mdi:whatsapp" />
                 </a>
-                <a href="https://wa.me/573164510766" target="_blank">
+                <a :href="data.facebookUrl" target="_blank">
                     <Icon name="mdi:facebook" />
                 </a>
-                <a href="https://wa.me/573164510766" target="_blank">
+                <a :href="data.instagramUrl" target="_blank">
                     <Icon name="mdi:instagram" />
                 </a>
             </div>
         </div>
     </div>
 </template>
-<script>
+<script setup>
+const props = defineProps({
+    data: {
+        type: Object
+    }
+})
 </script>
 
 <style lang="scss" scoped>

@@ -60,7 +60,7 @@ const closeCart = (() => {
 </script>
 
 <style lang="scss" scoped>
-@import "../styles/_breakpoints.scss";
+@import "@/styles/_breakpoints.scss";
 #overlay {
   position: fixed; /* Sit on top of the page content */
   display: none; /* Hidden by default */

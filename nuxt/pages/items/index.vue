@@ -47,8 +47,8 @@
     </div>
 </template>
 <script setup lang="ts">
-import ProductService from '../../services/ProductService';
-import { useImageFromStrapi } from '../../composables/useImageFromStrapi'
+import ProductService from '@/services/ProductService';
+import { useImageFromStrapi } from '@/composables/useImageFromStrapi'
 
 const productService = new ProductService(useRuntimeConfig())
 
@@ -90,8 +90,8 @@ onMounted(() => {
 })
 </script>
 <style lang="scss" scoped>
-@import "../styles/_colors.scss";
-@import "../styles/_breakpoints.scss";
+@import "@/styles/_colors.scss";
+@import "@/styles/_breakpoints.scss";
 .store {
     display: flex;
     width: 100%;

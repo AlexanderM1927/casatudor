@@ -5,7 +5,7 @@
     </div>
 </template>
 <script setup lang="ts">
-import SubPageService from '../../services/SubPageService';
+import SubPageService from '@/services/SubPageService';
 const route = useRoute()
 
 const isLoading: Ref<Boolean> = ref(true);

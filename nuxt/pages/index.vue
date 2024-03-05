@@ -24,10 +24,10 @@
     </div>
 </template>
 <script setup lang="ts">
-import PostService from '../services/PostService';
-import { useBreakpoints } from '../composables/useBreakpoints'
-import { useImageFromStrapi } from '../composables/useImageFromStrapi'
-import ContentService from '../services/ContentService'
+import PostService from '@/services/PostService';
+import { useBreakpoints } from '@/composables/useBreakpoints'
+import { useImageFromStrapi } from '@/composables/useImageFromStrapi'
+import ContentService from '@/services/ContentService'
 
 const { type } = useBreakpoints()
 
@@ -71,7 +71,7 @@ onMounted(() => {
 </script>
 
 <style lang="scss" scoped>
-@import "../styles/_breakpoints.scss";
+@import "@/styles/_breakpoints.scss";
 .container-index {
     background: url('img/bgjpg.jpg');
     background-size: cover;

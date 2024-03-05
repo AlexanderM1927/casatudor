@@ -5,7 +5,7 @@
     </div>
 </template>
 <script setup lang="ts">
-import PageService from '../../services/PageService';
+import PageService from '@/services/PageService';
 const route = useRoute()
 
 const isLoading: Ref<Boolean> = ref(true);

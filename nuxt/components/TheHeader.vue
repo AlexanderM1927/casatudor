@@ -123,8 +123,8 @@
 </template>
 
 <script setup lang="ts">
-import PageService from '~/services/PageService';
-import { useBreakpoints } from '../composables/useBreakpoints'
+import PageService from '@/services/PageService';
+import { useBreakpoints } from '@/composables/useBreakpoints'
 const route = useRoute()
 
 const { type } = useBreakpoints()

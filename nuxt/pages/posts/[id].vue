@@ -8,8 +8,8 @@
     </div>
 </template>
 <script setup lang="ts">
-import PostService from '../../services/PostService';
-import { useImageFromStrapi } from '../../composables/useImageFromStrapi'
+import PostService from '@/services/PostService';
+import { useImageFromStrapi } from '@/composables/useImageFromStrapi'
 
 const route = useRoute()
 

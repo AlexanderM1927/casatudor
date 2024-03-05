@@ -1,13 +1,40 @@
 <template>
     <div v-if="!isLoading" class="container custom-container">
         <h2>Store</h2>
-        <div class="row">
-            <Product 
-                v-for="(product, index) in products"
-                :product="product"
-                :childClass="`col-md-3 col-xs-12`"
-                :key="index"
-            ></Product>
+        <div class="store">
+            <div class="store__filters">
+                <h4>Categories</h4>
+                <ul>
+                    <li>Cat 1</li>
+                    <li>Cat 1</li>
+                    <li>Cat 1</li>
+                    <li>Cat 1</li>
+                </ul>
+                <h4>Filter by price</h4>
+                <div class="store__filters-price">
+                    <input 
+                        class="form-control"
+                        type="text"
+                        v-model="priceFilterMin"
+                    >
+                    <span>-</span>
+                    <input 
+                        class="form-control"
+                        type="text"
+                        v-model="priceFilterMax"
+                    > 
+                </div> 
+            </div>
+            <div class="store__products">
+                <div class="row">
+                    <Product 
+                        v-for="(product, index) in products"
+                        :product="product"
+                        :childClass="`col-md-4 col-xs-12`"
+                        :key="index"
+                    ></Product>
+                </div>
+            </div>
         </div>
         <div class="row">
             <Paginator 
@@ -26,6 +53,7 @@ const productService = new ProductService(useRuntimeConfig())
 const isLoading: Ref<Boolean> = ref(true);
 
 const products: Ref<[]> = ref([])
+const priceFilter: Ref<number> = ref(50000)
 
 const paginator: Ref<Paginator> = ref({
     currentPage: 1,
@@ -59,3 +87,28 @@ onMounted(() => {
     getProducts()
 })
 </script>
+<style lang="scss" scoped>
+@import "../styles/_colors.scss";
+@import "../styles/_breakpoints.scss";
+.store {
+    display: flex;
+    width: 100%;
+    justify-content: space-between;
+}
+
+.store__filters {
+    width: 30rem;
+}
+
+.store__products {
+    width: 100%;
+}
+
+.store__filters-price {
+    display: flex;
+}
+
+.store__filters-price input{
+    width: 6rem;
+}
+</style>

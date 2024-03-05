@@ -8,20 +8,20 @@
             <h4>Links</h4>
             <ul class="footer__links">
                 <li v-for="(url, index) in data.urls" :key="index">
-                    <a :href="url.url">{{ url.title }}</a>
+                    <a :title="url.title" :href="url.url">{{ url.title }}</a>
                 </li>
             </ul>
         </div>
         <div class="footer__column">
             <h4 class="text-centered">Redes sociales</h4>
             <div class="footer__social-media">
-                <a :href="`https://wa.me/${data.whatsappPhone}`" target="_blank">
+                <a title="Whatsapp" :href="`https://wa.me/${data.whatsappPhone}`" target="_blank">
                     <Icon name="mdi:whatsapp" />
                 </a>
-                <a :href="data.facebookUrl" target="_blank">
+                <a title="Facebook" :href="data.facebookUrl" target="_blank">
                     <Icon name="mdi:facebook" />
                 </a>
-                <a :href="data.instagramUrl" target="_blank">
+                <a title="Instagram" :href="data.instagramUrl" target="_blank">
                     <Icon name="mdi:instagram" />
                 </a>
             </div>

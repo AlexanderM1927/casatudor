@@ -3,8 +3,8 @@
         <div class="card-body cart-item">
             <h5 class="card-title">{{ product.name }}</h5>
             <p>Quantity: {{ product.quantity }}</p>
-            <a class="add-cart-btn btn btn-danger" @click="removeFromCart(product)">
-                Remove
+            <a title="Remover del carrito" class="add-cart-btn btn btn-danger" @click="removeFromCart(product)">
+                Quitar
             </a>
         </div>
     </div>

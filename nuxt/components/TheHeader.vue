@@ -19,33 +19,38 @@
                 <div class="company-name">CASA TUDOR</div>
                 <ul class="menu-items">
                     <li>
-                        <NuxtLink 
+                        <NuxtLink
+                            title="Inicio" 
                             class="menu-items-anchor anchor anchor-opacity anchor-underline anchor-black" 
                             to="/"
                         >Inicio</NuxtLink>
                     </li>
                     <li>
                         <NuxtLink 
+                            title="Publicaciones" 
                             class="menu-items-anchor anchor anchor-opacity anchor-underline anchor-black" 
                             to="/posts"
                         >Publicaciones</NuxtLink>
                     </li>
                     <li>
                         <NuxtLink 
+                            title="Tienda" 
                             class="menu-items-anchor anchor anchor-opacity anchor-underline anchor-black" 
                             to="/items"
                         >Tienda</NuxtLink>
                     </li>
                     <li class="subnav" v-for="(page, index) in pages" :key="index">
                         <NuxtLink 
+                            :title="page.urlTitle" 
                             class="menu-items-anchor anchor anchor-opacity anchor-underline anchor-black" 
                             :to="`/pages/${page.urlId}`"
                         >{{ page.urlTitle }}</NuxtLink>
                         <div class="subnav-content" v-if="page.subpages">
                             <NuxtLink 
-                                v-for="(subpage, index) in page.subpages"
+                                v-for="(subpage, index) in page.subpages.data"
                                 class="menu-items-anchor anchor anchor-opacity anchor-underline anchor-black" 
                                 :to="`/subpages/${subpage.urlId}`"
+                                :title="subpage.urlTitle" 
                             >
                                 {{ subpage.urlTitle }}
                             </NuxtLink>
@@ -55,6 +60,7 @@
                         v-if="!user.logged"
                     >
                         <NuxtLink
+                            title="Login" 
                             class="menu-items-anchor anchor anchor-opacity anchor-underline anchor-black" 
                             to="/login"
                         >Login</NuxtLink>
@@ -63,14 +69,16 @@
                         v-if="user.logged"
                     >
                         <NuxtLink
+                            title="Mis Pedidos" 
                             class="menu-items-anchor anchor anchor-opacity anchor-underline anchor-black" 
                             to="/orders"
-                        >Pedidos</NuxtLink>
+                        >Mis Pedidos</NuxtLink>
                     </li>
                     <li
                         v-if="user.logged"
                     >
                         <a
+                            title="Logout"
                             class="menu-items-anchor anchor anchor-opacity anchor-underline anchor-black" 
                             @click="logout"
                             href="#"
@@ -92,29 +100,58 @@
                 </div>
             </div>
             <ul class="items">
-                <li><NuxtLink class="anchor anchor-black" to="/">Inicio</NuxtLink></li>
-                <li><NuxtLink class="anchor anchor-black" to="/posts">Publicaciones</NuxtLink></li>
-                <li><NuxtLink class="anchor anchor-black" to="/items">Tienda</NuxtLink></li>
+                <li><NuxtLink title="Inicio" class="anchor anchor-black" to="/">Inicio</NuxtLink></li>
+                <li><NuxtLink title="Publicaciones" class="anchor anchor-black" to="/posts">Publicaciones</NuxtLink></li>
+                <li><NuxtLink title="Tienda" class="anchor anchor-black" to="/items">Tienda</NuxtLink></li>
                 <li v-for="(page, index) in pages" :key="index">
-                    <NuxtLink 
+                    <NuxtLink
                         class="anchor anchor-black" 
                         :to="`/pages/${page.urlId}`"
-                    >{{ page.urlTitle }}</NuxtLink>
+                        :title="page.urlTitle"
+                    >
+                        {{ page.urlTitle }}
+                    </NuxtLink>
+                    <ul v-if="page.subpages">
+                        <li
+                            v-for="(subpage, index) in page.subpages.data"
+                        >
+                            <NuxtLink 
+                                class="anchor anchor-black" 
+                                :to="`/subpages/${subpage.urlId}`"
+                                :title="subpage.urlTitle" 
+                            >
+                                {{ subpage.urlTitle }}
+                            </NuxtLink>
+                        </li>
+                    </ul>
                 </li>
                 <li
                     v-if="!user.logged"
                 >
-                    <NuxtLink class="anchor anchor-black" to="/login">Login</NuxtLink>
+                    <NuxtLink 
+                        class="anchor anchor-black" 
+                        to="/login"
+                        title="Login"
+                    >Login</NuxtLink>
                 </li>
                 <li
                     v-if="user.logged"
                 >
-                    <NuxtLink class="anchor anchor-black" to="/orders">Pedidos</NuxtLink>
+                    <NuxtLink 
+                        class="anchor anchor-black" 
+                        to="/orders"
+                        title="Mis Pedidos"
+                    >Mis Pedidos</NuxtLink>
                 </li>
                 <li
                     v-if="user.logged"
                 >
-                    <a class="anchor anchor-black" @click="logout" href="#">Logout</a>
+                    <a 
+                        title="Logout" 
+                        class="anchor anchor-black" 
+                        @click="logout" 
+                        href="#"
+                    >Logout</a>
                 </li>
             </ul>
         </div>
@@ -155,7 +192,7 @@ const getPages = async () => {
             id: id,
         }
         if (attributes.subpages && attributes.subpages.data.length > 0) {
-            page.subpages = attributes.subpages.data.map(({ id, attributes }: { id: number, attributes: any }) => {
+            page.subpages.data = attributes.subpages.data.map(({ id, attributes }: { id: number, attributes: any }) => {
                 return {
                     ...attributes,
                     id: id

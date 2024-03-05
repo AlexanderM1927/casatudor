@@ -5,10 +5,10 @@
             <h5 class="card-title">{{ product.name }}</h5>
             <p>${{ formatMiles(product.price) }}</p>
             <div class="product__btns">
-                <a class="add-cart-btn btn btn-outline-primary" @click="addToCart(product)">
+                <a title="Agregar al carrito" class="add-cart-btn btn btn-outline-primary" @click="addToCart(product)">
                     <Icon name="material-symbols:add-shopping-cart" />
                 </a>
-                <a class="add-cart-btn btn btn-outline-danger" @click="addToCart(product)">
+                <a title="Agregar a favoritos" class="add-cart-btn btn btn-outline-danger" @click="addToCart(product)">
                     <Icon name="material-symbols:favorite" />
                 </a>
             </div>

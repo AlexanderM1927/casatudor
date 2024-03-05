@@ -10,10 +10,10 @@
                     :class="`page-item ${currentPage == 1 ? 'disabled' : ''}`"
                     @click="changePage(`${currentPage == 1 ? '#' : (data.url + '' + (currentPage - 1))}`)"
                 >
-                    <a class="page-link">Previous</a>
+                    <a title="Previous" class="page-link">Previous</a>
                 </li>
                 <li class="page-item" v-if="currentPage > 3">
-                    <a class="page-link" @click="changePage(data.url + '1')">1</a>
+                    <a title="1" class="page-link" @click="changePage(data.url + '1')">1</a>
                 </li>
                 <li v-if="currentPage > 4"><span>...</span></li>
                 <li 
@@ -25,6 +25,7 @@
                         class="page-link" 
                         v-if="currentPage != n"
                         @click="changePage(data.url + '' + n)"
+                        :title="n"
                     >
                         {{ n }}
                     </a>
@@ -32,11 +33,16 @@
                 </li>
                 <li v-if="currentPage < data.lastPage - 3"><span>...</span></li>
                 <li class="page-item" v-if="currentPage < data.lastPage - 2">
-                    <a class="page-link" @click="changePage(data.url + '' + data.lastPage)">{{ data.lastPage }}</a>
+                    <a
+                        class="page-link"
+                        @click="changePage(data.url + '' + data.lastPage)"
+                        :title="data.lastPage"
+                    >{{ data.lastPage }}</a>
                 </li>
                 
                 <li :class="`page-item ${currentPage == data.lastPage ? 'disabled' : ''}`">
                     <a 
+                        title="Next"
                         class="page-link"
                         @click="changePage(`${currentPage == data.lastPage ? '#' : (data.url + '' + (currentPage + 1))}`)"
                     >Next</a>

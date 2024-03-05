@@ -4,5 +4,7 @@ interface Page {
     urlTitle: string,
     title: string,
     content: string,
-    subpages?: []
+    subpages?: {
+        data: []
+    }
 }

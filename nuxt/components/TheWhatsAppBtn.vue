@@ -1,6 +1,10 @@
 <template>
     <div class="btn-whatsapp">
-        <a :href="`https://wa.me/${data.whatsappPhone}`" target="_blank">
+        <a
+            :href="`https://wa.me/${data.whatsappPhone}`"
+            target="_blank"
+            title="WhatsApp"
+        >
             <Icon name="logos:whatsapp-icon" />
         </a>
     </div>

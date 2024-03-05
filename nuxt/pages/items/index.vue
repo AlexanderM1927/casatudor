@@ -14,12 +14,14 @@
                 <div class="store__filters-price">
                     <input 
                         class="form-control"
+                        placeholder="Min"
                         type="text"
                         v-model="priceFilterMin"
                     >
                     <span>-</span>
                     <input 
                         class="form-control"
+                        placeholder="Max"
                         type="text"
                         v-model="priceFilterMax"
                     > 
@@ -96,6 +98,15 @@ onMounted(() => {
     justify-content: space-between;
 }
 
+@media only screen and (max-width: $grid-breakpoints-sm) {
+    .store {
+        flex-direction: column;
+    }
+    .store__filters {
+        margin-bottom: 3rem;
+    }
+}
+
 .store__filters {
     width: 30rem;
 }
@@ -107,6 +118,7 @@ onMounted(() => {
 .store__filters-price {
     display: flex;
     align-items: center;
+    gap: 1rem;
 }
 
 .store__filters-price input{

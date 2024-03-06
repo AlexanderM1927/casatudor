@@ -18,6 +18,7 @@ export default defineNuxtConfig({
     "~/node_modules/bootstrap/dist/css/bootstrap.min.css"
   ],
   modules: [
+    '@nuxt/test-utils/module',
     '@pinia/nuxt',
     'nuxt-icon'
   ],

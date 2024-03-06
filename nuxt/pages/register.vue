@@ -26,7 +26,7 @@
                 <label for="exampleInputPassword1" required class="form-label">Clave</label>
                 <input v-model="password" type="password" class="form-control" id="exampleInputPassword1">
             </div>
-            <button type="submit" @click="submit" class="btn btn-success">Registrarme</button>
+            <button type="submit" @click="submit" class="btn ct-btn-success">Registrarme</button>
         </form>
         <Notification :type="notificationType" :toast-id="'user-created'">
             {{ notificationMessage }}

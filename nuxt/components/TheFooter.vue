@@ -49,7 +49,7 @@ const props = defineProps({
     justify-content: center;
     gap: 1rem;
     margin-top: 1rem;
-    background: $darkBlue;
+    background: $softBlue;
 }
 
 .footer__column {

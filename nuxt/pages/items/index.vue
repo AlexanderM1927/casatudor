@@ -304,7 +304,7 @@ onMounted(() => {
 }
 
 .store__filters {
-    background-color: $darkBlue;
+    background-color: $softBlue;
     padding: 2rem;
     border-radius: 1rem;
     color: white;

@@ -4,6 +4,7 @@ html {
 }
 
 @import "@/styles/_breakpoints.scss";
+@import "@/styles/_colors.scss";
 
 @font-face {
     font-family: 'contra-slab-bold';
@@ -54,4 +55,9 @@ blockquote {
     border-left: 0.3rem solid rgb(234, 234, 239);
     font-style: italic;
     padding: .5rem 1.2rem;
+}
+
+.ct-btn-success {
+    background: $softBlue !important;
+    --bs-btn-color: white !important;
 }

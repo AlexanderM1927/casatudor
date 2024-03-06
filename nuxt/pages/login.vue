@@ -10,7 +10,7 @@
                 <label for="exampleInputPassword1" class="form-label">Clave</label>
                 <input v-model="password" type="password" class="form-control" id="exampleInputPassword1">
             </div>
-            <button @click="login" type="submit" class="btn btn-success">Login</button>
+            <button @click="login" type="submit" class="btn ct-btn-success">Login</button>
             <br>
             No tienes una cuenta? <NuxtLink to="/register">Registrarme</NuxtLink>
         </form>

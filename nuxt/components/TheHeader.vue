@@ -3,7 +3,7 @@
         <template v-if="type === 'xs'">
             <div 
                 id="header-mobile" 
-                :class="`header-mobile ${route.name === 'index' ? 'header-transparent' : 'header-white'}`"
+                :class="`header-mobile ${route.name === 'index' ? 'header-transparent' : 'header-secondary'}`"
             >
                 <div id="burger-menu-btn" class="burger-menu-btn">
                     <Icon name="iconamoon:menu-burger-horizontal-fill" @click="openBurger" />
@@ -15,40 +15,40 @@
             </div>
         </template>
         <template v-else>
-            <div id="header" :class="`header ${route.name === 'index' ? 'header-transparent' : 'header-white'}`">
+            <div id="header" :class="`header ${route.name === 'index' ? 'header-transparent' : 'header-secondary'}`">
                 <div class="company-name">CASA TUDOR</div>
                 <ul class="menu-items">
                     <li>
                         <NuxtLink
                             title="Inicio" 
-                            class="menu-items-anchor anchor anchor-opacity anchor-underline anchor-black" 
+                            class="menu-items-anchor anchor anchor-opacity anchor-underline anchor-primary" 
                             to="/"
                         >Inicio</NuxtLink>
                     </li>
                     <li>
                         <NuxtLink 
                             title="Publicaciones" 
-                            class="menu-items-anchor anchor anchor-opacity anchor-underline anchor-black" 
+                            class="menu-items-anchor anchor anchor-opacity anchor-underline anchor-primary" 
                             to="/posts"
                         >Publicaciones</NuxtLink>
                     </li>
                     <li>
                         <NuxtLink 
                             title="Tienda" 
-                            class="menu-items-anchor anchor anchor-opacity anchor-underline anchor-black" 
+                            class="menu-items-anchor anchor anchor-opacity anchor-underline anchor-primary" 
                             to="/items"
                         >Tienda</NuxtLink>
                     </li>
                     <li class="subnav" v-for="(page, index) in pages" :key="index">
                         <NuxtLink 
                             :title="page.urlTitle" 
-                            class="menu-items-anchor anchor anchor-opacity anchor-underline anchor-black" 
+                            class="menu-items-anchor anchor anchor-opacity anchor-underline anchor-primary" 
                             :to="`/pages/${page.urlId}`"
                         >{{ page.urlTitle }}</NuxtLink>
                         <div class="subnav-content" v-if="page.subpages">
                             <NuxtLink 
                                 v-for="(subpage, index) in page.subpages.data"
-                                class="menu-items-anchor anchor anchor-opacity anchor-underline anchor-black" 
+                                class="menu-items-anchor anchor anchor-opacity anchor-underline anchor-primary" 
                                 :to="`/subpages/${subpage.urlId}`"
                                 :title="subpage.urlTitle" 
                             >
@@ -61,7 +61,7 @@
                     >
                         <NuxtLink
                             title="Login" 
-                            class="menu-items-anchor anchor anchor-opacity anchor-underline anchor-black" 
+                            class="menu-items-anchor anchor anchor-opacity anchor-underline anchor-primary" 
                             to="/login"
                         >Login</NuxtLink>
                     </li>
@@ -70,7 +70,7 @@
                     >
                         <NuxtLink
                             title="Mis Pedidos" 
-                            class="menu-items-anchor anchor anchor-opacity anchor-underline anchor-black" 
+                            class="menu-items-anchor anchor anchor-opacity anchor-underline anchor-primary" 
                             to="/orders"
                         >Mis Pedidos</NuxtLink>
                     </li>
@@ -79,7 +79,7 @@
                     >
                         <a
                             title="Logout"
-                            class="menu-items-anchor anchor anchor-opacity anchor-underline anchor-black" 
+                            class="menu-items-anchor anchor anchor-opacity anchor-underline anchor-primary" 
                             @click="logout"
                             href="#"
                         >Logout</a>
@@ -100,12 +100,12 @@
                 </div>
             </div>
             <ul class="items">
-                <li><NuxtLink title="Inicio" class="anchor anchor-black" to="/">Inicio</NuxtLink></li>
-                <li><NuxtLink title="Publicaciones" class="anchor anchor-black" to="/posts">Publicaciones</NuxtLink></li>
-                <li><NuxtLink title="Tienda" class="anchor anchor-black" to="/items">Tienda</NuxtLink></li>
+                <li><NuxtLink title="Inicio" class="anchor anchor-third" to="/">Inicio</NuxtLink></li>
+                <li><NuxtLink title="Publicaciones" class="anchor anchor-third" to="/posts">Publicaciones</NuxtLink></li>
+                <li><NuxtLink title="Tienda" class="anchor anchor-third" to="/items">Tienda</NuxtLink></li>
                 <li v-for="(page, index) in pages" :key="index">
                     <NuxtLink
-                        class="anchor anchor-black" 
+                        class="anchor anchor-third" 
                         :to="`/pages/${page.urlId}`"
                         :title="page.urlTitle"
                     >
@@ -116,7 +116,7 @@
                             v-for="(subpage, index) in page.subpages.data"
                         >
                             <NuxtLink 
-                                class="anchor anchor-black" 
+                                class="anchor anchor-third" 
                                 :to="`/subpages/${subpage.urlId}`"
                                 :title="subpage.urlTitle" 
                             >
@@ -129,7 +129,7 @@
                     v-if="!user.logged"
                 >
                     <NuxtLink 
-                        class="anchor anchor-black" 
+                        class="anchor anchor-third" 
                         to="/login"
                         title="Login"
                     >Login</NuxtLink>
@@ -138,7 +138,7 @@
                     v-if="user.logged"
                 >
                     <NuxtLink 
-                        class="anchor anchor-black" 
+                        class="anchor anchor-third" 
                         to="/orders"
                         title="Mis Pedidos"
                     >Mis Pedidos</NuxtLink>
@@ -148,7 +148,7 @@
                 >
                     <a 
                         title="Logout" 
-                        class="anchor anchor-black" 
+                        class="anchor anchor-third" 
                         @click="logout" 
                         href="#"
                     >Logout</a>
@@ -242,9 +242,9 @@ const setMenuItemsColor = ((color: String) => {
     const menuItems = document.getElementsByClassName('menu-items-anchor')
     for (let i = 0; i < menuItems.length; i++) {
         if (color === 'white') {
-            menuItems[i].classList.replace('anchor-black', 'anchor-white') 
+            menuItems[i].classList.replace('anchor-primary', 'anchor-secondary') 
         } else {
-            menuItems[i].classList.replace('anchor-white', 'anchor-black') 
+            menuItems[i].classList.replace('anchor-secondary', 'anchor-primary') 
         }
     }
 })
@@ -253,14 +253,14 @@ const burgerMenuBtn = document.getElementById('burger-menu-btn')
 
 const changeHeaderPerWhite = (() => {
     if (burgerMenuBtn) burgerMenuBtn.style.color = 'black'
-    document.getElementById('header')?.classList.replace('header-transparent', 'header-white')
-    document.getElementById('header-mobile')?.classList.replace('header-transparent', 'header-white')
+    document.getElementById('header')?.classList.replace('header-transparent', 'header-secondary')
+    document.getElementById('header-mobile')?.classList.replace('header-transparent', 'header-secondary')
     setMenuItemsColor('black')
 })
 const changeHeaderPerDefault = (() => {
     if (burgerMenuBtn) burgerMenuBtn.style.color = 'white'
-    document.getElementById('header')?.classList.replace('header-white', 'header-transparent')
-    document.getElementById('header-mobile')?.classList.replace('header-white', 'header-transparent')
+    document.getElementById('header')?.classList.replace('header-secondary', 'header-transparent')
+    document.getElementById('header-mobile')?.classList.replace('header-secondary', 'header-transparent')
     setMenuItemsColor('white')
 })
 
@@ -304,11 +304,12 @@ onUnmounted(() => {
 </script>
 
 <style lang="scss">
+@import "@/styles/_colors.scss";
 
-.header-white {
-    background: white;
+.header-secondary {
+    background: $softBlue;
     border-bottom: 1px solid rgba(60, 60, 60, .12);
-    color: black;
+    color: white;
 }
 
 .header-transparent {
@@ -368,20 +369,28 @@ onUnmounted(() => {
     opacity: 1;
 }
 
-.anchor-white {
+.anchor-secondary {
     color: white;
 }
 
-.anchor-white:after {
+.anchor-secondary:after {
     background-color: white;
 }
 
-.anchor-black {
+.anchor-third {
     color: black;
 }
 
-.anchor-black:after {
+.anchor-third:after {
     background-color: black;
+}
+
+.anchor-primary {
+    color: white;
+}
+
+.anchor-primary:after {
+    background-color: white;
 }
 
 .anchor-underline {

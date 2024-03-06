@@ -101,6 +101,10 @@ onMounted(() => {
     overflow-y: auto;
 }
 
+.favorites-content h2 {
+    margin-bottom: 0;
+}
+
 @media only screen and (max-width: $grid-breakpoints-sm) {
     .favorites-content {
         width: 100%;

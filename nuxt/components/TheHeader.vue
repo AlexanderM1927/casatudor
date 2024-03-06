@@ -99,7 +99,7 @@
         </template>
         <div class="burger-menu" ref="burgerMenu">
             <div class="burger-menu-header">
-                <h1>Casa Tudor</h1>
+                <h1 class="subtitle">Casa Tudor</h1>
                 <div class="close-btn">
                     <Icon name="material-symbols:close" @click="closeBurger()" color="black" />
                 </div>
@@ -459,8 +459,8 @@ onUnmounted(() => {
 }
 
 .burger-menu h1 {
+    margin-bottom: 0;
     font-family: 'contra-slab-bold';
-    font-size: 3rem;
 }
 
 .burger-menu .items {

@@ -89,6 +89,10 @@ const closeCart = (() => {
     transition: visibility 0s, opacity 0.5s linear;
 }
 
+.cart-content h2 {
+    margin-bottom: 0;
+}
+
 @media only screen and (max-width: $grid-breakpoints-sm) {
     .cart-content {
         width: 100%;

@@ -61,3 +61,7 @@ blockquote {
     background: $softBlue !important;
     --bs-btn-color: white !important;
 }
+
+.subtitle {
+    font-size: calc(1.325rem + .9vw);
+}

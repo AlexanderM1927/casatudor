@@ -21,6 +21,12 @@
                         >
                             {{ category.name }}
                         </li>
+                        <li style="list-style: none;">
+                            <PaginatorSeeMore
+                                @getAction="getCategories"
+                                :data="paginatorCategories"
+                            ></PaginatorSeeMore>
+                        </li>
                     </ul>
                     <h4>Filtrar por precio</h4>
                     <div class="store__filters-price">
@@ -74,7 +80,7 @@
             <div class="row">
                 <Paginator 
                     @getAction="getProducts"
-                    :data="paginator"
+                    :data="paginatorProducts"
                 ></Paginator>
             </div>
         </template>
@@ -106,7 +112,14 @@ const categoryFiltered: Ref<any> = ref({})
 const productNameFilter: Ref<string> = ref('')
 const { debounce } = useDebounce()
 
-const paginator: Ref<Paginator> = ref({
+const paginatorProducts: Ref<Paginator> = ref({
+    currentPage: 1,
+    lastPage: 0,
+    url: '',
+    data: []
+})
+
+const paginatorCategories: Ref<Paginator> = ref({
     currentPage: 1,
     lastPage: 0,
     url: '',
@@ -160,9 +173,9 @@ const filterProducts = () => {
 }
 
 const getProducts = async (newPage: number = 1) => {
-    paginator.value.currentPage = newPage
+    paginatorProducts.value.currentPage = newPage
     isLoading.value = true
-    const { data, meta }: any = await productService.getProducts(paginator.value.currentPage)
+    const { data, meta }: any = await productService.getProducts(paginatorProducts.value.currentPage)
     products.value = data.map(({ id, attributes }: { id: number, attributes: any }) => {
         const product: Product = {
             ...attributes,
@@ -171,7 +184,7 @@ const getProducts = async (newPage: number = 1) => {
         }
         return product
     })
-    paginator.value = {
+    paginatorProducts.value = {
         currentPage: meta.pagination.page,
         lastPage: meta.pagination.pageCount,
         data: products.value,
@@ -183,7 +196,7 @@ const getProducts = async (newPage: number = 1) => {
 
 const getProductsByCategory = async (categoryId: number) => {
     isLoading.value = true
-    const { data, meta }: any = await productService.getProductsByCategory(paginator.value.currentPage, categoryId)
+    const { data, meta }: any = await productService.getProductsByCategory(paginatorProducts.value.currentPage, categoryId)
     products.value = data.map(({ id, attributes }: { id: number, attributes: any }) => {
         const product: Product = {
             ...attributes,
@@ -192,7 +205,7 @@ const getProductsByCategory = async (categoryId: number) => {
         }
         return product
     })
-    paginator.value = {
+    paginatorProducts.value = {
         currentPage: meta.pagination.page,
         lastPage: meta.pagination.pageCount,
         data: products.value,
@@ -204,7 +217,7 @@ const getProductsByCategory = async (categoryId: number) => {
 
 const getProductsByName = async (name: string) => {
     isLoading.value = true
-    const { data, meta }: any = await productService.getProductsByName(paginator.value.currentPage, name)
+    const { data, meta }: any = await productService.getProductsByName(paginatorProducts.value.currentPage, name)
     products.value = data.map(({ id, attributes }: { id: number, attributes: any }) => {
         const product: Product = {
             ...attributes,
@@ -213,7 +226,7 @@ const getProductsByName = async (name: string) => {
         }
         return product
     })
-    paginator.value = {
+    paginatorProducts.value = {
         currentPage: meta.pagination.page,
         lastPage: meta.pagination.pageCount,
         data: products.value,
@@ -226,13 +239,28 @@ const getProductsByName = async (name: string) => {
 const getCategories = async (newPage: number = 1) => {
     isLoading.value = true
     const { data, meta }: any = await categoryService.getCategories(newPage)
-    categories.value = data.map(({ id, attributes }: { id: number, attributes: any }) => {
+    const categoriesToShow = data.map(({ id, attributes }: { id: number, attributes: any }) => {
         const category: Category = {
             ...attributes,
             id: id
         }
         return category
     })
+    for (let i = 0; i < categoriesToShow.length; i++) {
+        const element = categoriesToShow[i]
+        const isOnCategories = categories.value.find((cate: Category) => {
+            return cate.id === element.id
+        })
+        if (!isOnCategories) {
+            categories.value.push(element)
+        }
+    }
+    paginatorCategories.value = {
+        currentPage: meta.pagination.page,
+        lastPage: meta.pagination.pageCount,
+        data: categories.value,
+        url: ''
+    }
 
     isLoading.value = false
 }

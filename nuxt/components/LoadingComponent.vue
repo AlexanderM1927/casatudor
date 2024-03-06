@@ -15,25 +15,30 @@ const props = defineProps({
     }
 })
 
-watch(props.isLoading, (val) => {
-    if (val === true) {
-        setTimeout(() => {
-            const overlayItem = document.getElementById("spinner-overlay-" + props.id)
-            if (overlayItem) overlayItem.style.display = "flex";
-        }, 1000)
-    } else {
-        setTimeout(() => {
-            const overlayItem = document.getElementById("spinner-overlay-" + props.id)
-            if (overlayItem) overlayItem.style.display = "none";
-        }, 1000)
-    }
-})
-
 onMounted(() => {
     setTimeout(() => {
         if (props.isLoading === true) {
             const overlayItem = document.getElementById("spinner-overlay-" + props.id)
             if (overlayItem) overlayItem.style.display = "flex";
+        } else {
+            setTimeout(() => {
+                const overlayItem = document.getElementById("spinner-overlay-" + props.id)
+                if (overlayItem) overlayItem.style.display = "none";
+            }, 1000)
+        }
+    }, 1000)
+})
+
+onUpdated(() => {
+    setTimeout(() => {
+        if (props.isLoading === true) {
+            const overlayItem = document.getElementById("spinner-overlay-" + props.id)
+            if (overlayItem) overlayItem.style.display = "flex";
+        } else {
+            setTimeout(() => {
+                const overlayItem = document.getElementById("spinner-overlay-" + props.id)
+                if (overlayItem) overlayItem.style.display = "none";
+            }, 1000)
         }
     }, 1000)
 })

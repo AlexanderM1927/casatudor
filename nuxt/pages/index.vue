@@ -34,7 +34,7 @@ const { type } = useBreakpoints()
 const title: Ref<any> = ref(null)
 const description: Ref<any> = ref(null)
 const image: Ref<any> = ref(null)
-const posts: Ref<[Post]> = ref([{}])
+const posts: Ref<[]> = ref([])
 const isLoading = ref(true)
 
 const postService = new PostService(useRuntimeConfig())

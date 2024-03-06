@@ -97,12 +97,12 @@ const categoryService = new CategoryService(useRuntimeConfig())
 
 const isLoading: Ref<Boolean> = ref(true);
 
-const products: Ref<[]> = ref([])
-const categories: Ref<[]> = ref([])
+const products: Ref<any> = ref([])
+const categories: Ref<any> = ref([])
 const priceFilterMin: Ref<string> = ref('')
 const priceFilterMax: Ref<string> = ref('')
-const productsFiltered: Ref<[]> = ref(null)
-const categoryFiltered: Ref<{}> = ref(null)
+const productsFiltered: Ref<any> = ref(null)
+const categoryFiltered: Ref<any> = ref({})
 const productNameFilter: Ref<string> = ref('')
 const { debounce } = useDebounce()
 
@@ -133,25 +133,25 @@ const filterProducts = () => {
     const category = categoryFiltered.value
     const nameFilter = productNameFilter.value
 
-    let productsFilteredToShow = products.value.filter((product) => {
+    let productsFilteredToShow = products.value.filter((product: Product) => {
         const productPrice = product.price
 
         let validate = true
-        if (minPrice != '' && maxPrice == '') validate = productPrice >= minPrice
-        else if (minPrice == '' && maxPrice != '') validate = productPrice <= maxPrice
-        else if (minPrice != '' && maxPrice != '') validate = productPrice >= minPrice && productPrice <= maxPrice
+        if (minPrice != 0 && maxPrice == 0) validate = productPrice >= minPrice
+        else if (minPrice == 0 && maxPrice != 0) validate = productPrice <= maxPrice
+        else if (minPrice != 0 && maxPrice != 0) validate = productPrice >= minPrice && productPrice <= maxPrice
 
         return validate
     })
 
     if (category && category != '') {
-        productsFilteredToShow = productsFilteredToShow.filter((product) => {
-            return product.category.data?.id === category.id
+        productsFilteredToShow = productsFilteredToShow.filter((product: Product) => {
+            return product.category?.data?.id === category.id
         })
     }
 
     if (nameFilter && nameFilter != '') {
-        productsFilteredToShow = productsFilteredToShow.filter((product) => {
+        productsFilteredToShow = productsFilteredToShow.filter((product: Product) => {
             return product.name.toLowerCase().includes(nameFilter.toLowerCase())
         })
     }
@@ -159,10 +159,8 @@ const filterProducts = () => {
     productsFiltered.value = productsFilteredToShow
 }
 
-const getProducts = async (newPage) => {
-    if (newPage) {
-        paginator.value.currentPage = newPage
-    }
+const getProducts = async (newPage: number = 1) => {
+    paginator.value.currentPage = newPage
     isLoading.value = true
     const { data, meta }: any = await productService.getProducts(paginator.value.currentPage)
     products.value = data.map(({ id, attributes }: { id: number, attributes: any }) => {
@@ -183,7 +181,7 @@ const getProducts = async (newPage) => {
     isLoading.value = false
 }
 
-const getProductsByCategory = async (categoryId) => {
+const getProductsByCategory = async (categoryId: number) => {
     isLoading.value = true
     const { data, meta }: any = await productService.getProductsByCategory(paginator.value.currentPage, categoryId)
     products.value = data.map(({ id, attributes }: { id: number, attributes: any }) => {
@@ -204,7 +202,7 @@ const getProductsByCategory = async (categoryId) => {
     isLoading.value = false
 }
 
-const getProductsByName = async (name) => {
+const getProductsByName = async (name: string) => {
     isLoading.value = true
     const { data, meta }: any = await productService.getProductsByName(paginator.value.currentPage, name)
     products.value = data.map(({ id, attributes }: { id: number, attributes: any }) => {
@@ -239,7 +237,7 @@ const getCategories = async (newPage: number = 1) => {
     isLoading.value = false
 }
 
-const filterByCategory = (category) => {
+const filterByCategory = (category: Category) => {
     categoryFiltered.value = category
     getProductsByCategory(categoryFiltered.value.id)
 }

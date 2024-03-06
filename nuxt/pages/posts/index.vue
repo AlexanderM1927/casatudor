@@ -22,7 +22,7 @@ const postService = new PostService(useRuntimeConfig())
 const isLoading: Ref<Boolean> = ref(true);
 
 const posts: Ref<[]> = ref([])
-const sliderPosts: Ref<[]> = ref([])
+const sliderPosts: Ref<any> = ref([])
 
 const paginator: Ref<Paginator> = ref({
     currentPage: 1,
@@ -50,7 +50,11 @@ const getPosts = async (newPage: number = 1) => {
         url: ''
     }
     if (posts.value.length >= 4) {
-        sliderPosts.value = posts.value.slice(0, 4)
+        const postsToShowOnSlider = posts.value.slice(0, 4)
+        for (let i = 0; i < postsToShowOnSlider.length; i++) {
+            const element = postsToShowOnSlider[i]
+            sliderPosts.value.push(element)
+        }
     }
 
     isLoading.value = false

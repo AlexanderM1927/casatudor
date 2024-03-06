@@ -42,7 +42,7 @@ const login = async (e: Event) => {
         password: password.value
     }
     try {
-        const res = await userService.login(user)
+        const res: any = await userService.login(user)
         if (res) {
             const { jwt, user } = res
             user.logged = true
@@ -56,7 +56,7 @@ const login = async (e: Event) => {
             notificationMessage.value = 'Unexpected error'
             notificationType.value = 'negative'
         }
-    } catch (error) {
+    } catch (error: any) {
         notificationMessage.value = error.response._data.error.message
         notificationType.value = 'negative'
         ToastHelper.openToast('user-login')

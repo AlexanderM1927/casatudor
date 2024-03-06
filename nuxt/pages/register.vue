@@ -66,7 +66,7 @@ const submit = async (e: Event) => {
         setTimeout(() => {
             router.push('/login')
         }, 500)
-    } catch (error) {
+    } catch (error: any) {
         if (error) {
             notificationMessage.value = error.response._data.error.message
         } else {

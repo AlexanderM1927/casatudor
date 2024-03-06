@@ -1,80 +1,96 @@
 <template>
-    <div v-if="!isLoading" class="container custom-container">
-        <h2>Tienda</h2>
-        <div class="store">
-            <div class="store__filters">
-                <h4>Categorias</h4>
-                <ul>
-                    <li 
-                        v-for="(category, index) in categories" 
-                        :key="index"
-                        :class="`store__category ${categoryFiltered?.id === category.id ? 'category-selected' : ''}`"
-                        @click="filterByCategory(category)"
-                    >
-                        {{ category.name }}
-                    </li>
-                </ul>
-                <h4>Filtrar por precio</h4>
-                <div class="store__filters-price">
-                    <input 
-                        class="form-control"
-                        placeholder="Min"
+    <div class="container custom-container">
+        <template v-if="!isLoading">
+            <h2>Tienda</h2>
+            <div class="store">
+                <div class="store__filters">
+                    <h4>Buscador</h4>
+                    <input
                         type="text"
-                        v-model="priceFilterMin"
-                    >
-                    <span>-</span>
-                    <input 
                         class="form-control"
-                        placeholder="Max"
-                        type="text"
-                        v-model="priceFilterMax"
-                    > 
-                </div> 
-                <br>
-                <button class="btn btn-danger" @click="setDefaultProducts">Quitar filtros</button>
-            </div>
-            <div class="store__products">
-                <div class="row" v-if="!productsFiltered">
-                    <Product 
-                        v-for="(product, index) in products"
-                        :product="product"
-                        :childClass="`col-md-4 col-xs-12`"
-                        :key="index"
-                    ></Product>
+                        placeholder="Producto..."
+                        v-model="productNameFilter"
+                    >
+                    <h4>Categorias</h4>
+                    <ul>
+                        <li 
+                            v-for="(category, index) in categories" 
+                            :key="index"
+                            :class="`store__category ${categoryFiltered?.id === category.id ? 'category-selected' : ''}`"
+                            @click="filterByCategory(category)"
+                        >
+                            {{ category.name }}
+                        </li>
+                    </ul>
+                    <h4>Filtrar por precio</h4>
+                    <div class="store__filters-price">
+                        <input 
+                            class="form-control"
+                            placeholder="Min"
+                            type="text"
+                            v-model="priceFilterMin"
+                        >
+                        <span>-</span>
+                        <input 
+                            class="form-control"
+                            placeholder="Max"
+                            type="text"
+                            v-model="priceFilterMax"
+                        > 
+                    </div> 
+                    <br>
+                    <button class="btn btn-danger" @click="setDefaultProducts">Quitar filtros</button>
                 </div>
-                <div class="row" v-else-if="productsFiltered.length === 0">
-                    <div class="col-12">
-                        <b>No hay productos con estos filtros</b>
+                <div class="store__products">
+                    <div class="row" v-if="!productsFiltered">
+                        <Product 
+                            v-for="(product, index) in products"
+                            :product="product"
+                            :childClass="`col-md-4 col-xs-12`"
+                            :key="index"
+                        ></Product>
                     </div>
-                    <Product 
-                        v-for="(product, index) in products"
-                        :product="product"
-                        :childClass="`col-md-4 col-xs-12`"
-                        :key="index"
-                    ></Product>
-                </div>
-                <div class="row" v-else>
-                    <Product 
-                        v-for="(product, index) in productsFiltered"
-                        :product="product"
-                        :childClass="`col-md-4 col-xs-12`"
-                        :key="index"
-                    ></Product>
+                    <div class="row" v-else-if="productsFiltered.length === 0">
+                        <div class="col-12">
+                            <b>No hay productos con estos filtros</b>
+                        </div>
+                        <Product 
+                            v-for="(product, index) in products"
+                            :product="product"
+                            :childClass="`col-md-4 col-xs-12`"
+                            :key="index"
+                        ></Product>
+                    </div>
+                    <div class="row" v-else>
+                        <Product 
+                            v-for="(product, index) in productsFiltered"
+                            :product="product"
+                            :childClass="`col-md-4 col-xs-12`"
+                            :key="index"
+                        ></Product>
+                    </div>
                 </div>
             </div>
-        </div>
-        <div class="row">
-            <Paginator 
-                @getAction="getProducts"
-                :data="paginator"
-            ></Paginator>
-        </div>
+            <div class="row">
+                <Paginator 
+                    @getAction="getProducts"
+                    :data="paginator"
+                ></Paginator>
+            </div>
+        </template>
+        <template v-else>
+            <LoadingComponent
+                :isLoading="isLoading"
+                :id="1"
+            ></LoadingComponent>
+        </template>
     </div>
 </template>
 <script setup lang="ts">
 import ProductService from '@/services/ProductService';
 import CategoryService from '@/services/CategoryService';
 import { useImageFromStrapi } from '@/composables/useImageFromStrapi'
+import { useDebounce } from '@/composables/useDebounce'
 
 const productService = new ProductService(useRuntimeConfig())
 const categoryService = new CategoryService(useRuntimeConfig())
@@ -87,6 +103,8 @@ const priceFilterMin: Ref<string> = ref('')
 const priceFilterMax: Ref<string> = ref('')
 const productsFiltered: Ref<[]> = ref(null)
 const categoryFiltered: Ref<{}> = ref(null)
+const productNameFilter: Ref<string> = ref('')
+const { debounce } = useDebounce()
 
 const paginator: Ref<Paginator> = ref({
     currentPage: 1,
@@ -103,10 +121,17 @@ watch(priceFilterMax, (val) => {
     filterProducts()
 })
 
+watch(productNameFilter, (val) => {
+    debounce(() => {
+        getProductsByName(val)
+    }, 3000)
+})
+
 const filterProducts = () => {
     const minPrice = priceFilterMin.value ? parseFloat(priceFilterMin.value) : 0
     const maxPrice = priceFilterMax.value ? parseFloat(priceFilterMax.value) : 0
     const category = categoryFiltered.value
+    const nameFilter = productNameFilter.value
 
     let productsFilteredToShow = products.value.filter((product) => {
         const productPrice = product.price
@@ -123,6 +148,14 @@ const filterProducts = () => {
         productsFilteredToShow = productsFilteredToShow.filter((product) => {
             return product.category.data?.id === category.id
         })
+        console.log('entro al filtro de category')
+    }
+
+    if (nameFilter && nameFilter != '') {
+        productsFilteredToShow = productsFilteredToShow.filter((product) => {
+            return product.name.toLowerCase().includes(nameFilter.toLowerCase())
+        })
+        console.log('entro al filtro de name')
     }
 
     productsFiltered.value = productsFilteredToShow
@@ -173,6 +206,27 @@ const getProductsByCategory = async (categoryId) => {
     isLoading.value = false
 }
 
+const getProductsByName = async (name) => {
+    isLoading.value = true
+    const { data, meta }: any = await productService.getProductsByName(paginator.value.currentPage, name)
+    products.value = data.map(({ id, attributes }: { id: number, attributes: any }) => {
+        const product: Product = {
+            ...attributes,
+            image: useImageFromStrapi(attributes.image.data.attributes.url),
+            id: id
+        }
+        return product
+    })
+    paginator.value = {
+        currentPage: meta.pagination.page,
+        lastPage: meta.pagination.pageCount,
+        data: products.value,
+        url: ''
+    }
+    filterProducts()
+    isLoading.value = false
+}
+
 const getCategories = async (newPage: number = 1) => {
     isLoading.value = true
     const { data, meta }: any = await categoryService.getCategories(newPage)
@@ -197,6 +251,7 @@ const setDefaultProducts = () => {
     priceFilterMax.value = ''
     priceFilterMin.value = ''
     productsFiltered.value = null
+    productNameFilter.value = ''
     getProducts()
 }
 

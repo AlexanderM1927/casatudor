@@ -2,7 +2,7 @@
     <div :class="`card ${childClass}`">
         <div class="card-body cart-item">
             <h5 class="card-title">{{ product.name }}</h5>
-            <p>Quantity: {{ product.quantity }}</p>
+            <p>Cantidad: {{ product.quantity }}</p>
             <a title="Remover del carrito" class="add-cart-btn btn btn-danger" @click="removeFromCart(product)">
                 Quitar
             </a>

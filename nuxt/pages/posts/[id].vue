@@ -4,7 +4,7 @@
         <b style="white-space: pre-line;">{{ post.summary }}</b>
         <hr>
         <p style="white-space: pre-line;">{{ post.fullText }}</p>
-        <img :src="post.image" class="d-block w-100" alt="{{ post.tile }}">
+        <img :title="post.title" :src="post.image" class="d-block w-100" alt="{{ post.tile }}">
     </div>
 </template>
 <script setup lang="ts">

@@ -1,6 +1,6 @@
 <template>
     <div v-if="product" :class="`card ${childClass}`">
-        <img :src="product.image" class="card-img-top product__img" alt="...">
+        <img :title="product.name" :src="product.image" class="card-img-top product__img" alt="...">
         <div class="card-body">
             <h5 class="card-title">{{ product.name }}</h5>
             <p>${{ formatMiles(product.price) }}</p>

@@ -148,14 +148,12 @@ const filterProducts = () => {
         productsFilteredToShow = productsFilteredToShow.filter((product) => {
             return product.category.data?.id === category.id
         })
-        console.log('entro al filtro de category')
     }
 
     if (nameFilter && nameFilter != '') {
         productsFilteredToShow = productsFilteredToShow.filter((product) => {
             return product.name.toLowerCase().includes(nameFilter.toLowerCase())
         })
-        console.log('entro al filtro de name')
     }
 
     productsFiltered.value = productsFilteredToShow

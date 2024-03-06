@@ -3,17 +3,16 @@
         <h2>Login</h2>
         <form @submit="login">
             <div class="mb-3">
-                <label for="exampleInputEmail1" class="form-label">Email address</label>
+                <label for="exampleInputEmail1" class="form-label">Correo electrónico</label>
                 <input v-model="email" type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp">
-                <div id="emailHelp" class="form-text">We'll never share your email with anyone else.</div>
             </div>
             <div class="mb-3">
-                <label for="exampleInputPassword1" class="form-label">Password</label>
+                <label for="exampleInputPassword1" class="form-label">Clave</label>
                 <input v-model="password" type="password" class="form-control" id="exampleInputPassword1">
             </div>
             <button @click="login" type="submit" class="btn btn-success">Login</button>
             <br>
-            Don't you have an account? <NuxtLink to="/register">Register</NuxtLink>
+            No tienes una cuenta? <NuxtLink to="/register">Registrarme</NuxtLink>
         </form>
         <Notification :type="notificationType" :toast-id="'user-login'">
             {{ notificationMessage }}

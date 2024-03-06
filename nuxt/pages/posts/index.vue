@@ -1,6 +1,6 @@
 <template>
     <div v-if="!isLoading" class="container custom-container">
-        <h2>Posts</h2>
+        <h2>Artículos</h2>
         <SliderPosts :posts="sliderPosts"></SliderPosts>
         <hr>    
         <div class="row">

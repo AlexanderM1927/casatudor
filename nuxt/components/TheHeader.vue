@@ -292,7 +292,7 @@ onMounted(() => {
         window.addEventListener('scroll', () => {
             handleScroll()
         })
-    }, 100)
+    }, 200)
 })
 
 onUnmounted(() => {

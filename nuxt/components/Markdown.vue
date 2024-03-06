@@ -47,6 +47,10 @@ const fixHtml = (elText: string) => {
     let newText = elText
     newText = newText.replaceAll('&lt;', '<')
     newText = newText.replaceAll('&gt;', '>')
+    newText = newText.replaceAll('&quot;', '"')
+    newText = newText.replaceAll('<span class="hljs-operator">', '')
+    newText = newText.replaceAll('<span class="hljs-string">', '')
+    newText = newText.replaceAll('</span>', '')
     return newText
 }
 

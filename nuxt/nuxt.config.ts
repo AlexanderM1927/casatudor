@@ -22,5 +22,8 @@ export default defineNuxtConfig({
     '@pinia/nuxt',
     'nuxt-icon'
   ],
+  plugins: [
+    { src: "~/plugins/localbase", mode: "client" }
+  ],
   ssr: false
 })

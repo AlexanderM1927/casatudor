@@ -9,8 +9,9 @@
                     <Icon name="iconamoon:menu-burger-horizontal-fill" @click="openBurger" />
                 </div>
                 <div class="company-name">CASA TUDOR</div>
-                <div class="cart-icon">
+                <div class="menu-icon">
                     <Icon name="material-symbols:garden-cart-outline" @click="openCart" />
+                    <Icon name="material-symbols:favorite" @click="openFavoritesModal" />
                 </div>
             </div>
         </template>
@@ -88,9 +89,10 @@
                         >Logout</a>
                     </li>
                     <li>
-                        <div class="cart-icon">
-                        <Icon name="material-symbols:garden-cart-outline" @click="openCart" />
-                    </div>
+                        <div class="menu-icon">
+                            <Icon name="material-symbols:garden-cart-outline" @click="openCart" />
+                            <Icon name="material-symbols:favorite" @click="openFavoritesModal" />
+                        </div>
                     </li>
                 </ul>
             </div>
@@ -159,6 +161,7 @@
             </ul>
         </div>
         <TheCart :isCartOpen="isCartOpen" @closeCart="closeCart()"></TheCart>
+        <TheFavoritesModal :isFavoritesModalOpen="isFavoritesModalOpen" @closeFavoritesModal="closeFavoritesModal()"></TheFavoritesModal>
     </div>
 </template>
 
@@ -175,6 +178,7 @@ const user = userStore.getUser
 
 const burgerMenu: Ref<HTMLDivElement | undefined> = ref()
 const isCartOpen: Ref<Boolean> = ref(false)
+const isFavoritesModalOpen: Ref<Boolean> = ref(false)
 const pages: Ref<[Page]> = ref([{
     id: 0,
     urlId: '',
@@ -225,6 +229,14 @@ const openCart = (() => {
 
 const closeCart = (() => {
     isCartOpen.value = false
+})
+
+const openFavoritesModal = (() => {
+    isFavoritesModalOpen.value = true
+})
+
+const closeFavoritesModal = (() => {
+    isFavoritesModalOpen.value = false
 })
 
 const closeBurger = (() => {
@@ -464,8 +476,10 @@ onUnmounted(() => {
     cursor: pointer;
 }
 
-.cart-icon {
+.menu-icon {
     cursor: pointer;
+    display: flex;
+    gap: 0.5rem;
 }
 
 .subnav {

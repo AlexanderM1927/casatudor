@@ -45,7 +45,10 @@
                             class="menu-items-anchor anchor anchor-opacity anchor-underline anchor-primary" 
                             :to="`/pages/${page.urlId}`"
                         >{{ page.urlTitle }}</NuxtLink>
-                        <div class="subnav-content" v-if="page.subpages">
+                        <div 
+                            :class="`subnav-content ${route.name === 'index' ? 'ct-bg-transparent' : 'ct-bg-secondary'}`" 
+                            v-if="page.subpages.data && page.subpages.data.length > 0"
+                        >
                             <NuxtLink 
                                 v-for="(subpage, index) in page.subpages.data"
                                 class="menu-items-anchor anchor anchor-opacity anchor-underline anchor-primary" 
@@ -240,13 +243,21 @@ const openBurger = (() => {
 
 const setMenuItemsColor = ((color: String) => {
     const menuItems = document.getElementsByClassName('menu-items-anchor')
+    const elemntsModalWithBgWhite = document.getElementsByClassName('subnav-content')
     for (let i = 0; i < menuItems.length; i++) {
-        if (color === 'white') {
-            menuItems[i].classList.replace('anchor-primary', 'anchor-secondary') 
-        } else {
+        if (color === 'secondary') {
             menuItems[i].classList.replace('anchor-secondary', 'anchor-primary') 
+        } else {
+            menuItems[i].classList.replace('anchor-primary', 'anchor-secondary') 
         }
     }
+    for (let i = 0; i < elemntsModalWithBgWhite.length; i++) {
+        if (color === 'secondary') {
+            elemntsModalWithBgWhite[i]?.classList.replace('ct-bg-transparent', 'ct-bg-secondary')
+        } else {
+            elemntsModalWithBgWhite[i]?.classList.replace('ct-bg-secondary', 'ct-bg-transparent')
+        }
+    } 
 })
 
 const burgerMenuBtn = document.getElementById('burger-menu-btn')
@@ -255,13 +266,13 @@ const changeHeaderPerWhite = (() => {
     if (burgerMenuBtn) burgerMenuBtn.style.color = 'black'
     document.getElementById('header')?.classList.replace('header-transparent', 'header-secondary')
     document.getElementById('header-mobile')?.classList.replace('header-transparent', 'header-secondary')
-    setMenuItemsColor('black')
+    setMenuItemsColor('secondary')
 })
 const changeHeaderPerDefault = (() => {
     if (burgerMenuBtn) burgerMenuBtn.style.color = 'white'
     document.getElementById('header')?.classList.replace('header-secondary', 'header-transparent')
     document.getElementById('header-mobile')?.classList.replace('header-secondary', 'header-transparent')
-    setMenuItemsColor('white')
+    setMenuItemsColor('primary')
 })
 
 const handleScroll = (() => {
@@ -306,13 +317,13 @@ onUnmounted(() => {
 <style lang="scss">
 @import "@/styles/_colors.scss";
 
-.header-secondary {
+.header-secondary, .ct-bg-secondary {
     background: $softBlue;
     border-bottom: 1px solid rgba(60, 60, 60, .12);
     color: white;
 }
 
-.header-transparent {
+.header-transparent, .ct-bg-transparent {
     background: transparent;
     color: white;
 }
@@ -355,6 +366,8 @@ onUnmounted(() => {
     gap: 1rem;
     list-style: none;
     font-size: 1rem;
+    margin-bottom: 0;
+    align-items: center;
 }
 
 .anchor {
@@ -462,6 +475,9 @@ onUnmounted(() => {
 
 .subnav .subnav-content {
     display: none;
+    position: absolute;
+    padding: 0.5rem 1rem;
+    border-radius: 0.5rem;
 }
 
 .subnav:hover .subnav-content {

@@ -13,12 +13,13 @@
     </Notification>
 </template>
 <script setup lang="ts">
+import type { PropType } from 'vue';
 import ToastHelper from '~/helpers/ToastHelper';
 const cart = useCartStore()
 const props = defineProps({
     childClass: String,
     product: {
-        type: Object,
+        type: Object as PropType<ProductCart>,
         required: true
     }
 })

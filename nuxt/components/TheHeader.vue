@@ -177,7 +177,8 @@ const pages: Ref<[Page]> = ref([{
     urlId: '',
     urlTitle: '',
     title: '',
-    content: ''
+    content: '',
+    subpages: {}
 }])
 const isLoading: Ref<Boolean> = ref(false)
 

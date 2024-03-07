@@ -143,7 +143,9 @@ watch(priceFilterMax, (val) => {
 
 watch(productNameFilter, (val) => {
     debounce(() => {
+        isLoading.value = true
         getProductsByFilter()
+        isLoading.value = false
     }, 3000)
 })
 
@@ -220,8 +222,8 @@ const getProductsByFilter = async () => {
     isLoading.value = true
     const sort = orderBy.value
     const nameFilter = productNameFilter.value
-    const categoryId = categoryFiltered.value.id
-    const { data, meta }: any = await productService.getProductsWithFilters(paginatorProducts.value.currentPage, nameFilter, categoryId, sort)
+    const category = categoryFiltered.value
+    const { data, meta }: any = await productService.getProductsWithFilters(paginatorProducts.value.currentPage, nameFilter, category, sort)
     products.value = data.map(({ id, attributes }: { id: number, attributes: any }) => {
         const product: Product = {
             ...attributes,
@@ -275,6 +277,7 @@ const filterByCategory = (category: Category) => {
 }
 
 const setDefaultProducts = () => {
+    orderBy.value = ''
     categoryFiltered.value = null
     priceFilterMax.value = ''
     priceFilterMin.value = ''

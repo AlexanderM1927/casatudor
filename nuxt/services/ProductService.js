@@ -16,7 +16,7 @@ export default class ProductService {
         })
         return await $fetch(this.config.public.apiBase + '/products?' + query)
     }
-    async getProductsWithFilters(page = 1, name, categoryId, sort) {
+    async getProductsWithFilters(page = 1, name, category, sort) {
         const queryObject = {
             populate: '*',
             sort: ['id:desc'],
@@ -35,11 +35,11 @@ export default class ProductService {
         if (sort != '') {
             queryObject.sort = [sort]
         }
-        if (categoryId != '') {
+        if (category) {
             queryObject.filters = {
                 category: {
                     id: {
-                        $eq: categoryId
+                        $eq: category.id
                     }
                 }
             }

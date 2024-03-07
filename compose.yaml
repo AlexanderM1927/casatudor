@@ -7,6 +7,8 @@ services:
       context: ./nuxt
     volumes:
       - ./nuxt:/usr/src/nuxt-app
+      - ./nuxt/package.json:/usr/src/nuxt-app/package.json
+      - /usr/src/nuxt-app/node_modules
     ports:
       - "3000:3000"
     networks:

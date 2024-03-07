@@ -5,14 +5,17 @@ services:
     image: node:18-alpine
     restart: always
     networks:
-      - network_casatudor
+      - frontend
     volumes:
       - ./nuxt:/usr/src/nuxt-app
+    ports:
+      - "3000:3000"
 
   backend:
     container_name: strapi
     image: node:18-alpine
-    restart: always
+    restart: unless-stopped
+    env_file: ./strapi/.env
     volumes:
       - ./strapi/config:/opt/app/config
       - ./strapi/src:/opt/app/src
@@ -23,17 +26,15 @@ services:
     ports:
       - "1337:1337"
     networks:
-      - network_casatudor
+      - strapi
 
   # Nginx
   casatudor_nginx:
     image: nginx:alpine
     container_name: casatudor_nginx
     restart: always
-    ports:
-      - "3000:3000"
-      - "1337:1337"
     volumes:
+      - ./strapi:/opt/app
       - ./nuxt:/usr/src/nuxt-app
       - ./config/nginx/conf.d:/etc/nginx/conf.d
       - ./config/nginx/certs:/etc/nginx/certs
@@ -46,5 +47,7 @@ services:
           - casatudor.localhost
 
 networks:
+  strapi: {}
+  frontend: {}
   network_casatudor:
     name: network_casatudor

@@ -16,47 +16,10 @@ export default class ProductService {
         })
         return await $fetch(this.config.public.apiBase + '/products?' + query)
     }
-    async getProductsByCategory(page = 1, categoryId) {
-        const query = qs.stringify({
+    async getProductsWithFilters(page = 1, name, categoryId, sort) {
+        const queryObject = {
             populate: '*',
             sort: ['id:desc'],
-            pagination: {
-                page: page,
-                pageSize: 20
-            },
-            filters: {
-                category: {
-                    id: {
-                        $eq: categoryId
-                    }
-                }
-            }
-        })
-        return await $fetch(this.config.public.apiBase + '/products?' + query)
-    }
-    async getProductsByName(page = 1, name, sort) {
-        const queryObject = {
-            populate: '*',
-            pagination: {
-                page: page,
-                pageSize: 20
-            },
-            filters: {
-                name: {
-                    $containsi: name
-                }
-            }
-        }
-        if (sort != '') {
-            queryObject.sort = [sort]
-        }
-        const query = qs.stringify(queryObject)
-        return await $fetch(this.config.public.apiBase + '/products?' + query)
-    }
-    async getProductsSorByOrder(page = 1, sort, name) {
-        const queryObject = {
-            populate: '*',
-            sort: [sort],
             pagination: {
                 page: page,
                 pageSize: 20
@@ -66,6 +29,18 @@ export default class ProductService {
             queryObject.filters = {
                 name: {
                     $containsi: name
+                }
+            }
+        }
+        if (sort != '') {
+            queryObject.sort = [sort]
+        }
+        if (categoryId != '') {
+            queryObject.filters = {
+                category: {
+                    id: {
+                        $eq: categoryId
+                    }
                 }
             }
         }

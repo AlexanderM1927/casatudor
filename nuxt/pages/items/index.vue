@@ -143,12 +143,12 @@ watch(priceFilterMax, (val) => {
 
 watch(productNameFilter, (val) => {
     debounce(() => {
-        getProductsByName(val)
+        getProductsByFilter()
     }, 3000)
 })
 
 watch(orderBy, (val) => {
-    getProductsSorByOrder(val)
+    getProductsByFilter()
 })
 
 const filterProducts = () => {
@@ -216,53 +216,12 @@ const getProducts = async (newPage: number = 1) => {
     isLoading.value = false
 }
 
-const getProductsByCategory = async (categoryId: number) => {
-    isLoading.value = true
-    const { data, meta }: any = await productService.getProductsByCategory(paginatorProducts.value.currentPage, categoryId)
-    products.value = data.map(({ id, attributes }: { id: number, attributes: any }) => {
-        const product: Product = {
-            ...attributes,
-            image: useImageFromStrapi(attributes.image.data.attributes.url),
-            id: id
-        }
-        return product
-    })
-    paginatorProducts.value = {
-        currentPage: meta.pagination.page,
-        lastPage: meta.pagination.pageCount,
-        data: products.value,
-        url: ''
-    }
-    filterProducts()
-    isLoading.value = false
-}
-
-const getProductsByName = async (name: string) => {
+const getProductsByFilter = async () => {
     isLoading.value = true
     const sort = orderBy.value
-    const { data, meta }: any = await productService.getProductsByName(paginatorProducts.value.currentPage, name, sort)
-    products.value = data.map(({ id, attributes }: { id: number, attributes: any }) => {
-        const product: Product = {
-            ...attributes,
-            image: useImageFromStrapi(attributes.image.data.attributes.url),
-            id: id
-        }
-        return product
-    })
-    paginatorProducts.value = {
-        currentPage: meta.pagination.page,
-        lastPage: meta.pagination.pageCount,
-        data: products.value,
-        url: ''
-    }
-    filterProducts()
-    isLoading.value = false
-}
-
-const getProductsSorByOrder = async (sort: string) => {
-    isLoading.value = true
     const nameFilter = productNameFilter.value
-    const { data, meta }: any = await productService.getProductsSorByOrder(paginatorProducts.value.currentPage, sort, nameFilter)
+    const categoryId = categoryFiltered.value.id
+    const { data, meta }: any = await productService.getProductsWithFilters(paginatorProducts.value.currentPage, nameFilter, categoryId, sort)
     products.value = data.map(({ id, attributes }: { id: number, attributes: any }) => {
         const product: Product = {
             ...attributes,
@@ -312,7 +271,7 @@ const getCategories = async (newPage: number = 1) => {
 
 const filterByCategory = (category: Category) => {
     categoryFiltered.value = category
-    getProductsByCategory(categoryFiltered.value.id)
+    getProductsByFilter()
 }
 
 const setDefaultProducts = () => {

@@ -11,12 +11,17 @@
                         <option value="price:desc">De mayor a menos precio</option>
                     </select>
                     <h4>Buscador</h4>
-                    <input
-                        type="text"
-                        class="form-control"
-                        placeholder="Producto..."
-                        v-model="productNameFilter"
-                    >
+                    <div class="input-group mb-3">
+                        <span class="input-group-text" id="basic-addon1">
+                            <Icon name="material-symbols:search" color="black" />
+                        </span>
+                        <input
+                            type="text"
+                            class="form-control"
+                            placeholder="Producto..."
+                            v-model="productNameFilter"
+                        >
+                    </div>
                     <h4>Categorias</h4>
                     <ul>
                         <li 

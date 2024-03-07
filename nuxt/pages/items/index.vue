@@ -4,6 +4,12 @@
             <h2>Tienda</h2>
             <div class="store">
                 <div class="store__filters">
+                    <h4>Ordenar por:</h4>
+                    <select class="form-select" v-model="orderBy">
+                        <option value=""> </option>
+                        <option value="price:asc">De menor a mayor precio</option>
+                        <option value="price:desc">De mayor a menos precio</option>
+                    </select>
                     <h4>Buscador</h4>
                     <input
                         type="text"
@@ -110,6 +116,7 @@ const priceFilterMax: Ref<string> = ref('')
 const productsFiltered: Ref<any> = ref(null)
 const categoryFiltered: Ref<any> = ref({})
 const productNameFilter: Ref<string> = ref('')
+const orderBy: Ref<string> = ref('')
 const { debounce } = useDebounce()
 
 const paginatorProducts: Ref<Paginator> = ref({
@@ -140,11 +147,16 @@ watch(productNameFilter, (val) => {
     }, 3000)
 })
 
+watch(orderBy, (val) => {
+    getProductsSorByOrder(val)
+})
+
 const filterProducts = () => {
     const minPrice = priceFilterMin.value ? parseFloat(priceFilterMin.value) : 0
     const maxPrice = priceFilterMax.value ? parseFloat(priceFilterMax.value) : 0
     const category = categoryFiltered.value
     const nameFilter = productNameFilter.value
+    const orderByValue = orderBy.value
 
     let productsFilteredToShow = products.value.filter((product: Product) => {
         const productPrice = product.price
@@ -156,7 +168,7 @@ const filterProducts = () => {
         
         return validate
     })
-    
+
     if (category && category.id) {
         productsFilteredToShow = productsFilteredToShow.filter((product: Product) => {
             return product.category?.data?.id === category.id
@@ -166,6 +178,16 @@ const filterProducts = () => {
     if (nameFilter && nameFilter != '') {
         productsFilteredToShow = productsFilteredToShow.filter((product: Product) => {
             return product.name.toLowerCase().includes(nameFilter.toLowerCase())
+        })
+    }
+
+    if (orderByValue && orderByValue != '') {
+        productsFilteredToShow = productsFilteredToShow.sort((productA: Product, productB: Product) => {
+            if (orderByValue === 'price:asc') {
+                return productA.price - productB.price
+            } else if (orderByValue === 'price:desc') {
+                return productB.price - productA.price
+            }
         })
     }
 
@@ -217,7 +239,30 @@ const getProductsByCategory = async (categoryId: number) => {
 
 const getProductsByName = async (name: string) => {
     isLoading.value = true
-    const { data, meta }: any = await productService.getProductsByName(paginatorProducts.value.currentPage, name)
+    const sort = orderBy.value
+    const { data, meta }: any = await productService.getProductsByName(paginatorProducts.value.currentPage, name, sort)
+    products.value = data.map(({ id, attributes }: { id: number, attributes: any }) => {
+        const product: Product = {
+            ...attributes,
+            image: useImageFromStrapi(attributes.image.data.attributes.url),
+            id: id
+        }
+        return product
+    })
+    paginatorProducts.value = {
+        currentPage: meta.pagination.page,
+        lastPage: meta.pagination.pageCount,
+        data: products.value,
+        url: ''
+    }
+    filterProducts()
+    isLoading.value = false
+}
+
+const getProductsSorByOrder = async (sort: string) => {
+    isLoading.value = true
+    const nameFilter = productNameFilter.value
+    const { data, meta }: any = await productService.getProductsSorByOrder(paginatorProducts.value.currentPage, sort, nameFilter)
     products.value = data.map(({ id, attributes }: { id: number, attributes: any }) => {
         const product: Product = {
             ...attributes,

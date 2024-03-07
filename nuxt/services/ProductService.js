@@ -34,10 +34,9 @@ export default class ProductService {
         })
         return await $fetch(this.config.public.apiBase + '/products?' + query)
     }
-    async getProductsByName(page = 1, name) {
-        const query = qs.stringify({
+    async getProductsByName(page = 1, name, sort) {
+        const queryObject = {
             populate: '*',
-            sort: ['id:desc'],
             pagination: {
                 page: page,
                 pageSize: 20
@@ -47,7 +46,30 @@ export default class ProductService {
                     $containsi: name
                 }
             }
-        })
+        }
+        if (sort != '') {
+            queryObject.sort = [sort]
+        }
+        const query = qs.stringify(queryObject)
+        return await $fetch(this.config.public.apiBase + '/products?' + query)
+    }
+    async getProductsSorByOrder(page = 1, sort, name) {
+        const queryObject = {
+            populate: '*',
+            sort: [sort],
+            pagination: {
+                page: page,
+                pageSize: 20
+            }
+        }
+        if (name != '') {
+            queryObject.filters = {
+                name: {
+                    $containsi: name
+                }
+            }
+        }
+        const query = qs.stringify(queryObject)
         return await $fetch(this.config.public.apiBase + '/products?' + query)
     }
     async getSingleProduct(id) {

@@ -2,7 +2,7 @@ version: "3.5"
 services:
   frontend:
     container_name: frontend_containter
-    image: node:18-alpine
+    image: node:20-alpine
     build: ./nuxt
     volumes:
       - ./nuxt:/usr/src/nuxt-app

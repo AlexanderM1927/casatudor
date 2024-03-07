@@ -40,8 +40,8 @@ services:
     volumes:
       - ./strapi:/opt/app
       - ./nuxt:/usr/src/nuxt-app
-      - ./config/nginx/local-conf.d:/etc/nginx/conf.d
-      - ./config/nginx/certs:/etc/nginx/certs/casatudor
+      - ./config/nginx/conf.d:/etc/nginx/conf.d
+      - ./config/nginx/certs:/etc/nginx/certs
     depends_on:
       - frontend
       - backend

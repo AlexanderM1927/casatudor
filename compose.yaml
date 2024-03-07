@@ -47,6 +47,8 @@ services:
       - backend
     networks:
       - network_casatudor
+    ports:
+      - "80:80"
 
 networks:
   network_casatudor: {}

@@ -13,8 +13,8 @@ services:
 
   backend:
     container_name: strapi
-    image: node:18-alpine
     build: ./strapi
+    image: strapi:latest
     env_file: ./strapi/.env
     volumes:
       - ./strapi/config:/opt/app/config

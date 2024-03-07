@@ -153,11 +153,11 @@ const filterProducts = () => {
         if (minPrice != 0 && maxPrice == 0) validate = productPrice >= minPrice
         else if (minPrice == 0 && maxPrice != 0) validate = productPrice <= maxPrice
         else if (minPrice != 0 && maxPrice != 0) validate = productPrice >= minPrice && productPrice <= maxPrice
-
+        
         return validate
     })
-
-    if (category && category != '') {
+    
+    if (category && category.id) {
         productsFilteredToShow = productsFilteredToShow.filter((product: Product) => {
             return product.category?.data?.id === category.id
         })

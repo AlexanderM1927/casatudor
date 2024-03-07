@@ -1,8 +1,7 @@
 version: "3.5"
 services:
   frontend:
-    container_name: frontend_containter
-    image: node:20-alpine
+    container_name: frontend_casatudor
     build: 
       dockerfile: Dockerfile
       context: ./nuxt
@@ -14,8 +13,7 @@ services:
       - network_casatudor
 
   backend:
-    container_name: strapi
-    image: strapi:latest
+    container_name: backend_casatudor
     build: 
       dockerfile: Dockerfile
       context: ./strapi

@@ -3,18 +3,18 @@ services:
   frontend:
     container_name: frontend_containter
     image: node:18-alpine
-    restart: always
-    networks:
-      - frontend
+    build: ./nuxt
     volumes:
       - ./nuxt:/usr/src/nuxt-app
+    networks:
+      - frontend
     ports:
       - "3000:3000"
 
   backend:
     container_name: strapi
     image: node:18-alpine
-    restart: unless-stopped
+    build: ./strapi
     env_file: ./strapi/.env
     volumes:
       - ./strapi/config:/opt/app/config

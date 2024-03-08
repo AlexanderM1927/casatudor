@@ -15,7 +15,7 @@
             <div class="mb-3">
                 <label for="exampleInputEmail1" class="form-label">Nombre de usuario</label>
                 <input v-model="username" type="text" required class="form-control" aria-describedby="emailHelp">
-                <div id="emailHelp" class="form-text">Ex: JuanMartinez19</div>
+                <div id="emailHelp" class="form-text">Ex: JuanMartinez1</div>
             </div>
             <div class="mb-3">
                 <label for="exampleInputEmail1" class="form-label">Correo electrónico</label>

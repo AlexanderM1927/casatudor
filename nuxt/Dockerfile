@@ -8,11 +8,14 @@ WORKDIR /usr/src/nuxt-app
 # update and install dependency
 RUN apk update && apk upgrade
 RUN apk add git
+RUN npm install -g npm@10.5.0
+
+# install node dependencies
+COPY package.json package-lock.json ./
+RUN npm install
 
 # copy the app, note .dockerignore
 COPY . /usr/src/nuxt-app/
-RUN npm install -g npm@10.5.0
-RUN npm install
 RUN npm run build
 
 EXPOSE 3000

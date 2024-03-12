@@ -10,7 +10,7 @@ services:
       - ./nuxt/package.json:/usr/src/nuxt-app/package.json
       - /usr/src/nuxt-app/node_modules
     ports:
-      - "3000:3000"
+      - "9094:9094"
     networks:
       - network_casatudor
 

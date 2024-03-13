@@ -32,23 +32,5 @@ services:
     networks:
       - network_casatudor
 
-  # Nginx
-  casatudor_nginx:
-    image: nginx:alpine
-    container_name: casatudor_nginx
-    restart: always
-    volumes:
-      - ./strapi:/opt/app
-      - ./nuxt:/usr/src/nuxt-app
-      - ./config/nginx/conf.d:/etc/nginx/conf.d
-      - ./config/nginx/certs:/etc/nginx/certs/casatudor
-    depends_on:
-      - frontend
-      - backend
-    networks:
-      - network_casatudor
-    ports:
-      - "80:80"
-
 networks:
   network_casatudor: {}

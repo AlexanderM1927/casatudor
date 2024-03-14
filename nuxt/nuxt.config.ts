@@ -1,5 +1,9 @@
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
+  devServer: {
+    port: 9094,
+    host: '0.0.0.0'
+  },
   runtimeConfig: {
     public: {
       strapiAssets: 'http://192.168.0.4:1337',

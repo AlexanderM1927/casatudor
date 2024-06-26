@@ -10,12 +10,13 @@ const route = useRoute()
 
 const isLoading: Ref<Boolean> = ref(true);
 
-const page: Ref<Page> = ref({
+const page: Ref<IPage> = ref({
     id: 1,
     title: '',
     content: '',
     urlId: '',
-    urlTitle: ''
+    urlTitle: '',
+    subpages: {}
 })
 
 const pageService = new PageService(useRuntimeConfig())
@@ -25,7 +26,7 @@ const getPage = async (newPage: number = 1) => {
     isLoading.value = true
     const { data }: any = await pageService.getSinglePageByUrlId(route.params.id)
     page.value = data.map(({ id, attributes }: { id: number, attributes: any }) => {
-        const page: Page = {
+        const page: IPage = {
             ...attributes,
             id: id
         }

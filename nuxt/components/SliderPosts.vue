@@ -6,13 +6,13 @@
 <script setup lang="ts">
 const props = defineProps(
     {
-        posts: Array<Post>
+        posts: Array<IPost>
     }
 )
 const data: Ref<any> = ref([])
 
 onMounted(() => {
-    data.value = props.posts?.map((element: Post) => {
+    data.value = props.posts?.map((element: IPost) => {
     const newElement = {
         id: element.id,
         title: element.title,

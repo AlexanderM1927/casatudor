@@ -179,7 +179,7 @@ const user = userStore.getUser
 const burgerMenu: Ref<HTMLDivElement | undefined> = ref()
 const isCartOpen: Ref<Boolean> = ref(false)
 const isFavoritesModalOpen: Ref<Boolean> = ref(false)
-const pages: Ref<[Page]> = ref([{
+const pages: Ref<[IPage]> = ref([{
     id: 0,
     urlId: '',
     urlTitle: '',
@@ -195,7 +195,7 @@ const getPages = async () => {
     isLoading.value = true
     const { data }: any = await pageService.getPages()
     pages.value = data.map(({ id, attributes }: { id: number, attributes: any }) => {
-        const page: Page = {
+        const page: IPage = {
             ...attributes,
             id: id,
         }

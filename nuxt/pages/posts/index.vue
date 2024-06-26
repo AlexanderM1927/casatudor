@@ -24,7 +24,7 @@ const isLoading: Ref<Boolean> = ref(true);
 const posts: Ref<[]> = ref([])
 const sliderPosts: Ref<any> = ref([])
 
-const paginator: Ref<Paginator> = ref({
+const paginator: Ref<IPaginator> = ref({
     currentPage: 1,
     lastPage: 0,
     url: '',
@@ -36,7 +36,7 @@ const getPosts = async (newPage: number = 1) => {
     isLoading.value = true
     const { data, meta }: any = await postService.getPosts(newPage)
     posts.value = data.map(({ id, attributes }: { id: number, attributes: any }) => {
-        const post: Post = {
+        const post: IPost = {
             ...attributes,
             image: useImageFromStrapi(attributes.image.data.attributes.url),
             id: id

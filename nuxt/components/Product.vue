@@ -56,13 +56,13 @@ const props = defineProps({
     },
     product: {
         required: true,
-        type: Object as PropType<Product>
+        type: Object as PropType<IProduct>
     }
 })
 
-const addToCart = ((product: Product) => {
+const addToCart = ((product: IProduct) => {
     ToastHelper.openToast('product-' + product.id)
-    const productCart: ProductCart = {
+    const productCart: IProductCart = {
         ...product,
         quantity: 1
     }
@@ -71,7 +71,7 @@ const addToCart = ((product: Product) => {
 
 const isProductOnFavorites = computed(() => {
     if (favoritesProducts) {
-        const isIn = favoritesProducts.value.find((elProd: Product) => {
+        const isIn = favoritesProducts.value.find((elProd: IProduct) => {
             return elProd.id === props.product.id
         })
         return isIn
@@ -80,18 +80,18 @@ const isProductOnFavorites = computed(() => {
     }
 })
 
-const addToFavorites = ((product: Product) => {
+const addToFavorites = ((product: IProduct) => {
     db.collection('favorites').add(JSON.parse(JSON.stringify(product)))
     favoritesStore.addProducts(product)
 })
 
-const removeFromFavorites = ((product: Product) => {
+const removeFromFavorites = ((product: IProduct) => {
     deleteDataCollection('favorites', product.id)
     favoritesStore.removeProducts(product)
 })
 
 onMounted(() => {
-    db.collection('favorites').get().then((products: [Product]) => {
+    db.collection('favorites').get().then((products: [IProduct]) => {
         favoritesStore.set(products)
     })
 })

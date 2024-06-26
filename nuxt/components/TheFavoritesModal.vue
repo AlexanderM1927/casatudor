@@ -65,7 +65,7 @@ const closeFavoritesModal = (() => {
 })
 
 onMounted(() => {
-    db.collection('favorites').get().then((products: [Product]) => {
+    db.collection('favorites').get().then((products: [IProduct]) => {
         favoritesStore.set(products)
     })
 })

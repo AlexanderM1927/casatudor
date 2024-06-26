@@ -1,4 +1,4 @@
-interface Category {
+interface ICategory {
     id: number,
     name: string,
     products?: []

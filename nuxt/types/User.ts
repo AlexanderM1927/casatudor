@@ -1,4 +1,4 @@
-interface User {
+interface IUser {
     id: number,
     username: string,
     firstName: string,

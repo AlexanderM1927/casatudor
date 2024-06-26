@@ -1,4 +1,4 @@
-interface Post {
+interface IPost {
     id: number,
     title: string,
     summary: string,

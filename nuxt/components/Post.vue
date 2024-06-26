@@ -17,7 +17,7 @@ const props = defineProps(
     {
         childClass: String,
         post: {
-            type: Object as PropType<Post>,
+            type: Object as PropType<IPost>,
             required: true
         }
     }

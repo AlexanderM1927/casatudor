@@ -19,12 +19,12 @@ const cart = useCartStore()
 const props = defineProps({
     childClass: String,
     product: {
-        type: Object as PropType<ProductCart>,
+        type: Object as PropType<IProductCart>,
         required: true
     }
 })
 
-const removeFromCart = ((product: ProductCart) => {
+const removeFromCart = ((product: IProductCart) => {
     ToastHelper.openToast('product-cart-' + product.id)
     setTimeout(() => {
         cart.removeProducts(product)

@@ -15,7 +15,7 @@ const route = useRoute()
 
 const isLoading: Ref<Boolean> = ref(true);
 
-const post: Ref<Post> = ref({
+const post: Ref<IPost> = ref({
     id: 1,
     title: '',
     summary: '',
@@ -29,7 +29,7 @@ const getPost = async (newPage: number = 1) => {
     isLoading.value = true
     const { data }: any = await postService.getSinglePost(route.params.id)
     post.value = data.map(({ id, attributes }: { id: number, attributes: any }) => {
-        const post: Post = {
+        const post: IPost = {
             ...attributes,
             image: useImageFromStrapi(attributes.image.data.attributes.url),
             id: id

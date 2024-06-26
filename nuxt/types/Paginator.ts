@@ -1,4 +1,4 @@
-interface Paginator {
+interface IPaginator {
     data: Array<Object>,
     lastPage: number,
     currentPage: number,

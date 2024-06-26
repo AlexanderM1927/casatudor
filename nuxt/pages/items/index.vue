@@ -118,20 +118,20 @@ const products: Ref<any> = ref([])
 const categories: Ref<any> = ref([])
 const priceFilterMin: Ref<string> = ref('')
 const priceFilterMax: Ref<string> = ref('')
-const productsFiltered: Ref<any> = ref(null)
-const categoryFiltered: Ref<any> = ref({})
+const productsFiltered: Ref<[]|null> = ref(null)
+const categoryFiltered: Ref<ICategory|null> = ref(null)
 const productNameFilter: Ref<string> = ref('')
 const orderBy: Ref<string> = ref('')
 const { debounce } = useDebounce()
 
-const paginatorProducts: Ref<Paginator> = ref({
+const paginatorProducts: Ref<IPaginator> = ref({
     currentPage: 1,
     lastPage: 0,
     url: '',
     data: []
 })
 
-const paginatorCategories: Ref<Paginator> = ref({
+const paginatorCategories: Ref<IPaginator> = ref({
     currentPage: 1,
     lastPage: 0,
     url: '',
@@ -165,7 +165,7 @@ const filterProducts = () => {
     const nameFilter = productNameFilter.value
     const orderByValue = orderBy.value
 
-    let productsFilteredToShow = products.value.filter((product: Product) => {
+    let productsFilteredToShow = products.value.filter((product: IProduct) => {
         const productPrice = product.price
 
         let validate = true
@@ -177,19 +177,19 @@ const filterProducts = () => {
     })
 
     if (category && category.id) {
-        productsFilteredToShow = productsFilteredToShow.filter((product: Product) => {
+        productsFilteredToShow = productsFilteredToShow.filter((product: IProduct) => {
             return product.category?.data?.id === category.id
         })
     }
 
     if (nameFilter && nameFilter != '') {
-        productsFilteredToShow = productsFilteredToShow.filter((product: Product) => {
+        productsFilteredToShow = productsFilteredToShow.filter((product: IProduct) => {
             return product.name.toLowerCase().includes(nameFilter.toLowerCase())
         })
     }
 
     if (orderByValue && orderByValue != '') {
-        productsFilteredToShow = productsFilteredToShow.sort((productA: Product, productB: Product) => {
+        productsFilteredToShow = productsFilteredToShow.sort((productA: IProduct, productB: IProduct) => {
             if (orderByValue === 'price:asc') {
                 return productA.price - productB.price
             } else if (orderByValue === 'price:desc') {
@@ -206,7 +206,7 @@ const getProducts = async (newPage: number = 1) => {
     isLoading.value = true
     const { data, meta }: any = await productService.getProducts(paginatorProducts.value.currentPage)
     products.value = data.map(({ id, attributes }: { id: number, attributes: any }) => {
-        const product: Product = {
+        const product: IProduct = {
             ...attributes,
             image: useImageFromStrapi(attributes.image.data.attributes.url),
             id: id
@@ -230,7 +230,7 @@ const getProductsByFilter = async () => {
     const category = categoryFiltered.value
     const { data, meta }: any = await productService.getProductsWithFilters(paginatorProducts.value.currentPage, nameFilter, category, sort)
     products.value = data.map(({ id, attributes }: { id: number, attributes: any }) => {
-        const product: Product = {
+        const product: IProduct = {
             ...attributes,
             image: useImageFromStrapi(attributes.image.data.attributes.url),
             id: id
@@ -251,7 +251,7 @@ const getCategories = async (newPage: number = 1) => {
     isLoading.value = true
     const { data, meta }: any = await categoryService.getCategories(newPage)
     const categoriesToShow = data.map(({ id, attributes }: { id: number, attributes: any }) => {
-        const category: Category = {
+        const category: ICategory = {
             ...attributes,
             id: id
         }
@@ -259,7 +259,7 @@ const getCategories = async (newPage: number = 1) => {
     })
     for (let i = 0; i < categoriesToShow.length; i++) {
         const element = categoriesToShow[i]
-        const isOnCategories = categories.value.find((cate: Category) => {
+        const isOnCategories = categories.value.find((cate: ICategory) => {
             return cate.id === element.id
         })
         if (!isOnCategories) {
@@ -276,7 +276,7 @@ const getCategories = async (newPage: number = 1) => {
     isLoading.value = false
 }
 
-const filterByCategory = (category: Category) => {
+const filterByCategory = (category: ICategory) => {
     categoryFiltered.value = category
     getProductsByFilter()
 }

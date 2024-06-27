@@ -114,11 +114,11 @@ const categoryService = new CategoryService(useRuntimeConfig())
 
 const isLoading: Ref<Boolean> = ref(true);
 
-const products: Ref<any> = ref([])
-const categories: Ref<any> = ref([])
+const products: Ref<IProduct[]> = ref([])
+const categories: Ref<ICategory[]> = ref([])
 const priceFilterMin: Ref<string> = ref('')
 const priceFilterMax: Ref<string> = ref('')
-const productsFiltered: Ref<[]|null> = ref(null)
+const productsFiltered: Ref<IProduct[]|null> = ref(null)
 const categoryFiltered: Ref<ICategory|null> = ref(null)
 const productNameFilter: Ref<string> = ref('')
 const orderBy: Ref<string> = ref('')
@@ -151,7 +151,7 @@ watch(productNameFilter, (val) => {
         isLoading.value = true
         getProductsByFilter()
         isLoading.value = false
-    }, 3000)
+    }, 1500)
 })
 
 watch(orderBy, (val) => {
@@ -165,7 +165,7 @@ const filterProducts = () => {
     const nameFilter = productNameFilter.value
     const orderByValue = orderBy.value
 
-    let productsFilteredToShow = products.value.filter((product: IProduct) => {
+    let productsFilteredToShow: IProduct[] = products.value.filter((product: IProduct) => {
         const productPrice = product.price
 
         let validate = true
@@ -194,6 +194,8 @@ const filterProducts = () => {
                 return productA.price - productB.price
             } else if (orderByValue === 'price:desc') {
                 return productB.price - productA.price
+            } else {
+                return 0
             }
         })
     }

@@ -9,7 +9,7 @@ const props = defineProps(
         posts: Array<IPost>
     }
 )
-const data: Ref<any> = ref([])
+const data: Ref<Object[]|undefined> = ref(undefined)
 
 onMounted(() => {
     data.value = props.posts?.map((element: IPost) => {

@@ -31,9 +31,9 @@ import ContentService from '@/services/ContentService'
 
 const { type } = useBreakpoints()
 
-const title: Ref<any> = ref(null)
-const description: Ref<any> = ref(null)
-const image: Ref<any> = ref(null)
+const title: Ref<string> = ref('')
+const description: Ref<string> = ref('')
+const image: Ref<string> = ref('')
 const posts: Ref<[]> = ref([])
 const isLoading = ref(true)
 

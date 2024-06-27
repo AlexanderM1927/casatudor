@@ -25,7 +25,7 @@
                         class="page-link" 
                         v-if="currentPage != n"
                         @click="changePage(data.url + '' + n)"
-                        :title="n"
+                        :title="`${n}`"
                     >
                         {{ n }}
                     </a>
@@ -52,7 +52,7 @@
     </div>
 </template>
 <script setup lang="ts">
-const pagesToShow: Ref<any> = ref([])
+const pagesToShow: Ref<number[]> = ref([])
 const currentPage: Ref<number> = ref(0)
 const render: Ref<number> = ref(0)
 const emit = defineEmits(['getAction'])

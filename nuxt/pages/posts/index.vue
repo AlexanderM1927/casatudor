@@ -22,7 +22,7 @@ const postService = new PostService(useRuntimeConfig())
 const isLoading: Ref<Boolean> = ref(true);
 
 const posts: Ref<[]> = ref([])
-const sliderPosts: Ref<any> = ref([])
+const sliderPosts: Ref<[]> = ref([])
 
 const paginator: Ref<IPaginator> = ref({
     currentPage: 1,

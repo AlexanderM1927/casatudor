@@ -21,7 +21,7 @@ onMounted(() => {
     getFooter()
 })
 useHead({
-  title: 'CasaTudor - Your alliance for life',
+  title: 'CasaTudor - Connect with your soul',
   meta: [
     { name: 'description', content: 'Website to read tips and see all products that we have for you that you alwas desire | Relax zone | Learn | Your main alliance' }
   ],

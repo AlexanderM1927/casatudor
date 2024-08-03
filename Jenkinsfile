@@ -21,7 +21,7 @@ pipeline {
             }
             steps {
                 dir('./nuxt') {
-                    sh 'export JENKINS_NODE_COOKIE=dontKillMe; pm2 start'
+                    sh 'export JENKINS_NODE_COOKIE=dontKillMe; pm2 start ecosystem.config.cjs'
                 }
             }
         }

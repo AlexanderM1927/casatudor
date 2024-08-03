@@ -6,8 +6,8 @@ export default defineNuxtConfig({
   },
   runtimeConfig: {
     public: {
-      strapiAssets: 'http://localhost:1337',
-      apiBase: 'http://localhost:1337/api'
+      strapiAssets: process.env.STRAPI_ASSETS,
+      apiBase: process.env.API_BASE
     }
   },
   app: {

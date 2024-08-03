@@ -26,8 +26,13 @@ export default defineNuxtConfig({
     '@pinia/nuxt',
     'nuxt-icon'
   ],
-  plugins: [
-    { src: "~/plugins/localbase", mode: "client" }
-  ],
-  ssr: false
+  ssr: false,
+  vite: {
+    server: {
+      hmr: {
+        protocol: 'ws',
+        host: 'localhost'
+      }
+    }
+  }
 })

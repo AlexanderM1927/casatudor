@@ -39,9 +39,6 @@
 import type { PropType } from 'vue';
 import NumberHelper from '~/helpers/NumberHelper';
 import ToastHelper from '~/helpers/ToastHelper';
-import { useLocalbase } from '~/composables/useLocalbase'
-const nuxtApp = useNuxtApp()
-const { db, deleteDataCollection }: any = useLocalbase(nuxtApp)
 
 const cart = useCartStore()
 const favoritesStore = useFavoritesStore()
@@ -81,19 +78,27 @@ const isProductOnFavorites = computed(() => {
 })
 
 const addToFavorites = ((product: IProduct) => {
-    db.collection('favorites').add(JSON.parse(JSON.stringify(product)))
+    const favoritesLS = localStorage.getItem('favorites')
+    const favorites = favoritesLS ? JSON.parse(favoritesLS) : []
+    favorites.push(product)
+    localStorage.setItem('favorites', JSON.stringify(favorites))
     favoritesStore.addProducts(product)
 })
 
 const removeFromFavorites = ((product: IProduct) => {
-    deleteDataCollection('favorites', product.id)
+    const favoritesLS = localStorage.getItem('favorites')
+    const favorites = favoritesLS ? JSON.parse(favoritesLS) : []
+
+    const favoritesClean = favorites.filter((el: IProduct) => el.id !== product.id)
+    localStorage.setItem('favorites', JSON.stringify(favoritesClean))
+
     favoritesStore.removeProducts(product)
 })
 
 onMounted(() => {
-    db.collection('favorites').get().then((products: [IProduct]) => {
-        favoritesStore.set(products)
-    })
+    const favoritesLS = localStorage.getItem('favorites')
+    const favorites = favoritesLS ? JSON.parse(favoritesLS) : []
+    favoritesStore.set(favorites)
 })
 </script>
 

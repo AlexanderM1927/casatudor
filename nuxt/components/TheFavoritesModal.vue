@@ -20,13 +20,9 @@
     <div id="overlay-favorites" @click="closeFavoritesModal()"></div>
 </template>
 <script setup lang="ts">
-import { useLocalbase } from '~/composables/useLocalbase'
 const favoritesStore = useFavoritesStore()
 const favoritesStoreComputed = storeToRefs(favoritesStore)
 const favoritesProducts = favoritesStoreComputed.getProducts
-
-const nuxtApp = useNuxtApp()
-const { db }: any = useLocalbase(nuxtApp)
 
 
 
@@ -65,9 +61,9 @@ const closeFavoritesModal = (() => {
 })
 
 onMounted(() => {
-    db.collection('favorites').get().then((products: [IProduct]) => {
-        favoritesStore.set(products)
-    })
+    const favoritesLS = localStorage.getItem('favorites')
+    const favorites = favoritesLS ? JSON.parse(favoritesLS) : []
+    favoritesStore.set(favorites)
 })
 </script>
 

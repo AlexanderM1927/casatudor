@@ -62,7 +62,7 @@ const closeFavoritesModal = (() => {
 
 onMounted(() => {
     const favoritesLS = localStorage.getItem('favorites')
-    const favorites = favoritesLS ? JSON.parse(favoritesLS) : []
+    const favorites: [IProduct] = favoritesLS ? JSON.parse(favoritesLS) : []
     favoritesStore.set(favorites)
 })
 </script>

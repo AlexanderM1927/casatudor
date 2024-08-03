@@ -25,24 +25,14 @@ pipeline {
                 }
             }
         }
-        stage('Backend prepare and build') {
+        stage('Restart db back') {
             tools {
                 nodejs 'node-21.11.1'
             }
             steps {
                 dir('./strapi') {
                     sh 'npm install'
-                    sh 'NODE_ENV=production npm run build'
-                }
-            }
-        }
-        stage('Deploy strapi') {
-            tools {
-                nodejs 'node-21.11.1'
-            }
-            steps {
-                dir('./strapi') {
-                    sh 'export JENKINS_NODE_COOKIE=dontKillMe; NODE_ENV=production pm2 start'
+                    sh 'npm run start'
                 }
             }
         }

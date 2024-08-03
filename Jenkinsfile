@@ -11,7 +11,7 @@ pipeline {
             steps {
                 dir('./nuxt') {
                     sh 'npm install'
-                    sh 'nuxt build'
+                    sh 'npm run build'
                 }
             }
         }

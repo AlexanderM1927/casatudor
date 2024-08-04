@@ -18,8 +18,7 @@ RUN npm install
 COPY . /usr/src/nuxt-app/
 RUN npm run build
 
-ENV NUXT_HOST=0.0.0.0
-ENV HOST=0.0.0.0
-EXPOSE 9094
+ENV PORT=24678
+EXPOSE 24678
 
 CMD ["npm", "run", "dev"]

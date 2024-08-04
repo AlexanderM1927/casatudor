@@ -27,12 +27,4 @@ export default defineNuxtConfig({
     'nuxt-icon'
   ],
   ssr: false,
-  vite: {
-    server: {
-      hmr: {
-        protocol: 'ws',
-        host: 'localhost'
-      }
-    }
-  }
 })

@@ -1,4 +1,4 @@
-import '~/node_modules/bootstrap/dist/js/bootstrap.bundle.min.js'
+import bootstrap from '~/node_modules/bootstrap/dist/js/bootstrap.bundle.min.js'
 
 export default {
     openToast (toastTarget) {

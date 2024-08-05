@@ -343,7 +343,7 @@ onUnmounted(() => {
 .header-mobile {
     display: flex;
     position: fixed;
-    z-index: 2;
+    z-index: 3;
     font-size: 1.5rem;
     padding: 1rem;
     vertical-align: middle;

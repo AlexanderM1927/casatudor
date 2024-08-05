@@ -101,7 +101,7 @@
             <div class="burger-menu-header">
                 <h1 class="subtitle">Casa Tudor</h1>
                 <div class="close-btn">
-                    <Icon name="material-symbols:close" @click="closeBurger()" color="black" />
+                    <Icon name="material-symbols:close" @click="closeBurger()" color="white" />
                 </div>
             </div>
             <ul class="items">

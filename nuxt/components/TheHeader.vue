@@ -242,14 +242,14 @@ const closeFavoritesModal = (() => {
 const closeBurger = (() => {
     if (burgerMenu.value) {
         burgerMenu.value.style.opacity = '0'
-        burgerMenu.value.style.visibility = 'hidden'
+        burgerMenu.value.style.left = '-80%'
     }
 })
 
 const openBurger = (() => {
     if (burgerMenu.value) {
         burgerMenu.value.style.opacity = '1'
-        burgerMenu.value.style.visibility = 'visible'
+        burgerMenu.value.style.left = '0px'
     }
 })
 
@@ -442,20 +442,21 @@ onUnmounted(() => {
 
 .burger-menu {
     position: fixed;
-    width: 100%;
+    width: 80%;
     height: 100vh;
     background: white;
-    visibility: hidden;
+    left: -80%;
     opacity: 0;
     padding: 1rem;
     z-index: 3;
-    transition: visibility 0s, opacity 0.5s linear;
+    transition: all 0.3s ease;
 }
 
 .burger-menu-header {
     display: flex;
     justify-content: space-between;
-    border-bottom: 1px solid #000;
+    background: $softBlue;
+    color: white;
 }
 
 .burger-menu h1 {

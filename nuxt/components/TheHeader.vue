@@ -8,7 +8,7 @@
                 <div id="burger-menu-btn" class="burger-menu-btn">
                     <Icon name="iconamoon:menu-burger-horizontal-fill" @click="openBurger" />
                 </div>
-                <div class="company-name">CASA TUDOR</div>
+                <div class="company-name" @click="goToHome()">{{ appConfig.public.storeName }}</div>
                 <div class="menu-icon">
                     <Icon name="material-symbols:garden-cart-outline" @click="openCart" />
                     <Icon name="material-symbols:favorite" @click="openFavoritesModal" />
@@ -17,28 +17,28 @@
         </template>
         <template v-else>
             <div id="header" :class="`header ${route.name === 'index' ? 'header-transparent' : 'header-secondary'}`">
-                <div class="company-name">CASA TUDOR</div>
+                <div class="company-name" @click="goToHome()">{{ appConfig.public.storeName }}</div>
                 <ul class="menu-items">
                     <li>
                         <NuxtLink
-                            title="Inicio" 
+                            :title="texts.pages.index" 
                             class="menu-items-anchor anchor anchor-opacity anchor-underline anchor-primary" 
                             to="/"
-                        >Inicio</NuxtLink>
+                        >{{ texts.pages.index }}</NuxtLink>
                     </li>
                     <li>
                         <NuxtLink 
-                            title="Publicaciones" 
+                            :title="texts.pages.posts"
                             class="menu-items-anchor anchor anchor-opacity anchor-underline anchor-primary" 
                             to="/posts"
-                        >Publicaciones</NuxtLink>
+                        >{{ texts.pages.posts }}</NuxtLink>
                     </li>
                     <li>
                         <NuxtLink 
-                            title="Tienda" 
+                            :title="texts.pages.store" 
                             class="menu-items-anchor anchor anchor-opacity anchor-underline anchor-primary" 
                             to="/items"
-                        >Tienda</NuxtLink>
+                        >{{ texts.pages.store }}</NuxtLink>
                     </li>
                     <li class="subnav" v-for="(page, index) in pages" :key="index">
                         <NuxtLink 
@@ -64,10 +64,10 @@
                         v-if="!user.logged"
                     >
                         <NuxtLink
-                            title="Login" 
+                            :title="texts.pages.login" 
                             class="menu-items-anchor anchor anchor-opacity anchor-underline anchor-primary" 
                             to="/login"
-                        >Login</NuxtLink>
+                        >{{ texts.pages.login }}</NuxtLink>
                     </li>
                     <li
                         v-if="user.logged"
@@ -97,17 +97,29 @@
                 </ul>
             </div>
         </template>
-        <div class="burger-menu" ref="burgerMenu">
+        <div class="burger-menu" id="burger-menu" ref="burgerMenu">
             <div class="burger-menu-header">
-                <h1 class="subtitle">Casa Tudor</h1>
+                <h1 class="subtitle">{{ appConfig.public.storeName }}</h1>
                 <div class="close-btn">
-                    <Icon name="material-symbols:close" @click="closeBurger()" color="white" />
+                    <Icon name="material-symbols:close" @click="closeBurger()" />
                 </div>
             </div>
+            <div class="input-group mb-3">
+                <span class="input-group-text" id="basic-addon1">
+                    <Icon name="material-symbols:search" color="black" />
+                </span>
+                <input
+                    type="text"
+                    class="form-control"
+                    :placeholder="texts.filter.searcher_placeholder"
+                    v-model="productNameSearch"
+                    @keyup.enter="searchItem"
+                >
+            </div>
             <ul class="items">
-                <li><NuxtLink title="Inicio" class="anchor anchor-third" to="/">Inicio</NuxtLink></li>
-                <li><NuxtLink title="Publicaciones" class="anchor anchor-third" to="/posts">Publicaciones</NuxtLink></li>
-                <li><NuxtLink title="Tienda" class="anchor anchor-third" to="/items">Tienda</NuxtLink></li>
+                <li><NuxtLink :title="texts.pages.index" class="anchor anchor-third" to="/">{{ texts.pages.index }}</NuxtLink></li>
+                <li><NuxtLink :title="texts.pages.posts" class="anchor anchor-third" to="/posts">{{ texts.pages.posts }}</NuxtLink></li>
+                <li><NuxtLink :title="texts.pages.store" class="anchor anchor-third" to="/items">{{ texts.pages.store }}</NuxtLink></li>
                 <li v-for="(page, index) in pages" :key="index">
                     <NuxtLink
                         class="anchor anchor-third" 
@@ -136,8 +148,8 @@
                     <NuxtLink 
                         class="anchor anchor-third" 
                         to="/login"
-                        title="Login"
-                    >Login</NuxtLink>
+                        :title="texts.pages.login"
+                    >{{ texts.pages.login }}</NuxtLink>
                 </li>
                 <li
                     v-if="user.logged"
@@ -159,6 +171,7 @@
                     >Logout</a>
                 </li>
             </ul>
+            <SocialMediaLinks :data="data" :color="'black'"></SocialMediaLinks>
         </div>
         <TheCart :isCartOpen="isCartOpen" @closeCart="closeCart()"></TheCart>
         <TheFavoritesModal :isFavoritesModalOpen="isFavoritesModalOpen" @closeFavoritesModal="closeFavoritesModal()"></TheFavoritesModal>
@@ -168,10 +181,18 @@
 <script setup lang="ts">
 import PageService from '@/services/PageService';
 import { useBreakpoints } from '@/composables/useBreakpoints'
+import SocialMediaLinks from './SocialMediaLinks.vue';
+import texts from '@/config/texts.json'
+defineProps({
+    data: {
+        type: Object
+    }
+})
 const route = useRoute()
 
 const { type } = useBreakpoints()
 const userState = useUserStore()
+const appConfig = useRuntimeConfig()
 
 const userStore = storeToRefs(userState)
 const user = userStore.getUser
@@ -188,8 +209,14 @@ const pages: Ref<[IPage]> = ref([{
     subpages: {}
 }])
 const isLoading: Ref<Boolean> = ref(false)
+const productNameSearch: Ref<String> = ref('')
 
-const pageService = new PageService(useRuntimeConfig())
+
+const searchItem = (() => {
+    navigateTo('/items?q=' + productNameSearch.value)
+})
+
+const pageService = new PageService(appConfig)
 
 const getPages = async () => {
     isLoading.value = true
@@ -217,6 +244,10 @@ watch(() => route.name, () => {
     closeBurger()
 })
 
+const goToHome = (() => {
+    navigateTo('/')
+})
+
 const logout = (() => {
     userState.removeUser()
     localStorage.removeItem('userData')
@@ -242,7 +273,7 @@ const closeFavoritesModal = (() => {
 const closeBurger = (() => {
     if (burgerMenu.value) {
         burgerMenu.value.style.opacity = '0'
-        burgerMenu.value.style.left = '-80%'
+        burgerMenu.value.style.left = '-70%'
     }
 })
 
@@ -273,17 +304,48 @@ const setMenuItemsColor = ((color: String) => {
 })
 
 const burgerMenuBtn = document.getElementById('burger-menu-btn')
-
+const setPositionsFixed = (() => {
+    const headerHTML = document.getElementById('header')
+    const headerMobileHTML = document.getElementById('header-mobile')
+    const burgerMenuHTML = document.getElementById('burger-menu')
+    if (headerHTML) {
+        headerHTML.style.position = 'fixed'
+    }
+    if (headerMobileHTML) {
+        headerMobileHTML.style.position = 'fixed'
+    }
+    if (burgerMenuHTML) {
+        burgerMenuHTML.style.position = 'fixed'
+    }
+})
+const setPositionsAbsolute = (() => {
+    const headerHTML = document.getElementById('header')
+    const headerMobileHTML = document.getElementById('header-mobile')
+    const burgerMenuHTML = document.getElementById('burger-menu')
+    if (headerHTML) {
+        headerHTML.style.position = 'absolute'
+    }
+    if (headerMobileHTML) {
+        headerMobileHTML.style.position = 'absolute'
+    }
+    if (burgerMenuHTML) {
+        burgerMenuHTML.style.position = 'absolute'
+    }
+})
 const changeHeaderPerWhite = (() => {
+    const headerHTML = document.getElementById('header')
+    const headerMobileHTML = document.getElementById('header-mobile')
     if (burgerMenuBtn) burgerMenuBtn.style.color = 'black'
-    document.getElementById('header')?.classList.replace('header-transparent', 'header-secondary')
-    document.getElementById('header-mobile')?.classList.replace('header-transparent', 'header-secondary')
+    headerHTML?.classList.replace('header-transparent', 'header-secondary')
+    headerMobileHTML?.classList.replace('header-transparent', 'header-secondary')
     setMenuItemsColor('secondary')
 })
 const changeHeaderPerDefault = (() => {
+    const headerHTML = document.getElementById('header')
+    const headerMobileHTML = document.getElementById('header-mobile')
     if (burgerMenuBtn) burgerMenuBtn.style.color = 'white'
-    document.getElementById('header')?.classList.replace('header-secondary', 'header-transparent')
-    document.getElementById('header-mobile')?.classList.replace('header-secondary', 'header-transparent')
+    headerHTML?.classList.replace('header-secondary', 'header-transparent')
+    headerMobileHTML?.classList.replace('header-secondary', 'header-transparent')
     setMenuItemsColor('primary')
 })
 
@@ -291,11 +353,14 @@ const handleScroll = (() => {
     const bodyScrollTop = document.documentElement.scrollTop || document.body.scrollTop
     if (bodyScrollTop > 70) {
         changeHeaderPerWhite()
+        setPositionsFixed()
     } else {
         if (route.name === 'index') {
             changeHeaderPerDefault()
+            setPositionsAbsolute()
         } else {
             changeHeaderPerWhite()
+            setPositionsAbsolute()
         }
     }
 })
@@ -326,11 +391,11 @@ onUnmounted(() => {
 })
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
 @import "@/styles/_colors.scss";
 
 .header-secondary, .ct-bg-secondary {
-    background: $softBlue;
+    background: $primary;
     border-bottom: 1px solid rgba(60, 60, 60, .12);
     color: white;
 }
@@ -342,7 +407,8 @@ onUnmounted(() => {
 
 .header-mobile {
     display: flex;
-    position: fixed;
+    position: absolute;
+    top: 0px;
     z-index: 3;
     font-size: 1.5rem;
     padding: 1rem;
@@ -359,16 +425,18 @@ onUnmounted(() => {
 }
 
 .header {
-    position: fixed;
+    position: absolute;
     display: flex;
     font-size: 1.5rem;
     padding: 1rem;
     width: 100%;
     justify-content: space-between;
     z-index: 3;
+    top: 0px;
 }
 
 .company-name {
+    cursor: pointer;
     font-family: 'contra-slab-bold';
 }
 
@@ -441,22 +509,23 @@ onUnmounted(() => {
 }
 
 .burger-menu {
-    position: fixed;
-    width: 80%;
+    position: absolute;
+    width: 70%;
     height: 100vh;
-    background: white;
-    left: -80%;
+    background: hsla(0,0%,100%,.95);
+    left: -70%;
     opacity: 0;
     padding: 1rem;
     z-index: 3;
     transition: all 0.3s ease;
+    top: 0;
 }
 
 .burger-menu-header {
     display: flex;
     justify-content: space-between;
-    background: $softBlue;
-    color: white;
+    color: $primary;
+    padding: 1rem;
 }
 
 .burger-menu h1 {
@@ -470,11 +539,19 @@ onUnmounted(() => {
     font-size: 1.3rem;
 }
 
+.burger-menu .items li {
+    border-bottom: 1px solid #ececec;
+    padding-bottom: 0.5rem;
+    padding-top: 0.5rem;
+    width: 100%;
+}
+
 .close-btn {
     display: flex;
     align-items: center;
     font-size: 2rem;
     cursor: pointer;
+    color: $primary;
 }
 
 .menu-icon {

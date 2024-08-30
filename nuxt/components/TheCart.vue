@@ -1,9 +1,9 @@
 <template>
     <div class="cart-content" ref="cartContent">
         <div class="cart-content-header">
-            <h2>My Cart</h2>
+            <h2 class="title">{{ texts.cart.title }}</h2>
             <div class="close-btn">
-                <Icon name="material-symbols:close" @click="closeCart()" color="black" />
+                <Icon name="material-symbols:close" @click="closeCart()" />
             </div>
         </div>
         <div class="cart-content-items">
@@ -16,10 +16,17 @@
                 ></ProductCart>
             </div>
         </div>
+        <a 
+            title="Proceder al pago" 
+            class="add-cart-btn btn btn-success w-100"
+        >
+            {{ texts.cart.proceed }}
+        </a>
     </div>
     <div id="overlay" @click="closeCart()"></div>
 </template>
 <script setup lang="ts">
+import texts from '@/config/texts.json'
 const emit = defineEmits(['closeCart'])
 const props = defineProps(['isCartOpen'])
 const cart = useCartStore()
@@ -60,6 +67,7 @@ const closeCart = (() => {
 </script>
 
 <style lang="scss" scoped>
+@import "@/styles/_colors.scss";
 @import "@/styles/_breakpoints.scss";
 #overlay {
   position: fixed; /* Sit on top of the page content */
@@ -78,10 +86,12 @@ const closeCart = (() => {
 
 .cart-content {
     position: fixed;
+    top: 0;
     width: 30%;
     right: 0;
     height: 100vh;
-    background: white;
+    background: $themeBackground;
+    color: $themeColorText;
     visibility: hidden;
     opacity: 0;
     padding: 1rem;
@@ -101,7 +111,7 @@ const closeCart = (() => {
 .cart-content-header {
     display: flex;
     justify-content: space-between;
-    border-bottom: 1px solid #000;
+    border-bottom: 1px solid $themeColorText;
 }
 
 .cart-content h1 {
@@ -112,5 +122,10 @@ const closeCart = (() => {
 .cart-content-items {
     overflow-y: auto;
     overflow-x: hidden;
+    height: 70%;
+}
+
+.close-btn {
+    cursor: pointer;
 }
 </style>

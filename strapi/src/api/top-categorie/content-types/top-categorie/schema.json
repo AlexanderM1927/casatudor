@@ -1,0 +1,20 @@
+{
+  "kind": "collectionType",
+  "collectionName": "top_categories",
+  "info": {
+    "singularName": "top-categorie",
+    "pluralName": "top-categories",
+    "displayName": "Top Categorie"
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "categories": {
+      "type": "relation",
+      "relation": "oneToMany",
+      "target": "api::category.category"
+    }
+  }
+}

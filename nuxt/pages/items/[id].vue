@@ -1,33 +1,32 @@
 <template>
-    <div v-if="product" :class="`product-card card ${childClass}`">
-        <img
-            :title="product.name"
-            :src="product.image" 
-            class="card-img-top product-card__img" 
-            alt="..."
-            @click="navigateTo('/items/' + product.id)"
-        >
-        <div class="card-body">
-            <h5 
-                class="card-title product-card__title" 
-                @click="navigateTo('/items/' + product.id)"
-            >{{ product.name }}</h5>
-            <div class="product-card__price">
-                <p 
-                    v-if="product.price_before_offer"
-                    class="product-card__price-offer"
-                >
-                    ${{ formatMiles(product.price_before_offer) }}
-                </p>
-                <p>${{ formatMiles(product.price) }}</p>
+    <div class="container custom-container product-page">
+        <div class="product-container">
+            <div class="product-container__image">
+                <img :title="product.name" :src="product.image" alt="{{ product.name }}">
             </div>
-            <div class="product-card__btns">
+            <div class="product-container__content">
+                <h2 class="title">{{ product.name }}</h2>
+                <b>{{ texts.description }}:</b>
+                <p>
+                    {{ product.description }}
+                </p>
+                <div class="product-container__price">
+                    <p 
+                        v-if="product.price_before_offer"
+                        class="product-container__price-offer"
+                    >
+                        ${{ formatMiles(product.price_before_offer) }}
+                    </p>
+                    <p>${{ formatMiles(product.price) }}</p>
+                </div>
+                <div class="product-container__btns">
                 <a 
                     title="Agregar al carrito" 
                     class="add-cart-btn btn btn-primary" 
                     @click="addToCart(product)"
                 >
                     <Icon name="material-symbols:add-shopping-cart" />
+                    {{ texts.add_to_cart }}
                 </a>
                 <a 
                     v-if="!isProductOnFavorites" 
@@ -36,6 +35,7 @@
                     @click="addToFavorites(product)"
                 >
                     <Icon name="material-symbols:favorite" />
+                    {{ texts.add_to_favorites }}
                 </a>
                 <a 
                     v-else
@@ -44,7 +44,9 @@
                     @click="removeFromFavorites(product)"
                 >
                     <Icon name="carbon:favorite-half" />
+                    {{ texts.remove_from_favorites }}
                 </a>
+            </div>
             </div>
         </div>
     </div>
@@ -54,8 +56,9 @@
 </template>
 <script setup lang="ts">
 import texts from '@/config/texts.json'
-import type { PropType } from 'vue'
+import ProductService from '@/services/ProductService'
 import NumberHelper from '~/helpers/NumberHelper'
+import { useImageFromStrapi } from '@/composables/useImageFromStrapi'
 import ToastHelper from '~/helpers/ToastHelper'
 
 const cart = useCartStore()
@@ -65,15 +68,34 @@ const favoritesProducts: any = favoritesStoreComputed.getProducts
 
 const formatMiles = NumberHelper.miles
 
-const props = defineProps({
-    childClass: {
-        type: String as PropType<String>
-    },
-    product: {
-        required: true,
-        type: Object as PropType<IProduct>
-    }
+const route = useRoute()
+
+const isLoading: Ref<Boolean> = ref(true);
+
+const product: Ref<IProduct> = ref({
+    id: 1,
+    name: '',
+    image: '',
+    price: 0
 })
+
+const productService = new ProductService(useRuntimeConfig())
+
+
+const getProduct = async (newPage: number = 1) => {
+    isLoading.value = true
+    const { data }: any = await productService.getSingleProduct(route.params.id)
+    product.value = data.map(({ id, attributes }: { id: number, attributes: any }) => {
+        const product: IProduct = {
+            ...attributes,
+            image: useImageFromStrapi(attributes.image.data.attributes.url),
+            id: id
+        }
+        return product
+    })[0]
+
+    isLoading.value = false
+}
 
 const addToCart = ((product: IProduct) => {
     ToastHelper.openToast('product-' + product.id)
@@ -87,7 +109,7 @@ const addToCart = ((product: IProduct) => {
 const isProductOnFavorites = computed(() => {
     if (favoritesProducts) {
         const isIn = favoritesProducts.value.find((elProd: IProduct) => {
-            return elProd.id === props.product.id
+            return elProd.id === product.value.id
         })
         return isIn
     } else {
@@ -118,45 +140,46 @@ onMounted(() => {
     const favorites: [IProduct] = favoritesLS ? JSON.parse(favoritesLS) : []
     favoritesStore.set(favorites)
 })
+
+onMounted(() => {
+    getProduct()
+})
 </script>
-
-<style lang="scss" scoped>
-@import "@/styles/_colors.scss";
-
-.product-card {
-    background: $themeBackgroundCards;
-    color: $themeColorCards;
-}
-
-.add-cart-btn {
-    display: flex;
-    align-items: center;
-    vertical-align: middle;
-    justify-content: space-between;
-}
-
-.product-card__img {
-    cursor: pointer;
+<style lang="scss">
+.product-page {
     width: 100%;
-    height: 10rem;
+}
+.product-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(15rem, 1fr));
 }
 
-.product-card__btns {
+.product-container__image {
+    display: flex;
+    width: 100%;
+    justify-content: center;
+}
+
+.product-container__image img {
+    max-width: 100%;
+}
+
+.product-container__content {
+    padding: 1rem;
+}
+
+.product-container__btns {
     display: flex;
     justify-content: space-between;
 }
 
-.product-card__price {
+.product-container__price {
     display: flex;
     justify-content: space-between;
 }
 
-.product-card__price-offer {
+.product-container__price-offer {
     color: red;
     text-decoration: line-through;
-}
-
-.product-card__title {
-    cursor: pointer;
 }
 </style>

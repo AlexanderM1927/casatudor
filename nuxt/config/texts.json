@@ -1,0 +1,44 @@
+{
+    "last_posts": "Últimas publicaciones",
+    "top_products": "Productos top",
+    "top_categories": "Categorias",
+    "read_article": "Leer artículo",
+    "social_media": "Redes sociales",
+    "view": "ver",
+    "add_to_cart": "Agregar al carrito",
+    "add_to_favorites": "Agregar a favoritos",
+    "remove_from_favorites": "Quitar de favoritos",
+    "description": "Descripción",
+    "no_products_filter": "No hay productos con estos filtros",
+    "remove": "Quitar",
+    "pages": {
+        "index": "Inicio",
+        "posts": "Publicaciones",
+        "store": "Tienda",
+        "login": "Login"
+    },
+    "filter": {
+        "title": "Filtrar",
+        "searcher": "Buscador",
+        "categories": "Categorias",
+        "order_by": "Ordenar por",
+        "filter_by_price": "Filtrar por precio",
+        "remove_filters": "Quitar filtros",
+        "searcher_placeholder": "Nombre del producto...",
+        "from_lowest_to_highest": "De menor a mayor precio",
+        "from_highest_to_lowest": "De mayor a menor precio"
+    },
+    "cart": {
+        "title": "Mi carrito",
+        "quantity": "Cantidad",
+        "remove": "Quitar del carrito",
+        "proceed": "Proceder al pago",
+        "price": "Precio",
+        "total": "Total"
+    },
+    "favorites": {
+        "title": "Favoritos"
+    },
+    "item_added": "Producto agregado al carrito",
+    "item_removed": "Producto removido"
+}

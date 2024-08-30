@@ -1,28 +1,52 @@
 <template>
-  <TheHeader />
-  <NuxtPage />
-  <TheWhatsAppBtn :data="dataFooter" />
-  <TheFooter :data="dataFooter" />
+  <ThePromotion :data="dataPromotions"></ThePromotion>
+  <div class="main-page">
+    <TheHeader :data="dataFooter" />
+    <NuxtPage />
+    <TheWhatsAppBtn :data="dataFooter" />
+    <TheFooter :data="dataFooter" />
+  </div>
 </template>
 <script setup lang="ts">
+import ThePromotion from '@/components/ThePromotion.vue'
 import FooterService from '@/services/FooterService'
-const footerService = new FooterService(useRuntimeConfig())
+import PromotionService from '@/services/PromotionService'
 
+
+const appConfig = useRuntimeConfig()
+const footerService = new FooterService(appConfig)
+const promotionService = new PromotionService(appConfig)
 const dataFooter = ref({})
+const dataPromotions = ref({})
 
 const getFooter = async () => {
     const { data }: any = await footerService.getFooter()
-    const { attributes } = data[0]
-    dataFooter.value = attributes
+    if (data && data[0]) {
+      const { attributes } = data[0]
+      dataFooter.value = attributes
+    }
+}
+
+const getPromotions = async () => {
+    const { data }: any = await promotionService.getPromotions()
+    if (data && data[0]) {
+      const { attributes } = data[0]
+      dataPromotions.value = {
+        ...attributes,
+        id: data[0].id
+      }
+    }
+    
 }
 
 onMounted(() => {
     getFooter()
+    getPromotions()
 })
 useHead({
-  title: 'CasaTudor - Connect with your soul',
+  title: `${appConfig.public.header}`,
   meta: [
-    { name: 'description', content: 'Website to read tips and see all products that we have for you that you alwas desire | Relax zone | Learn | Your main alliance' }
+    { name: 'description', content: appConfig.public.description }
   ],
 })
 

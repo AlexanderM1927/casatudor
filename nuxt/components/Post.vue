@@ -1,5 +1,5 @@
 <template>
-    <div :class="`card ${childClass}`">
+    <div :class="`post-card card ${childClass}`">
         <img :title="post.title" :src="post.image" class="card-img-top post-img" alt="...">
         <div class="card-body">
             <h5 class="card-title">{{ post.title }}</h5>
@@ -7,12 +7,14 @@
             <NuxtLink
                 :to="`/posts/${post.id}`"
                 class="anchor"
-                title="Leer artículo"
-            >Leer artículo</NuxtLink>
+                :title="texts.read_article"
+            >{{ texts.read_article }}</NuxtLink>
         </div>
     </div>
 </template>
 <script setup lang="ts">
+import texts from '@/config/texts.json'
+
 const props = defineProps(
     {
         childClass: String,
@@ -23,7 +25,14 @@ const props = defineProps(
     }
 )
 </script>
-<style scoped>
+<style lang="scss" scoped>
+@import "@/styles/_colors.scss";
+
+.post-card {
+    background: $themeBackgroundCards;
+    color: $themeColorCards;
+}
+
 .post-img {
     width: 100%;
     height: 10rem;

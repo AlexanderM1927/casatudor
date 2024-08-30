@@ -19,6 +19,5 @@ COPY . /usr/src/nuxt-app/
 RUN npm run build
 
 ENV HOST=0.0.0.0
-EXPOSE 9094 24678
 
 CMD ["npm", "run", "dev"]

@@ -1,6 +1,6 @@
 <template>
     <div class="container custom-container">
-        <h2>{{ post.title }}</h2>
+        <h2 class="title">{{ post.title }}</h2>
         <b style="white-space: pre-line;">{{ post.summary }}</b>
         <hr>
         <p style="white-space: pre-line;">{{ post.fullText }}</p>

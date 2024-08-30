@@ -1,16 +1,13 @@
 <template>
     <div class="container custom-container">
         <template v-if="!isLoading">
-            <h2>Tienda</h2>
+            <h2 class="title">{{ texts.pages.store }}</h2>
             <div class="store">
-                <div class="store__filters">
-                    <h4>Ordenar por:</h4>
-                    <select class="form-select" v-model="orderBy">
-                        <option value=""> </option>
-                        <option value="price:asc">De menor a mayor precio</option>
-                        <option value="price:desc">De mayor a menos precio</option>
-                    </select>
-                    <h4>Buscador</h4>
+                <div class="store__filters" v-show="showFilters">
+                    <div class="close-btn" v-show="type === 'xs'">
+                        <Icon name="material-symbols:close" color="white" @click="showFilters = false" />
+                    </div>
+                    <h4>{{ texts.filter.searcher }}:</h4>
                     <div class="input-group mb-3">
                         <span class="input-group-text" id="basic-addon1">
                             <Icon name="material-symbols:search" color="black" />
@@ -18,11 +15,17 @@
                         <input
                             type="text"
                             class="form-control"
-                            placeholder="Producto..."
+                            :placeholder="texts.filter.searcher_placeholder"
                             v-model="productNameFilter"
                         >
                     </div>
-                    <h4>Categorias</h4>
+                    <h4>{{ texts.filter.order_by }}:</h4>
+                    <select class="form-select" v-model="orderBy">
+                        <option value=""> </option>
+                        <option value="price:asc">{{ texts.filter.from_lowest_to_highest }}</option>
+                        <option value="price:desc">{{ texts.filter.from_highest_to_lowest }}</option>
+                    </select>
+                    <h4>{{ texts.filter.categories }}:</h4>
                     <ul>
                         <li 
                             v-for="(category, index) in categories" 
@@ -39,7 +42,7 @@
                             ></PaginatorSeeMore>
                         </li>
                     </ul>
-                    <h4>Filtrar por precio</h4>
+                    <h4>{{ texts.filter.filter_by_price }}:</h4>
                     <div class="store__filters-price">
                         <input 
                             class="form-control"
@@ -56,8 +59,11 @@
                         > 
                     </div> 
                     <br>
-                    <button class="btn btn-danger" @click="setDefaultProducts">Quitar filtros</button>
+                    <button class="btn btn-danger" @click="setDefaultProducts">{{ texts.filter.remove_filters }}</button>
                 </div>
+                <button class="btn btn-dark" v-show="!showFilters && type === 'xs'" @click="showFilters = true">
+                    <Icon name="material-symbols:tune" />{{ texts.filter.title }}
+                </button>
                 <div class="store__products">
                     <div class="row" v-if="!productsFiltered">
                         <Product 
@@ -69,7 +75,7 @@
                     </div>
                     <div class="row" v-else-if="productsFiltered.length === 0">
                         <div class="col-12">
-                            <b>No hay productos con estos filtros</b>
+                            <b>{{ texts.no_products_filter }}</b>
                         </div>
                         <Product 
                             v-for="(product, index) in products"
@@ -108,9 +114,15 @@ import ProductService from '@/services/ProductService';
 import CategoryService from '@/services/CategoryService';
 import { useImageFromStrapi } from '@/composables/useImageFromStrapi'
 import { useDebounce } from '@/composables/useDebounce'
+import { useBreakpoints } from '@/composables/useBreakpoints'
+import texts from '@/config/texts.json'
 
-const productService = new ProductService(useRuntimeConfig())
-const categoryService = new CategoryService(useRuntimeConfig())
+const { type } = useBreakpoints()
+
+const appConfig = useRuntimeConfig()
+
+const productService = new ProductService(appConfig)
+const categoryService = new CategoryService(appConfig)
 
 const isLoading: Ref<Boolean> = ref(true);
 
@@ -122,6 +134,7 @@ const productsFiltered: Ref<IProduct[]|null> = ref(null)
 const categoryFiltered: Ref<ICategory|null> = ref(null)
 const productNameFilter: Ref<string> = ref('')
 const orderBy: Ref<string> = ref('')
+const showFilters: Ref<Boolean> = ref(false)
 const { debounce } = useDebounce()
 
 const paginatorProducts: Ref<IPaginator> = ref({
@@ -138,15 +151,17 @@ const paginatorCategories: Ref<IPaginator> = ref({
     data: []
 })
 
-watch(priceFilterMin, (val) => {
+const route = useRoute()
+
+watch(priceFilterMin, (_val: Number) => {
     filterProducts()
 })
 
-watch(priceFilterMax, (val) => {
+watch(priceFilterMax, (_val: Number) => {
     filterProducts()
 })
 
-watch(productNameFilter, (val) => {
+watch(productNameFilter, (_val: String) => {
     debounce(() => {
         isLoading.value = true
         getProductsByFilter()
@@ -154,8 +169,12 @@ watch(productNameFilter, (val) => {
     }, 1500)
 })
 
-watch(orderBy, (val) => {
+watch(orderBy, (_val: String) => {
     getProductsByFilter()
+})
+
+watch(() => route.query, () => {
+    setSearchByQueryParams()
 })
 
 const filterProducts = () => {
@@ -176,9 +195,10 @@ const filterProducts = () => {
         return validate
     })
 
+
     if (category && category.id) {
         productsFilteredToShow = productsFilteredToShow.filter((product: IProduct) => {
-            return product.category?.data?.id === category.id
+            return product.category?.data?.id === parseInt(category.id)
         })
     }
 
@@ -293,9 +313,39 @@ const setDefaultProducts = () => {
     getProducts()
 }
 
+const setSearchByQueryParams = (() => {
+    const { query } = route
+    const { q: productName } = query
+    const { c: categoryId } = query
+    if (productName) {
+        categoryFiltered.value = null
+        productNameFilter.value = productName
+        isLoading.value = true
+        getProductsByFilter()
+        isLoading.value = false
+    }
+    if (categoryId) {
+        productNameFilter.value = ''
+        categoryFiltered.value = {
+            id: categoryId
+        }
+        isLoading.value = true
+        getProductsByFilter()
+        isLoading.value = false
+    }
+})
+
+const checkBreakpointsForFilters = (() => {
+    if (type.value !== 'xs') {
+        showFilters.value = true
+    }
+})
+
 onMounted(() => {
+    checkBreakpointsForFilters()
     getCategories()
     getProducts()
+    setSearchByQueryParams()
 })
 </script>
 <style lang="scss" scoped>
@@ -318,7 +368,7 @@ onMounted(() => {
 }
 
 .store__filters {
-    background-color: $softBlue;
+    background-color: $primary;
     padding: 2rem;
     border-radius: 1rem;
     color: white;
@@ -350,5 +400,9 @@ onMounted(() => {
 
 .category-selected {
     opacity: 1;
+}
+
+.close-btn {
+    float: right;
 }
 </style>

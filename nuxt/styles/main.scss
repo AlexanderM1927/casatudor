@@ -17,11 +17,22 @@ html {
 }
 
 h1, h2, h3 {
-    font-family: 'contra-slab-bold';
+    font-family: 'Roboto';
 }
 
 p {
-    font-family: 'contra-slab';
+    font-family: 'Roboto';
+}
+
+.main-page {
+    position: relative;
+    background: $themeBackground;
+    color: $themeColorText;
+}
+
+.container {
+    padding-top: 1rem;
+    padding-bottom: 1rem;
 }
 
 .custom-container {
@@ -58,10 +69,17 @@ blockquote {
 }
 
 .ct-btn-success {
-    background: $softBlue !important;
+    background: $primary !important;
     --bs-btn-color: white !important;
+}
+
+.title {
+    font-size: 2rem;
+    font-weight: 800;
+    // text-shadow: 0.1rem 0.1rem 0.1rem gray;
 }
 
 .subtitle {
     font-size: 2rem;
+    font-weight: 800;
 }

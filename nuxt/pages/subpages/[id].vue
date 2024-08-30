@@ -1,6 +1,6 @@
 <template>
     <div class="container custom-container">
-        <h2>{{ subPage.title }}</h2>
+        <h2 class="title">{{ subPage.title }}</h2>
         <Markdown :source="subPage.content" />
     </div>
 </template>

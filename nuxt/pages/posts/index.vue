@@ -1,6 +1,6 @@
 <template>
     <div v-if="!isLoading" class="container custom-container">
-        <h2>Artículos</h2>
+        <h2 class="title">{{ texts.pages.posts }}</h2>
         <SliderPosts :posts="sliderPosts"></SliderPosts>
         <hr>    
         <div class="row">
@@ -15,7 +15,8 @@
     </div>
 </template>
 <script setup lang="ts">
-import PostService from '@/services/PostService';
+import texts from '@/config/texts.json'
+import PostService from '@/services/PostService'
 import { useImageFromStrapi } from '@/composables/useImageFromStrapi'
 
 const postService = new PostService(useRuntimeConfig())

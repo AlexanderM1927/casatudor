@@ -13,22 +13,14 @@
             </ul>
         </div>
         <div class="footer__column">
-            <h4 class="text-centered">Redes sociales</h4>
-            <div class="footer__social-media">
-                <a title="Whatsapp" :href="`https://wa.me/${data.whatsappPhone}`" target="_blank">
-                    <Icon name="mdi:whatsapp" />
-                </a>
-                <a title="Facebook" :href="data.facebookUrl" target="_blank">
-                    <Icon name="mdi:facebook" />
-                </a>
-                <a title="Instagram" :href="data.instagramUrl" target="_blank">
-                    <Icon name="mdi:instagram" />
-                </a>
-            </div>
+            <h4 class="text-centered">{{ texts.social_media }}</h4>
+            <SocialMediaLinks :data="data" :color="'white'"></SocialMediaLinks>
         </div>
     </div>
 </template>
 <script setup>
+import texts from '@/config/texts.json'
+import SocialMediaLinks from './SocialMediaLinks.vue'
 const props = defineProps({
     data: {
         type: Object
@@ -49,7 +41,7 @@ const props = defineProps({
     justify-content: center;
     gap: 1rem;
     margin-top: 1rem;
-    background: $softBlue;
+    background: $primary;
 }
 
 .footer__column {

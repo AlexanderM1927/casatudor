@@ -2,5 +2,6 @@ interface ICategory {
     id: number,
     name: string,
     products?: []
-    data?: any
+    data?: any,
+    image?: string
 }

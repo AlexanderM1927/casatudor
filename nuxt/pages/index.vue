@@ -1,30 +1,28 @@
 <template>
-    <div v-if="!isLoading">
-        <div class="container-index"  :style="`background: url(
+    <template v-if="!isLoading">
+        <section class="container-index"  :style="`background: url(
                 ${
                     useImageFromStrapi(image)
                 }
             ); background-size: cover;`">
             <div :class="`hero-text ${type === 'xs' ? 'hero-text-center' : ''}`">
-                <h2>
+                <h2 class="title">
                     {{ title }}
                 </h2>
                 <p style="white-space: pre-line;">{{ description }}</p>
             </div>
-        </div>
-        <div class="container">
-            <h2>Últimas publicaciones</h2>
-            <hr />
-            <SliderPosts :posts="posts"></SliderPosts>
-            <br>
-            <div class="row">
-                <Post v-for="(post, index) in posts" :key="index" :post="post" :childClass="`col-md-3 col-xs-12`"></Post>
-            </div>
-        </div>
-    </div>
+        </section>
+        <TopCategories></TopCategories>
+        <LatestPosts></LatestPosts>
+    </template>
+    <template v-else>
+        <LoadingComponent
+            :isLoading="isLoading"
+            :id="1"
+        ></LoadingComponent>
+    </template>
 </template>
 <script setup lang="ts">
-import PostService from '@/services/PostService';
 import { useBreakpoints } from '@/composables/useBreakpoints'
 import { useImageFromStrapi } from '@/composables/useImageFromStrapi'
 import ContentService from '@/services/ContentService'
@@ -34,38 +32,29 @@ const { type } = useBreakpoints()
 const title: Ref<string> = ref('')
 const description: Ref<string> = ref('')
 const image: Ref<string> = ref('')
-const posts: Ref<[]> = ref([])
-const isLoading = ref(true)
+const isLoading: Ref<Boolean> = ref(true)
 
-const postService = new PostService(useRuntimeConfig())
-const contentService = new ContentService(useRuntimeConfig())
+const appConfig = useRuntimeConfig()
+const contentService = new ContentService(appConfig)
 
 
 const getContent = async () => {
-    const { data }: any = await contentService.getContent()
-    const { attributes } = data[0]
-    title.value = attributes.titleHomePage
-    description.value = attributes.descriptionHomePage
-    image.value = attributes.imageHomePage.data.attributes.url
-}
-
-const getPosts = async () => {
     isLoading.value = true
-    const { data }: any = await postService.getHomePosts()
-    posts.value = data.map(({ id, attributes }: { id: number, attributes: any }) => {
-        const post: IPost = {
-            ...attributes,
-            image: useImageFromStrapi(attributes.image.data.attributes.url),
-            id: id
-        }
-        return post
-    })
-    isLoading.value = false
+    try {
+        const { data }: any = await contentService.getContent()
+        const { attributes } = data[0]
+        title.value = attributes.titleHomePage
+        description.value = attributes.descriptionHomePage
+        image.value = attributes.imageHomePage.data.attributes.url
+    } catch (e) {
+        console.log(e)
+    } finally {
+        isLoading.value = false
+    }
 }
 
 onMounted(() => {
     getContent()
-    getPosts()
 })
 
 </script>
@@ -73,6 +62,7 @@ onMounted(() => {
 <style lang="scss" scoped>
 @import "@/styles/_breakpoints.scss";
 .container-index {
+    position: relative;
     background: url('img/bgjpg.jpg');
     background-size: cover;
     width: 100%;

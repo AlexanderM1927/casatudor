@@ -1,6 +1,6 @@
 <template>
     <div class="custom-container center-container">
-        <h2>Login</h2>
+        <h2 class="title">Login</h2>
         <form @submit="login">
             <div class="mb-3">
                 <label for="exampleInputEmail1" class="form-label">Correo electrónico</label>

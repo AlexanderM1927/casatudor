@@ -1,7 +1,7 @@
 <template>
     <div 
         class="pagination-centered"
-        v-if="data.data && data.data.length > 0 && data.lastPage > 1" 
+        v-if="data.data && data.data.length > 0 && data.pageCount > 1" 
         :key="render"
     >
         <nav aria-label="Page navigation example">
@@ -31,20 +31,20 @@
                     </a>
                     <a class="page-link" v-else>{{ n }}</a>
                 </li>
-                <li v-if="currentPage < data.lastPage - 3"><span>...</span></li>
-                <li class="page-item" v-if="currentPage < data.lastPage - 2">
+                <li v-if="currentPage < data.pageCount - 3"><span>...</span></li>
+                <li class="page-item" v-if="currentPage < data.pageCount - 2">
                     <a
                         class="page-link"
-                        @click="changePage(data.url + '' + data.lastPage)"
-                        :title="data.lastPage"
-                    >{{ data.lastPage }}</a>
+                        @click="changePage(data.url + '' + data.pageCount)"
+                        :title="data.pageCount"
+                    >{{ data.pageCount }}</a>
                 </li>
                 
-                <li :class="`page-item ${currentPage == data.lastPage ? 'disabled' : ''}`">
+                <li :class="`page-item ${currentPage == data.pageCount ? 'disabled' : ''}`">
                     <a 
                         title="Next"
                         class="page-link"
-                        @click="changePage(`${currentPage == data.lastPage ? '#' : (data.url + '' + (currentPage + 1))}`)"
+                        @click="changePage(`${currentPage == data.pageCount ? '#' : (data.url + '' + (currentPage + 1))}`)"
                     >Next</a>
                 </li>
             </ul>
@@ -66,11 +66,12 @@ const props = defineProps(
 )
 const getPagesToShow = () => {
     pagesToShow.value = []
-    for (let i: number = 1; i <= props.data.lastPage; i++) {
+    for (let i: number = 1; i <= props.data.pageCount; i++) {
         if (i >= currentPage.value - 2 && i <= currentPage.value + 2) {
             pagesToShow.value.push(i)
         }
     }
+    console.log('pagesToShow.value', pagesToShow.value)
     render.value++
 }
 const changePage = (newPage: string) => {
@@ -80,6 +81,11 @@ const changePage = (newPage: string) => {
         getPagesToShow()
     }
 }
+
+watch(() => props.data.pageCount, (val) => {
+    getPagesToShow()
+})
+
 onMounted(() => {
     currentPage.value = props.data.currentPage
     getPagesToShow()

@@ -6,5 +6,8 @@ interface IPage {
     content: string,
     subpages: {
         data?: [IPage]
+    },
+    category?: {
+        data?: [ICategory]
     }
 }

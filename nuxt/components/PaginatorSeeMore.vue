@@ -1,5 +1,5 @@
 <template>
-    <div v-if="data.currentPage < data.lastPage" class="paginator-see-more" @click="next()">
+    <div v-if="data.currentPage < data.pageCount" class="paginator-see-more" @click="next()">
         Ver más
     </div>
 </template>

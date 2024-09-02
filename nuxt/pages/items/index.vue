@@ -139,14 +139,14 @@ const { debounce } = useDebounce()
 
 const paginatorProducts: Ref<IPaginator> = ref({
     currentPage: 1,
-    lastPage: 0,
+    pageCount: 0,
     url: '',
     data: []
 })
 
 const paginatorCategories: Ref<IPaginator> = ref({
     currentPage: 1,
-    lastPage: 0,
+    pageCount: 0,
     url: '',
     data: []
 })
@@ -237,7 +237,7 @@ const getProducts = async (newPage: number = 1) => {
     })
     paginatorProducts.value = {
         currentPage: meta.pagination.page,
-        lastPage: meta.pagination.pageCount,
+        pageCount: meta.pagination.pageCount,
         data: products.value,
         url: ''
     }
@@ -261,7 +261,7 @@ const getProductsByFilter = async () => {
     })
     paginatorProducts.value = {
         currentPage: meta.pagination.page,
-        lastPage: meta.pagination.pageCount,
+        pageCount: meta.pagination.pageCount,
         data: products.value,
         url: ''
     }
@@ -290,7 +290,7 @@ const getCategories = async (newPage: number = 1) => {
     }
     paginatorCategories.value = {
         currentPage: meta.pagination.page,
-        lastPage: meta.pagination.pageCount,
+        pageCount: meta.pagination.pageCount,
         data: categories.value,
         url: ''
     }
@@ -323,8 +323,7 @@ const setSearchByQueryParams = (() => {
         isLoading.value = true
         getProductsByFilter()
         isLoading.value = false
-    }
-    if (categoryId) {
+    } else if (categoryId) {
         productNameFilter.value = ''
         categoryFiltered.value = {
             id: categoryId
@@ -332,6 +331,8 @@ const setSearchByQueryParams = (() => {
         isLoading.value = true
         getProductsByFilter()
         isLoading.value = false
+    } else {
+        setDefaultProducts()
     }
 })
 

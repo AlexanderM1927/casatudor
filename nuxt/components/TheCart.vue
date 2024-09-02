@@ -16,21 +16,30 @@
                 ></ProductCart>
             </div>
         </div>
-        <a 
+        <button 
             title="Proceder al pago" 
             class="add-cart-btn btn btn-success w-100"
+            @click="proceedPurchase"
         >
             {{ texts.cart.proceed }}
-        </a>
+        </button>
     </div>
     <div id="overlay" @click="closeCart()"></div>
 </template>
 <script setup lang="ts">
 import texts from '@/config/texts.json'
 const emit = defineEmits(['closeCart'])
-const props = defineProps(['isCartOpen'])
 const cart = useCartStore()
 const cartContent: Ref<HTMLDivElement | undefined> = ref()
+
+const props = defineProps({
+    isCartOpen: {
+        type: Boolean
+    },
+    data: {
+        type: Object
+    }
+})
 
 watch(() => props.isCartOpen, (val) => {
     if (val === true) {
@@ -63,6 +72,22 @@ const openCartHTML = (() => {
 
 const closeCart = (() => {
     emit('closeCart')
+})
+
+const purchaseByWhatsapp = (() => {
+    let listOfProducts = '¡Hola!,%20estoy%20interesado%20en%20comprar%20estos%20productos:%0A'
+    for (let i = 0; i < cartProducts.value.length; i++) {
+        const element = cartProducts.value[i]
+        const productName = element.name
+        const quantity = element.quantity
+        listOfProducts += `${productName} - Cantidad: ${quantity}`
+        listOfProducts += `,%20 %0A`
+    }
+    window.open(`https://wa.me/${props.data.whatsappPhone}?text=${listOfProducts}`)
+})
+
+const proceedPurchase = (() => {
+    purchaseByWhatsapp()
 })
 </script>
 

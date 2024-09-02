@@ -1,6 +1,6 @@
 interface IPaginator {
     data: Array<Object>,
-    lastPage: number,
+    pageCount: number,
     currentPage: number,
     url: string
 }

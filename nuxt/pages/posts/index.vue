@@ -27,7 +27,7 @@ const sliderPosts: Ref<[]> = ref([])
 
 const paginator: Ref<IPaginator> = ref({
     currentPage: 1,
-    lastPage: 0,
+    pageCount: 0,
     url: '',
     data: []
 })
@@ -46,7 +46,7 @@ const getPosts = async (newPage: number = 1) => {
     })
     paginator.value = {
         currentPage: newPage,
-        lastPage: meta.pagination.pageCount,
+        pageCount: meta.pagination.pageCount,
         data: posts.value,
         url: ''
     }

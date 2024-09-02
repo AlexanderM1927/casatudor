@@ -173,7 +173,7 @@
             </ul>
             <SocialMediaLinks :data="data" :color="'black'"></SocialMediaLinks>
         </div>
-        <TheCart :isCartOpen="isCartOpen" @closeCart="closeCart()"></TheCart>
+        <TheCart :data="data" :isCartOpen="isCartOpen" @closeCart="closeCart()"></TheCart>
         <TheFavoritesModal :isFavoritesModalOpen="isFavoritesModalOpen" @closeFavoritesModal="closeFavoritesModal()"></TheFavoritesModal>
     </div>
 </template>

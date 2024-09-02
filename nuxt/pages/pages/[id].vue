@@ -2,10 +2,27 @@
     <div class="container custom-container">
         <h2 class="title">{{ page.title }}</h2>
         <Markdown :source="page.content" />
+        <template v-if="!isLoading && page.category && page.category.data">
+            <div class="row">
+                <Product 
+                    v-for="(product, index) in page.category.data.products"
+                    :product="product"
+                    :childClass="`col-md-3 col-xs-12`"
+                    :key="index"
+                ></Product>
+            </div>
+            <div class="row">
+                <Paginator
+                    @getAction="getProducts"
+                    :data="paginatorProducts"
+                ></Paginator>
+            </div>
+        </template>
     </div>
 </template>
 <script setup lang="ts">
-import PageService from '@/services/PageService';
+import PageService from '@/services/PageService'
+import ProductService from '@/services/ProductService'
 const route = useRoute()
 
 const isLoading: Ref<Boolean> = ref(true);
@@ -19,7 +36,16 @@ const page: Ref<IPage> = ref({
     subpages: {}
 })
 
-const pageService = new PageService(useRuntimeConfig())
+const appConfig = useRuntimeConfig()
+const pageService = new PageService(appConfig)
+const productService = new ProductService(appConfig)
+
+const paginatorProducts: Ref<IPaginator> = ref({
+    currentPage: 1,
+    pageCount: 0,
+    url: '',
+    data: []
+})
 
 
 const getPage = async (newPage: number = 1) => {
@@ -32,8 +58,43 @@ const getPage = async (newPage: number = 1) => {
         }
         return page
     })[0]
-
+    getProducts()
     isLoading.value = false
+}
+
+const getProducts = async (newPage = 1) => {
+    if (page.value && page.value.category && page.value.category.data) {
+        paginatorProducts.value.currentPage = newPage
+        isLoading.value = true
+        const categoryId = page.value.category.data.id
+        const { data, meta }: any = await productService.getProductsWithFilters(paginatorProducts.value.currentPage, '', {
+            id: categoryId
+        }, '')
+        const products = data.map(({ id, attributes }: { id: number, attributes: any }) => {
+            const product: IProduct = {
+                ...attributes,
+                image: useImageFromStrapi(attributes.image.data.attributes.url),
+                id: id
+            }
+            return product
+        })
+        page.value = {
+            ...page.value,
+            category: {
+                data: {
+                    id: categoryId,
+                    products: products
+                }
+            }
+        }
+        paginatorProducts.value = {
+            currentPage: meta.pagination.page,
+            pageCount: meta.pagination.pageCount,
+            data: products,
+            url: ''
+        }
+        isLoading.value = false
+    }
 }
 
 onMounted(() => {

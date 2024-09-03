@@ -42,7 +42,6 @@ const getPromotions = async (newPage: number = 1) => {
     })[0]
     const promotionsData = promotion.value
     const { data: dataProducts } = promotionsData.products
-    console.log('dataProducts', dataProducts)
     products.value = dataProducts.map(({ id, attributes }: { id: number, attributes: any }) => {
         const product: IProduct = {
             ...attributes,

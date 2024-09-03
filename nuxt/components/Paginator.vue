@@ -71,7 +71,6 @@ const getPagesToShow = () => {
             pagesToShow.value.push(i)
         }
     }
-    console.log('pagesToShow.value', pagesToShow.value)
     render.value++
 }
 const changePage = (newPage: string) => {
@@ -97,6 +96,7 @@ onMounted(() => {
     display: flex;
     width: 100%;
     justify-content: center;
+    z-index: 1;
 }
 .page-link {
     cursor: pointer;

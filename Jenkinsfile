@@ -21,7 +21,7 @@ pipeline {
             }
             steps {
                 dir('./nuxt') {
-                    sh 'export JENKINS_NODE_COOKIE=dontKillMe; pm2 start ecosystem.config.cjs'
+                    sh 'export JENKINS_NODE_COOKIE=dontKillMeCasatudor; pm2 start ecosystem.config.cjs'
                 }
             }
         }
@@ -42,7 +42,7 @@ pipeline {
             }
             steps {
                 dir('./strapi') {
-                    sh 'export JENKINS_NODE_COOKIE=dontKillMe; NODE_ENV=production pm2 start'
+                    sh 'export JENKINS_NODE_COOKIE=dontKillMeCasatudor; NODE_ENV=production pm2 start'
                 }
             }
         }

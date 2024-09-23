@@ -1,5 +1,5 @@
 <template>
-    <div class="container custom-container">
+    <div class="first-container">
         Hello world
     </div>
 </template>

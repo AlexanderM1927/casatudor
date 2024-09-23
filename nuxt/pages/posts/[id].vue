@@ -1,5 +1,5 @@
 <template>
-    <div class="container custom-container">
+    <div class="first-container">
         <h2 class="title">{{ post.title }}</h2>
         <b style="white-space: pre-line;">{{ post.summary }}</b>
         <hr>

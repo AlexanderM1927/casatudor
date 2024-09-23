@@ -10,8 +10,16 @@
                 </div>
                 <div class="company-name" @click="goToHome()">{{ appConfig.public.storeName }}</div>
                 <div class="menu-icon">
-                    <Icon name="material-symbols:garden-cart-outline" @click="openCart" />
-                    <Icon name="material-symbols:favorite" @click="openFavoritesModal" />
+                    <div class="menu-items__product">
+                        <span
+                            v-show="cartProducts.length > 0"
+                            class="menu-items__product-text"
+                        >{{ cartProducts.length }}</span>
+                        <Icon name="material-symbols:garden-cart-outline" @click="openCart" />
+                    </div>
+                    <div>
+                        <Icon name="material-symbols:favorite" @click="openFavoritesModal" />
+                    </div>
                 </div>
             </div>
         </template>
@@ -90,8 +98,16 @@
                     </li>
                     <li>
                         <div class="menu-icon">
-                            <Icon name="material-symbols:garden-cart-outline" @click="openCart" />
-                            <Icon name="material-symbols:favorite" @click="openFavoritesModal" />
+                            <div class="menu-items__product">
+                                <span
+                                    v-show="cartProducts.length > 0"
+                                    class="menu-items__product-text"
+                                >{{ cartProducts.length }}</span>
+                                <Icon name="material-symbols:garden-cart-outline" @click="openCart" />
+                            </div>
+                            <div>
+                                <Icon name="material-symbols:favorite" @click="openFavoritesModal" />
+                            </div>
                         </div>
                     </li>
                 </ul>
@@ -192,10 +208,13 @@ const route = useRoute()
 
 const { type } = useBreakpoints()
 const userState = useUserStore()
+const cartState = useCartStore()
 const appConfig = useRuntimeConfig()
 
 const userStore = storeToRefs(userState)
 const user = userStore.getUser
+const cartStoreComputed = storeToRefs(cartState)
+const cartProducts = cartStoreComputed.getProductsCart
 
 const burgerMenu: Ref<HTMLDivElement | undefined> = ref()
 const isCartOpen: Ref<Boolean> = ref(false)
@@ -392,6 +411,7 @@ onUnmounted(() => {
 </script>
 
 <style lang="scss" scoped>
+@import "@/styles/_breakpoints.scss";
 @import "@/styles/_colors.scss";
 
 .header-secondary, .ct-bg-secondary {
@@ -428,7 +448,10 @@ onUnmounted(() => {
     position: absolute;
     display: flex;
     font-size: 1.5rem;
-    padding: 1rem;
+    padding-top: 1rem;
+    padding-bottom: 1rem;
+    padding-left: 4rem;
+    padding-right: 4rem;
     width: 100%;
     justify-content: space-between;
     z-index: 3;
@@ -578,5 +601,35 @@ onUnmounted(() => {
 
 .subnav:hover .subnav-content a {
     display: block;
+}
+
+.menu-items__product {
+    position: relative;
+}
+
+.menu-items__product-text {
+    position: absolute;
+    right: -0.3rem;
+    top: -0.1rem;
+    background: $cartItemsQuantityHeaderBackground;
+    color: white;
+    border-radius: 50%;
+    height: 0.5rem;
+    width: 0.5rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 0.3rem;
+    font-size: 0.7rem;
+    border: 1px solid $cartItemsQuantityHeaderBackground;
+}
+
+@media only screen and (max-width: $grid-breakpoints-sm) {
+    .menu-items__product-text {
+        top: -0.1rem;
+        right: -0.3rem;
+        padding: 0.5rem;
+        font-size: 1rem;
+    }
 }
 </style>

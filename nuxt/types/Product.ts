@@ -1,7 +1,10 @@
 interface IProduct {
     id: number,
     name: string,
-    image: string,
+    images: string[],
     price: number
-    category?: ICategory
+    category?: ICategory,
+    description?: string,
+    colors?: [],
+    sizes?: []
 }

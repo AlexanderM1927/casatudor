@@ -1,19 +1,25 @@
 <template>
     <div :class="`product-cart-card card ${childClass}`">
         <div class="card-body cart-item">
-            <img :title="product.name" :src="product.image" alt="{{ product.name }}">
+            <div class="cart-item__image">
+                <img :title="product.name" :src="product.images[0]" alt="{{ product.name }}">
+            </div>
             <div class="cart-item__info">
                 <h5 class="cad-item__title">{{ product.name }}</h5>
-                <p>{{ texts.cart.quantity }}: {{ product.quantity }}</p>
-                <div class="cad-item__price">
-                    <p>{{ texts.cart.price }}: {{ formatMiles(product.price) }}</p>
-                    <p>{{ texts.cart.total }}: {{ formatMiles((product.price * product.quantity)) }}</p>
+                <p><b>{{ texts.variant_color }}</b>: {{ product.selectedVariants.color }}</p>
+                <p><b>{{ texts.variant_size }}</b>: {{ product.selectedVariants.size }}</p>
+                <p><b>{{ texts.cart.quantity }}</b>: {{ product.quantity }}</p>
+                <div class="d-flex space-between">
+                    <p><b>{{ texts.cart.price }}</b>: {{ formatMiles(product.price) }}</p>
+                    <p><b>{{ texts.cart.total }}</b>: {{ formatMiles((product.price * product.quantity)) }}</p>
                 </div>
             </div>
+            <div class="cart-item__delete">
+                <a title="Remover del carrito" class="btn btn-danger" @click="removeFromCart(product)">
+                    <Icon name="material-symbols:delete" />
+                </a>
+            </div>
         </div>
-        <a title="Remover del carrito" class="add-cart-btn btn btn-danger" @click="removeFromCart(product)">
-            {{ texts.cart.remove }}
-        </a>
     </div>
     <Notification type="info" :toast-id="'product-cart-' + product.id">
         {{ texts.item_removed }}
@@ -55,21 +61,36 @@ const removeFromCart = ((product: IProductCart) => {
 .cart-item {
     display: flex;
     align-items: center;
+    border-bottom: 1px solid white;
 }
 
 .cart-item__info {
     display: flex;
     flex-direction: column;
-    padding: 1rem;
+    padding: 0.3rem;
     width: 100%;
+    font-size: 1rem;
 }
 
-.cart-item img {
+.cart-item__info p {
+    margin-bottom: 0;
+}
+
+.cart-item__image {
+    background: transparent;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.cart-item__image img {
     max-height: 3rem;
 }
 
-.cad-item__price {
+.cart-item__delete {
     display: flex;
-    justify-content: space-between;
+    align-items: flex-start;
+    flex-direction: row;
 }
 </style>

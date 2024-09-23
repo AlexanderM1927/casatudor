@@ -1,11 +1,11 @@
 <template>
-    <div id="carouselExampleDark" class="carousel carousel-dark slide">
+    <div :id="id" class="carousel carousel-dark slide">
         <div class="carousel-indicators">
             <button 
                 v-for="(item, index) in data"
                 :key="index"
                 type="button"
-                data-bs-target="#carouselExampleDark"
+                :data-bs-target="'#'+id"
                 :data-bs-slide-to="index"
                 :aria-label="`Slide ${index}`"
                 :class="`${index === 0 ? 'active' : ''}`"
@@ -25,11 +25,11 @@
                 </div>
             </div>
         </div>
-        <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleDark" data-bs-slide="prev">
+        <button class="carousel-control-prev" type="button" :data-bs-target="'#'+id" data-bs-slide="prev">
             <span class="carousel-control-prev-icon" aria-hidden="true"></span>
             <span class="visually-hidden">Previous</span>
         </button>
-        <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleDark" data-bs-slide="next">
+        <button class="carousel-control-next" type="button" :data-bs-target="'#'+id" data-bs-slide="next">
             <span class="carousel-control-next-icon" aria-hidden="true"></span>
             <span class="visually-hidden">Next</span>
         </button>
@@ -37,7 +37,9 @@
 </template>
 <script setup>
 const props = defineProps({
-    data: Array
+    data: Array,
+    id: String
+
 })
 </script>
 

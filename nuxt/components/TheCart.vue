@@ -1,28 +1,30 @@
 <template>
     <div class="cart-content" ref="cartContent">
-        <div class="cart-content-header">
-            <h2 class="title">{{ texts.cart.title }}</h2>
-            <div class="close-btn">
-                <Icon name="material-symbols:close" @click="closeCart()" />
+        <div class="cart-content__container">
+            <div class="cart-content-header">
+                <h2 class="title">{{ texts.cart.title }}</h2>
+                <div class="close-btn">
+                    <Icon name="material-symbols:close" @click="closeCart()" />
+                </div>
             </div>
-        </div>
-        <div class="cart-content-items">
-            <div class="row">
-                <ProductCart
-                    v-for="(product, index) in cartProducts"
-                    :key="index"
-                    :product="product"
-                    :childClass="`col-12`"
-                ></ProductCart>
+            <div class="cart-content-items">
+                <div class="row">
+                    <ProductCart
+                        v-for="(product, index) in cartProducts"
+                        :key="index"
+                        :product="product"
+                        :childClass="`col-12`"
+                    ></ProductCart>
+                </div>
             </div>
+            <button 
+                title="Proceder al pago" 
+                class="btn btn-success w-100"
+                @click="proceedPurchase"
+            >
+                {{ texts.cart.proceed }}
+            </button>
         </div>
-        <button 
-            title="Proceder al pago" 
-            class="add-cart-btn btn btn-success w-100"
-            @click="proceedPurchase"
-        >
-            {{ texts.cart.proceed }}
-        </button>
     </div>
     <div id="overlay" @click="closeCart()"></div>
 </template>
@@ -80,7 +82,9 @@ const purchaseByWhatsapp = (() => {
         const element = cartProducts.value[i]
         const productName = element.name
         const quantity = element.quantity
-        listOfProducts += `${productName} - Cantidad: ${quantity}`
+        const color = element.selectedVariants.color
+        const size = element.selectedVariants.size
+        listOfProducts += `${productName} ${color ? '- Color: ' + color : ''} ${size ? '- Talla: ' + size : ''} - Cantidad: ${quantity}`
         listOfProducts += `,%20 %0A`
     }
     window.open(`https://wa.me/${props.data.whatsappPhone}?text=${listOfProducts}`)
@@ -147,10 +151,20 @@ const proceedPurchase = (() => {
 .cart-content-items {
     overflow-y: auto;
     overflow-x: hidden;
-    height: 70%;
+    height: 80%;
 }
 
 .close-btn {
     cursor: pointer;
+}
+
+.cart-content__container {
+    position: relative;
+    height: 100%;
+}
+
+.cart-content__container button {
+    position: absolute;
+    bottom: 1rem;
 }
 </style>

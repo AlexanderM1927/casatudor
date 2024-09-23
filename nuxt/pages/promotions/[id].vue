@@ -1,5 +1,5 @@
 <template>
-    <div class="container custom-container">
+    <div class="first-container">
         <h2 class="title">{{ promotion.text }}</h2>
         <div class="row">
             <Product 
@@ -45,8 +45,10 @@ const getPromotions = async (newPage: number = 1) => {
     products.value = dataProducts.map(({ id, attributes }: { id: number, attributes: any }) => {
         const product: IProduct = {
             ...attributes,
-            image: useImageFromStrapi(attributes.image.data.attributes.url),
-            id
+            images: attributes.image.data.map((el: IImageStrapi) => {
+                return useImageFromStrapi(el.attributes?.url)
+            }),
+            id: id
         }
         return product
     })

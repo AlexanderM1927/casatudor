@@ -1,10 +1,11 @@
 $secondary: #2c3f50;
-$primary: #1ba7a1; // 
-$themeBackground: #ccf6f4; //darkmode: #1F1A24 || #FFFFFF
-$themeColorText: #1ba7a1; //darkmode: #FFFFFF || #000000
-$themeBackgroundCards: #FFFFFF; //darkmode: #1F1A24 || #FFFFFF
-$themeColorCards: #000000; //darkmode: #1F1A24 || #FFFFFF
-$themePromotionButton: #000; // normal: red
+$primary: #000; // normal #000
+$themeBackground: #1F1A24; //darkmode: #1F1A24 || #FFFFFF
+$themeColorText: #FFFFFF; //darkmode: #FFFFFF || #000000
+$themeBackgroundCards: #1F1A24; //darkmode: #1F1A24 || #FFFFFF
+$themeColorCards: #FFFFFF; //darkmode: #FFFFFF || #000000
+$themePromotionButton: #FF0000; // normal: #FF0000 || #000000
+$cartItemsQuantityHeaderBackground: #FF0000; // normal: #FF0000 || #000000
 
 /** CASATUDOR SETTINGS **/
 
@@ -17,5 +18,6 @@ $themeColorText: #1ba7a1; //darkmode: #FFFFFF || #000000
 $themeBackgroundCards: #FFFFFF; //darkmode: #1F1A24 || #FFFFFF
 $themeColorCards: #000000; //darkmode: #1F1A24 || #FFFFFF
 $themePromotionButton: #000; // normal: red
+$cartItemsQuantityHeaderBackground: #1ba7a1; // normal: #FF0000 || #000000
 
 */

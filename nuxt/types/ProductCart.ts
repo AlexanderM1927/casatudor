@@ -1,3 +1,7 @@
 interface IProductCart extends IProduct {
-    quantity: number
+    quantity: number,
+    selectedVariants?: {
+        color?: String,
+        size?: String
+    }
 }

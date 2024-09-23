@@ -14,6 +14,7 @@
         </section>
         <TopCategories></TopCategories>
         <LatestPosts></LatestPosts>
+        <LatestProducts></LatestProducts>
     </template>
     <template v-else>
         <LoadingComponent
@@ -69,8 +70,8 @@ onMounted(() => {
     min-height: 100vh;
     z-index: 1;
     padding-top: 5rem;
-    padding-left: 1rem;
-    padding-right: 1rem;
+    padding-left: 2rem;
+    padding-right: 2rem;
     color: white;
 }
 
@@ -82,7 +83,7 @@ onMounted(() => {
 
 @media only screen and (max-width: $grid-breakpoints-sm) {
     .hero-text {
-        padding: 1rem;
+        padding: 2rem;
         width: 100%;
     }
 }

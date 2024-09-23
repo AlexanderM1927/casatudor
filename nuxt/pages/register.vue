@@ -1,5 +1,5 @@
 <template>
-    <div class="custom-container center-container">
+    <div class="first-container center-container">
         <h2 class="title">Registro</h2>
         <form @submit.prevent="submit" preven>
             <div class="mb-3">

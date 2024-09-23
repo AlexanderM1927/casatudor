@@ -1,5 +1,5 @@
 <template>
-    <div class="container custom-container">
+    <div class="first-container">
         <h2 class="title">{{ subPage.title }}</h2>
         <Markdown :source="subPage.content" />
     </div>

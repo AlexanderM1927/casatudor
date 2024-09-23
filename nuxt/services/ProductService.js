@@ -5,6 +5,17 @@ export default class ProductService {
     constructor (config) {
         this.config = config
     }
+    async getHomeProducts(page = 1) {
+        const query = qs.stringify({
+            populate: '*',
+            sort: ['id:desc'],
+            pagination: {
+                page: page,
+                pageSize: 6
+            },
+        })
+        return await $fetch(this.config.public.apiBase + '/products?' + query)
+    }
     async getProducts(page = 1) {
         const query = qs.stringify({
             populate: '*',

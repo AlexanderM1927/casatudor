@@ -17,7 +17,7 @@
     },
     "image": {
       "type": "media",
-      "multiple": false,
+      "multiple": true,
       "required": false,
       "allowedTypes": [
         "images",
@@ -40,6 +40,18 @@
     },
     "description": {
       "type": "richtext"
+    },
+    "colors": {
+      "displayName": "Variant",
+      "type": "component",
+      "repeatable": true,
+      "component": "variants.variant"
+    },
+    "sizes": {
+      "displayName": "Size",
+      "type": "component",
+      "repeatable": true,
+      "component": "variants.size"
     }
   }
 }

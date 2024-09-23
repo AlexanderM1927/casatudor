@@ -1,0 +1,12 @@
+{
+  "collectionName": "components_variants_sizes",
+  "info": {
+    "displayName": "Size"
+  },
+  "options": {},
+  "attributes": {
+    "name": {
+      "type": "string"
+    }
+  }
+}

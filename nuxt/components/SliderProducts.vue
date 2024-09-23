@@ -1,23 +1,23 @@
 <template>
     <div>
-        <Slider id="posts" :data="data"></Slider>
+        <Slider id="products" :data="data"></Slider>
     </div>
 </template>
 <script setup lang="ts">
 const props = defineProps(
     {
-        posts: Array<IPost>
+        products: Array<IProduct>
     }
 )
 const data: Ref<Object[]|undefined> = ref(undefined)
 
 onMounted(() => {
-    data.value = props.posts?.map((element: IPost) => {
+    data.value = props.products?.map((element: IProduct) => {
         const newElement = {
             id: element.id,
-            title: element.title,
-            description: element.summary,
-            image: element.image
+            title: element.name,
+            description: element.description,
+            image: element.images[0]
         }
         return newElement
     })

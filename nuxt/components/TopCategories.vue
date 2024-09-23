@@ -1,5 +1,5 @@
 <template>
-    <section v-if="!isLoading" class="container">
+    <section v-if="!isLoading" class="second-container">
         <h2 class="title">{{ texts.top_categories }}</h2>
         <div class="top-categories">
             <div 
@@ -64,13 +64,19 @@ onMounted(() => {
 }
 
 .top-categories__category {
-    width: 15rem;
+    width: 50%;
+    aspect-ratio: 1/1;
     background-repeat: no-repeat;
     background-size: cover;
-    height: 15rem;
     position: relative;
     cursor: pointer;
     box-shadow: 0 0px 0px 0 rgba(0,0,0,.14), 0 0px 1rem 0 rgba(0,0,0,.12), 0 0.1rem 0.2rem -0.1rem rgba(0,0,0,.3);
+}
+
+@media only screen and (max-width: $grid-breakpoints-sm) {
+    .top-categories__category {
+        width: 100%;
+    }
 }
 
 @media only screen and (max-width: $grid-breakpoints-sm) {

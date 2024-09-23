@@ -1,0 +1,16 @@
+{
+  "collectionName": "components_variants_variants",
+  "info": {
+    "displayName": "color",
+    "description": ""
+  },
+  "options": {},
+  "attributes": {
+    "name": {
+      "type": "string"
+    },
+    "hexadecimal": {
+      "type": "string"
+    }
+  }
+}

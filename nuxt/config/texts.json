@@ -1,5 +1,6 @@
 {
     "last_posts": "Últimas publicaciones",
+    "last_products": "Nuevos productos",
     "top_products": "Productos top",
     "top_categories": "Categorias",
     "read_article": "Leer artículo",
@@ -11,6 +12,8 @@
     "description": "Descripción",
     "no_products_filter": "No hay productos con estos filtros",
     "remove": "Quitar",
+    "variant_color": "Color",
+    "variant_size": "Talla",
     "pages": {
         "index": "Inicio",
         "posts": "Publicaciones",

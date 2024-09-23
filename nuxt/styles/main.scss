@@ -30,15 +30,38 @@ p {
     color: $themeColorText;
 }
 
-.container {
-    padding-top: 1rem;
-    padding-bottom: 1rem;
-}
-
-.custom-container {
+.first-container {
     padding-top: 5rem;
     padding-bottom: 5rem;
+    padding-left: 4rem;
+    padding-right: 4rem;
     word-wrap: break-word;
+}
+
+@media only screen and (max-width: $grid-breakpoints-sm) {
+    .first-container {
+        padding-left: 2rem;
+        padding-right: 2rem;
+        word-wrap: break-word;
+    }
+}
+
+.second-container {
+    padding-top: 2rem;
+    padding-bottom: 2rem;
+    padding-left: 4rem;
+    padding-right: 4rem;
+    word-wrap: break-word;
+}
+
+@media only screen and (max-width: $grid-breakpoints-sm) {
+    .second-container {
+        padding-top: 2.5rem;
+        padding-bottom: 2.5rem;
+        padding-left: 2rem;
+        padding-right: 2rem;
+        word-wrap: break-word;
+    }
 }
 
 .text-centered {
@@ -82,4 +105,12 @@ blockquote {
 .subtitle {
     font-size: 2rem;
     font-weight: 800;
+}
+
+.space-between {
+    justify-content: space-between;
+}
+
+.space-around {
+    justify-content: space-around;
 }

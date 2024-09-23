@@ -1,5 +1,5 @@
 <template>
-    <div class="container custom-container">
+    <div class="first-container">
         <template v-if="!isLoading">
             <h2 class="title">{{ texts.pages.store }}</h2>
             <div class="store">
@@ -230,7 +230,9 @@ const getProducts = async (newPage: number = 1) => {
     products.value = data.map(({ id, attributes }: { id: number, attributes: any }) => {
         const product: IProduct = {
             ...attributes,
-            image: useImageFromStrapi(attributes.image.data.attributes.url),
+            images: attributes.image.data.map((el: IImageStrapi) => {
+                return useImageFromStrapi(el.attributes?.url)
+            }),
             id: id
         }
         return product
@@ -254,7 +256,9 @@ const getProductsByFilter = async () => {
     products.value = data.map(({ id, attributes }: { id: number, attributes: any }) => {
         const product: IProduct = {
             ...attributes,
-            image: useImageFromStrapi(attributes.image.data.attributes.url),
+            images: attributes.image.data.map((el: IImageStrapi) => {
+                return useImageFromStrapi(el.attributes?.url)
+            }),
             id: id
         }
         return product

@@ -42,7 +42,7 @@
                                 :key="color.id"
                                 :checked="index === 0"
                                 class="variants__colors-input"
-                                :style="`background: #${color.hexadecimal};`"
+                                :style="`background: ${color.hexadecimal};`"
                                 type="radio"
                                 :id='color.id'
                                 name="colors"

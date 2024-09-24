@@ -30,7 +30,7 @@ const props = defineProps({
     padding: 0.5rem;
     width: 100%;
     background: $primary;
-    font-family: 'Roboto';
+    font-family: system-ui;
     gap: 0.5rem;
 }
 .promotion a {

@@ -33,14 +33,14 @@ const favoritesContent: Ref<HTMLDivElement | undefined> = ref()
 
 watch(() => props.isFavoritesModalOpen, (val) => {
     if (val === true) {
-        openCartHTML()
+        openFavoritesModalHTML()
     } else {
         closeFavoritesModalHTML()
     }
 })
 
 const closeFavoritesModalHTML = (() => {
-    const overlayItem = document.getElementById("overlay")
+    const overlayItem = document.getElementById("overlay-favorites")
     if (overlayItem) overlayItem.style.display = "none";
     if (favoritesContent.value) {
         favoritesContent.value.style.opacity = '0'
@@ -48,8 +48,8 @@ const closeFavoritesModalHTML = (() => {
     }
 })
 
-const openCartHTML = (() => {
-    const overlayItem = document.getElementById("overlay")
+const openFavoritesModalHTML = (() => {
+    const overlayItem = document.getElementById("overlay-favorites")
     if (overlayItem) overlayItem.style.display = "block";
     if (favoritesContent.value) {
         favoritesContent.value.style.opacity = '1'

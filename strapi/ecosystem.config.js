@@ -1,7 +1,7 @@
 module.exports = {
   apps: [
     {
-      name: 'app',
+      name: 'CasaTudorStrapi',
       script: 'npm',
       args: 'start',
     },

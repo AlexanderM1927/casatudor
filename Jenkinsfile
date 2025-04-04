@@ -10,6 +10,7 @@ pipeline {
             }
             steps {
                 withCredentials([file(credentialsId: 'envcasatudor-front', variable: 'ENV_FILE')]) {
+                    sh 'rm -f ./nuxt/.env'
                     sh 'cp "\$ENV_FILE" ./nuxt/.env'
                 }
                 dir('./nuxt') {
@@ -34,6 +35,7 @@ pipeline {
             }
             steps {
                 withCredentials([file(credentialsId: 'envcasatudor', variable: 'ENV_FILE')]) {
+                    sh 'rm -f ./strapi/.env'
                     sh 'cp "\$ENV_FILE" ./strapi/.env'
                 }
                 dir('./strapi') {

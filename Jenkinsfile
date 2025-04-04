@@ -13,6 +13,8 @@ pipeline {
                     sh 'npm install'
                 }
                 withCredentials([file(credentialsId: 'envcasatudor-front', variable: 'ENV_FILE')]) {
+                    sh 'ls -la'
+                    sh 'pwd'
                     sh 'cp $ENV_FILE ./nuxt/.env'
                 }
                 dir('./nuxt') {

@@ -9,16 +9,11 @@ pipeline {
                 nodejs 'node-21.11.1'
             }
             steps {
+                withCredentials([file(credentialsId: 'envcasatudor-front', variable: 'ENV_FILE')]) {
+                    sh 'cp "\$ENV_FILE" ./nuxt/.env'
+                }
                 dir('./nuxt') {
                     sh 'npm install'
-                }
-                withCredentials([file(credentialsId: 'envcasatudor-front', variable: 'ENV_FILE')]) {
-                    sh 'ls -la'
-                    sh 'pwd'
-                    sh 'echo $ENV_FILE'
-                    sh 'cp $ENV_FILE ./nuxt/.env'
-                }
-                dir('./nuxt') {
                     sh 'npm run build'
                 }
             }
@@ -38,13 +33,11 @@ pipeline {
                 nodejs 'node-21.11.1'
             }
             steps {
+                withCredentials([file(credentialsId: 'envcasatudor', variable: 'ENV_FILE')]) {
+                    sh 'cp "\$ENV_FILE" ./strapi/.env'
+                }
                 dir('./strapi') {
                     sh 'npm install'
-                }
-                withCredentials([file(credentialsId: 'envcasatudor', variable: 'ENV_FILE')]) {
-                    sh 'cp $ENV_FILE ./strapi/.env'
-                }
-                dir('./strapi') {
                     sh 'NODE_ENV=production npm run build'
                 }
             }

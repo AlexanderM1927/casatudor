@@ -15,6 +15,7 @@ pipeline {
                 withCredentials([file(credentialsId: 'envcasatudor-front', variable: 'ENV_FILE')]) {
                     sh 'ls -la'
                     sh 'pwd'
+                    sh 'echo $ENV_FILE'
                     sh 'cp $ENV_FILE ./nuxt/.env'
                 }
                 dir('./nuxt') {

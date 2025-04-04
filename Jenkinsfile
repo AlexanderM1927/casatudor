@@ -10,7 +10,7 @@ pipeline {
             }
             steps {
                 withCredentials([file(credentialsId: 'envcasatudor-front', variable: 'ENV_FILE')]) {
-                    sh 'cp $ENV_FILE .env'
+                    sh 'cp $ENV_FILE ./nuxt/.env'
                 }
                 dir('./nuxt') {
                     sh 'npm install'
@@ -34,7 +34,7 @@ pipeline {
             }
             steps {
                 withCredentials([file(credentialsId: 'envcasatudor', variable: 'ENV_FILE')]) {
-                    sh 'cp $ENV_FILE .env'
+                    sh 'cp $ENV_FILE ./strapi/.env'
                 }
                 dir('./strapi') {
                     sh 'npm install'

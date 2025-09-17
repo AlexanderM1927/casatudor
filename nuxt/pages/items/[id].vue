@@ -5,7 +5,7 @@
                 <img
                     :title="product.name"
                     :src="product.images[0]"
-                    alt="{{ product.name }}"
+                    :alt="product.name"
                     id="main-image"
                 />
                 <div class="slider-product" v-show="product.images.length > 1">
@@ -14,7 +14,7 @@
                         class="slider-product__item"
                         @click="changeMainImage(image)"
                     >
-                        <img :src="image">
+                        <img :src="image" :alt="image">
                     </div>
                 </div>
             </div>

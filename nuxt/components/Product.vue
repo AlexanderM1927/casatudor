@@ -4,7 +4,7 @@
             :title="product.name"
             :src="product.images[0]" 
             class="card-img-top product-card__img" 
-            alt="..."
+            :alt="product.name"
             @click="navigateTo('/items/' + product.id)"
         >
         <div class="card-body">

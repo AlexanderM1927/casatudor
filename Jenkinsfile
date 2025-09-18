@@ -46,9 +46,9 @@ pipeline {
                       PERSIST_UPLOADS="/var/www/uploads/casatudor"
 
                       # 1) Ensure the external uploads folder exists (adjust sudo if not needed)
-                      sudo mkdir -p "$PERSIST_UPLOADS"
-                      sudo chown -R "$(whoami)":"$(whoami)" "$PERSIST_UPLOADS"
-                      sudo chmod -R 755 "$PERSIST_UPLOADS"
+                      mkdir -p "$PERSIST_UPLOADS"
+                      chown -R "$(whoami)":"$(whoami)" "$PERSIST_UPLOADS"
+                      chmod -R 755 "$PERSIST_UPLOADS"
 
                       # 2) (one-time) migrate any existing local uploads if they were a real folder
                       if [ -d "./public/uploads" ] && [ ! -L "./public/uploads" ] && [ -n "$(ls -A ./public/uploads 2>/dev/null)" ]; then

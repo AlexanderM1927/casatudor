@@ -36,6 +36,7 @@ const props = defineProps(
 .post-card {
     background: $themeBackgroundCards;
     color: $themeColorCards;
+    padding-top: 1rem;
 }
 
 .post-img {

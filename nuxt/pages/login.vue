@@ -1,5 +1,5 @@
 <template>
-    <div class="first-container center-container">
+    <div class="first-container center-container bg-white">
         <h2 class="title">Login</h2>
         <form @submit="login">
             <div class="mb-3">

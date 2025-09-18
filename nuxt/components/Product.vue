@@ -125,6 +125,7 @@ onMounted(() => {
 .product-card {
     background: $themeBackgroundCards;
     color: $themeColorCards;
+    padding-top: 1rem;
 }
 
 .add-cart-btn {

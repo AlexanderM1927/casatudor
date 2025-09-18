@@ -14,9 +14,6 @@
             <br>
             No tienes una cuenta? <NuxtLink to="/register">Registrarme</NuxtLink>
         </form>
-        <Notification :type="notificationType" :toast-id="'user-login'">
-            {{ notificationMessage }}
-        </Notification>
     </div>
 </template>
 <script setup lang="ts">
@@ -54,12 +51,12 @@ const login = async (e: Event) => {
             }, 500)
         } else {
             notificationMessage.value = 'Unexpected error'
-            notificationType.value = 'negative'
+            notificationType.value = 'error'
         }
     } catch (error: any) {
         notificationMessage.value = error.response._data.error.message
-        notificationType.value = 'negative'
-        ToastHelper.openToast('user-login')
+        notificationType.value = 'error'
+        ToastHelper.openToast(notificationMessage.value, notificationType.value)
     }
 }
 </script>

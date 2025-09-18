@@ -100,9 +100,6 @@
             </div>
         </div>
     </div>
-    <Notification v-if="product" type="positive" :toast-id="'product-' + product.id">
-        {{ texts.item_added }}
-    </Notification>
 </template>
 <script setup lang="ts">
 import texts from '@/config/texts.json'
@@ -150,7 +147,7 @@ const getProduct = async (newPage: number = 1) => {
 }
 
 const addToCart = ((product: IProduct) => {
-    ToastHelper.openToast('product-' + product.id)
+    ToastHelper.openToast(texts.item_added, 'success')
     const colorSelected = (document.querySelector('input[name="colors"]:checked') as HTMLInputElement)?.value
     const sizeSelected = (document.getElementById('variant-size') as HTMLInputElement)?.value
 

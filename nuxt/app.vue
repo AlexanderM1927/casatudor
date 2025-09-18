@@ -1,7 +1,10 @@
 <template>
     <template v-if="!isLoading">
         <ThePromotion :data="dataPromotions"></ThePromotion>
-        <div class="main-page">
+            <div class="main-page">
+                <div id="toast-container">
+                <!-- Toast notifications will appear here -->
+            </div>
             <TheHeader :data="dataFooter" />
             <NuxtPage />
             <TheWhatsAppBtn :data="dataFooter" />

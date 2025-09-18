@@ -25,9 +25,6 @@
             </div>
         </div>
     </div>
-    <Notification type="info" :toast-id="'product-cart-' + product.id">
-        {{ texts.item_removed }}
-    </Notification>
 </template>
 <script setup lang="ts">
 import texts from '@/config/texts.json'
@@ -47,7 +44,7 @@ const props = defineProps({
 })
 
 const removeFromCart = ((product: IProductCart) => {
-    ToastHelper.openToast('product-cart-' + product.id)
+    ToastHelper.openToast(texts.item_removed, 'success')
     setTimeout(() => {
         cart.removeProducts(product)
     }, 500)

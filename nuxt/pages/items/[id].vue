@@ -2,7 +2,7 @@
     <div class="first-container product-page">
         <div class="product-container">
             <div class="product-container__image">
-                <img
+                <NuxtImg
                     :title="product.name"
                     :src="product.images[0]"
                     :alt="product.name"
@@ -14,7 +14,7 @@
                         class="slider-product__item"
                         @click="changeMainImage(image)"
                     >
-                        <img :src="image" :alt="image">
+                        <NuxtImg :src="image" :alt="image" />
                     </div>
                 </div>
             </div>

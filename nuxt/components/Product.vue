@@ -1,12 +1,15 @@
 <template>
     <div v-if="product" :class="`product-card card ${childClass}`">
-        <img
-            :title="product.name"
+        <NuxtImg
             :src="product.images[0]" 
-            class="card-img-top product-card__img" 
             :alt="product.name"
+            :title="product.name"
+            class="card-img-top product-card__img"
+            loading="lazy"
+            format="webp"
+            sizes="sm:100vw md:50vw lg:25vw"
             @click="navigateTo('/items/' + product.id)"
-        >
+        />
         <div class="card-body">
             <h5 
                 class="card-title product-card__title" 

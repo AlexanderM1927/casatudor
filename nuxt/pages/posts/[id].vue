@@ -4,7 +4,12 @@
         <b style="white-space: pre-line;">{{ post.summary }}</b>
         <hr>
         <p style="white-space: pre-line;">{{ post.fullText }}</p>
-        <img :title="post.title" :src="post.image" class="d-block w-100" :alt="post.title">
+        <NuxtImg
+            :title="post.title"
+            :src="post.image"
+            class="d-block w-100" 
+            :alt="post.title" 
+        />
     </div>
 </template>
 <script setup lang="ts">

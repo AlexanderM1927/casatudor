@@ -18,7 +18,12 @@
                 :class="`carousel-item ${index === 0 ? 'active' : ''}`"
                 :data-bs-interval="`${item.id}000`"
             >
-                <img :title="item.title" :src="item.image" class="d-block w-100" :alt="item.title">
+                <NuxtImg 
+                    :title="item.title" 
+                    :src="item.image" 
+                    class="d-block w-100" 
+                    :alt="item.title"
+                />
                 <div class="carousel-caption d-md-block">
                     <h5>{{ item.title }}</h5>
                     <p>{{ item.description }}.</p>

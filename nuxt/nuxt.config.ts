@@ -23,9 +23,15 @@ export default defineNuxtConfig({
   modules: [
     '@nuxt/test-utils/module',
     '@pinia/nuxt',
+    '@nuxt/image',
     'nuxt-icon'
   ],
-  ssr: false,
+  ssr: true,
+  nitro: {
+    prerender: {
+      routes: ['/'] // Pre-render critical pages
+    }
+  },
   $development: {
     vite: {
       server: {

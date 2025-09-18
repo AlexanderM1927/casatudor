@@ -2,7 +2,11 @@
     <div :class="`product-cart-card card ${childClass}`">
         <div class="card-body cart-item">
             <div class="cart-item__image">
-                <img :title="product.name" :src="product.images[0]" :alt="product.name">
+                <NuxtImg
+                    :title="product.name"
+                    :src="product.images[0]"
+                    :alt="product.name" 
+                />
             </div>
             <div class="cart-item__info">
                 <h5 class="cad-item__title">{{ product.name }}</h5>

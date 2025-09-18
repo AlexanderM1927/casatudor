@@ -8,6 +8,7 @@
                 :key="index"
                 :product="product"
                 :childClass="`col-md-3 col-xs-12`"
+                :isFirstProduct="index < 2"
             ></Product>
         </div>
     </section>

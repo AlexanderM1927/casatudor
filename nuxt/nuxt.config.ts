@@ -29,6 +29,25 @@ export default defineNuxtConfig({
     '@nuxt/image',
     'nuxt-icon'
   ],
+  image: {
+    formats: ['webp', 'avif', 'jpeg'],
+    screens: {
+      xs: 320,
+      sm: 640,
+      md: 768,
+      lg: 1024,
+      xl: 1280,
+    },
+    presets: {
+      hero: {
+        modifiers: {
+          format: 'webp',
+          quality: 90,
+          sizes: '100vw'
+        }
+      }
+    }
+  },
   ssr: true,
   nitro: {
     prerender: {

@@ -1,10 +1,16 @@
 <template>
     <template v-if="!isLoading">
-        <section class="container-index"  :style="`background: url(
-                ${
-                    useImageFromStrapi(image)
-                }
-            ); background-size: cover;`">
+        <section class="container-index">
+            <!-- Hero image with high priority -->
+            <NuxtImg
+                :src="useImageFromStrapi(image)"
+                :alt="title"
+                class="hero-background"
+                fetchpriority="high"
+                format="webp"
+                sizes="100vw"
+                preload
+            />
             <div :class="`hero-text ${type === 'xs' ? 'hero-text-center' : ''}`">
                 <h2 class="title">
                     {{ title }}

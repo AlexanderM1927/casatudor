@@ -5,7 +5,8 @@
             :alt="product.name"
             :title="product.name"
             class="card-img-top product-card__img"
-            loading="lazy"
+            :loading="isFirstProduct ? 'eager' : 'lazy'"
+            :fetchpriority="isFirstProduct ? 'high' : 'auto'"
             format="webp"
             sizes="sm:100vw md:50vw lg:25vw"
             @click="navigateTo('/items/' + product.id)"
@@ -75,6 +76,10 @@ const props = defineProps({
     product: {
         required: true,
         type: Object as PropType<IProduct>
+    },
+    isFirstProduct: {
+        type: Boolean,
+        default: false
     }
 })
 

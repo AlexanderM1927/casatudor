@@ -22,29 +22,29 @@
                 <p>${{ formatMiles(product.price) }}</p>
             </div>
             <div class="product-card__btns">
-                <a 
+                <button
                     title="Ver más detalles" 
                     class="add-cart-btn btn btn-primary" 
                     @click="navigateTo('/items/' + product.id)"
                 >
                     <Icon name="material-symbols:visibility-outline" />
-                </a>
-                <a 
+                </button>
+                <button 
                     v-if="!isProductOnFavorites" 
                     title="Agregar a favoritos" 
                     class="add-cart-btn btn btn-danger" 
                     @click="addToFavorites(product)"
                 >
                     <Icon name="material-symbols:favorite" />
-                </a>
-                <a 
+                </button>
+                <button 
                     v-else
                     title="Elminar de favoritos" 
                     class="add-cart-btn btn btn-danger" 
                     @click="removeFromFavorites(product)"
                 >
                     <Icon name="carbon:favorite-half" />
-                </a>
+                </button>
             </div>
         </div>
     </div>

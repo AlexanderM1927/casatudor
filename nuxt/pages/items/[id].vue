@@ -70,7 +70,7 @@
                     </div>
                 </div>
                 <div class="product-container__btns">
-                <a 
+                <button 
                     v-if="!isProductOnFavorites" 
                     title="Agregar a favoritos" 
                     class="add-cart-btn btn btn-danger" 
@@ -78,8 +78,8 @@
                 >
                     <Icon name="material-symbols:favorite" />
                     {{ texts.add_to_favorites }}
-                </a>
-                <a 
+                </button>
+                <button 
                     v-else
                     title="Elminar de favoritos" 
                     class="add-cart-btn btn btn-danger" 
@@ -87,15 +87,15 @@
                 >
                     <Icon name="carbon:favorite-half" />
                     {{ texts.remove_from_favorites }}
-                </a>
-                <a 
+                </button>
+                <button 
                     title="Agregar al carrito" 
                     class="add-cart-btn btn btn-primary" 
                     @click="addToCart(product)"
                 >
                     <Icon name="material-symbols:add-shopping-cart" />
                     {{ texts.add_to_cart }}
-                </a>
+                </button>
             </div>
             </div>
         </div>

@@ -70,8 +70,6 @@ onMounted(() => {
 @import "@/styles/_breakpoints.scss";
 .container-index {
     position: relative;
-    background: url('img/bgjpg.jpg');
-    background-size: cover;
     width: 100%;
     min-height: 100vh;
     z-index: 1;
@@ -79,18 +77,46 @@ onMounted(() => {
     padding-left: 2rem;
     padding-right: 2rem;
     color: white;
+    overflow: hidden; /* Prevent image overflow */
+}
+
+.hero-background {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    z-index: -1;
 }
 
 .hero-text {
+    position: relative;
+    z-index: 1;
     padding: 2rem;
     border-radius: 1rem;
     width: 20rem;
+    max-width: calc(100% - 2rem); /* Ensure it doesn't overflow on mobile */
 }
 
 @media only screen and (max-width: $grid-breakpoints-sm) {
+    .container-index {
+        padding-left: 1rem;
+        padding-right: 1rem;
+        padding-top: 3rem;
+    }
+    
     .hero-text {
-        padding: 2rem;
+        padding: 1.5rem;
         width: 100%;
+        max-width: none;
+    }
+    
+    .hero-background {
+        /* Ensure full coverage on mobile */
+        width: 100vw;
+        height: 100vh;
+        object-position: center center;
     }
 }
 

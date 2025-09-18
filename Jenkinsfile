@@ -54,5 +54,16 @@ pipeline {
                 }
             }
         }
+        stage('Verify Deployment') {
+            tools {
+                nodejs 'node-21.11.1'
+            }
+            steps {
+                script {
+                    sh 'pm2 list | grep CasaTudorNuxt'
+                    sh 'pm2 list | grep CasaTudorStrapi'
+                }
+            }
+        }
     }
 }

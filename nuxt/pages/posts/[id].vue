@@ -36,7 +36,7 @@ const getPost = async (newPage: number = 1) => {
     post.value = data.map(({ id, attributes }: { id: number, attributes: any }) => {
         const post: IPost = {
             ...attributes,
-            image: useImageFromStrapi(attributes.image.data.attributes.url),
+            image: useImageFromStrapi(attributes?.image?.data?.attributes?.url),
             id: id
         }
         return post

@@ -231,7 +231,7 @@ const getProducts = async (newPage: number = 1) => {
         const product: IProduct = {
             ...attributes,
             images: attributes.image.data.map((el: IImageStrapi) => {
-                return useImageFromStrapi(el.attributes?.url)
+                return useImageFromStrapi(el?.attributes?.url)
             }),
             id: id
         }
@@ -257,7 +257,7 @@ const getProductsByFilter = async () => {
         const product: IProduct = {
             ...attributes,
             images: attributes.image.data.map((el: IImageStrapi) => {
-                return useImageFromStrapi(el.attributes?.url)
+                return useImageFromStrapi(el?.attributes?.url)
             }),
             id: id
         }

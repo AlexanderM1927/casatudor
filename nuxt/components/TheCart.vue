@@ -144,8 +144,9 @@ const proceedPurchase = (() => {
 }
 
 .cart-content h1 {
-    font-family: 'contra-slab-bold';
+    font-family: 'Inter';
     font-size: 3rem;
+    font-weight: 700;
 }
 
 .cart-content-items {

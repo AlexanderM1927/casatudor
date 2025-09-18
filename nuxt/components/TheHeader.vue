@@ -436,7 +436,8 @@ onUnmounted(() => {
     width: 100%;
     place-items: center;
     justify-content: space-between;
-    font-family: 'contra-slab-bold';
+    font-family: 'Inter';
+    font-weight: 700;
 }
 
 .header-mobile .burger-menu-btn {
@@ -460,17 +461,18 @@ onUnmounted(() => {
 
 .company-name {
     cursor: pointer;
-    font-family: 'contra-slab-bold';
+    font-family: 'Inter';
 }
 
 .header .menu-items {
-    font-family: 'contra-slab';
+    font-family: 'Inter';
     display: flex;
     gap: 1rem;
     list-style: none;
     font-size: 1rem;
     margin-bottom: 0;
     align-items: center;
+    font-weight: 700;
 }
 
 .anchor {
@@ -553,7 +555,8 @@ onUnmounted(() => {
 
 .burger-menu h1 {
     margin-bottom: 0;
-    font-family: 'contra-slab-bold';
+    font-family: 'Inter';
+    font-weight: 700;
 }
 
 .burger-menu .items {

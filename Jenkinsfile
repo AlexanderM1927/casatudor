@@ -50,7 +50,8 @@ pipeline {
             }
             steps {
                 dir('./strapi') {
-                    sh 'export JENKINS_NODE_COOKIE=dontKillMeCasatudor; NODE_ENV=production pm2 start'
+                    // sh 'export JENKINS_NODE_COOKIE=dontKillMeCasatudor; NODE_ENV=production pm2 start'
+                    sh 'export JENKINS_NODE_COOKIE=dontKillMeCasatudor; npm run develop'
                 }
             }
         }

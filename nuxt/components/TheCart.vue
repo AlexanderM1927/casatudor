@@ -18,7 +18,7 @@
                 </div>
             </div>
             <button 
-                title="Proceder al pago" 
+                :title="texts.cart.proceed" 
                 class="btn btn-success w-100"
                 @click="proceedPurchase"
             >
@@ -243,6 +243,6 @@ const processPurchaseByWompi = (async () => {
 
 .cart-content__container button {
     position: absolute;
-    bottom: 1rem;
+    bottom: 10%;
 }
 </style>

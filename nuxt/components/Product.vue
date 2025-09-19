@@ -60,6 +60,7 @@
 import texts from '@/config/texts.json'
 import type { PropType } from 'vue'
 import NumberHelper from '~/helpers/NumberHelper'
+import type { IProduct } from '~/types/Product'
 
 const favoritesStore = useFavoritesStore()
 const favoritesStoreComputed = storeToRefs(favoritesStore)

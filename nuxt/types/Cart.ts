@@ -1,4 +1,4 @@
-interface ICart {
+export interface ICart {
     id: number,
     total?: number
     totalPaid?: number,

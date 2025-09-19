@@ -16,6 +16,7 @@
 <script setup lang="ts">
 import texts from '@/config/texts.json'
 import PostService from '@/services/PostService'
+import type { IPost } from '~/types/Post'
 
 const appConfig = useRuntimeConfig()
 const postService = new PostService(appConfig)

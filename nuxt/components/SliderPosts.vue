@@ -4,6 +4,8 @@
     </div>
 </template>
 <script setup lang="ts">
+import type { IPost } from '~/types/Post'
+
 const props = defineProps(
     {
         posts: Array<IPost>

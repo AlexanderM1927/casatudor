@@ -21,6 +21,7 @@
 </template>
 <script setup lang="ts">
 import texts from '@/config/texts.json'
+import type { IProduct } from '~/types/Product'
 const favoritesStore = useFavoritesStore()
 const favoritesStoreComputed = storeToRefs(favoritesStore)
 const favoritesProducts = favoritesStoreComputed.getProducts

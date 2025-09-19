@@ -10,8 +10,8 @@
             </div>
             <div class="cart-item__info">
                 <h5 class="cad-item__title">{{ product.name }}</h5>
-                <p><b>{{ texts.variant_color }}</b>: {{ product.selectedVariants.color }}</p>
-                <p><b>{{ texts.variant_size }}</b>: {{ product.selectedVariants.size }}</p>
+                <p><b>{{ texts.variant_color }}</b>: {{ product?.selectedVariants?.color }}</p>
+                <p><b>{{ texts.variant_size }}</b>: {{ product?.selectedVariants?.size }}</p>
                 <p><b>{{ texts.cart.quantity }}</b>: {{ product.quantity }}</p>
                 <div class="d-flex space-between">
                     <p><b>{{ texts.cart.price }}</b>: {{ formatMiles(product.price) }}</p>
@@ -31,6 +31,7 @@ import texts from '@/config/texts.json'
 import type { PropType } from 'vue'
 import ToastHelper from '~/helpers/ToastHelper'
 import NumberHelper from '~/helpers/NumberHelper'
+import type { IProductCart } from '~/types/ProductCart'
 
 const formatMiles = NumberHelper.miles
 

@@ -33,6 +33,8 @@ import texts from '@/config/texts.json'
 import CartService from '~/services/CartService';
 import ToastHelper from '~/helpers/ToastHelper'
 import PaymentService from '~/services/PaymentService'
+import type { ICart } from '~/types/Cart';
+import type { IProductCart } from '~/types/ProductCart';
 
 const { user } = useAuth()
 const cartService = new CartService(useRuntimeConfig())

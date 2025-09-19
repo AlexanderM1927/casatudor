@@ -19,6 +19,7 @@
 <script setup lang="ts">
 import texts from "@/config/texts.json";
 import TopCategoryService from "@/services/TopCategoryService";
+import type { ICategory } from "~/types/Category";
 
 const appConfig = useRuntimeConfig();
 const topCategoryService = new TopCategoryService(appConfig);

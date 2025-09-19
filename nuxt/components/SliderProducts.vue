@@ -4,6 +4,8 @@
     </div>
 </template>
 <script setup lang="ts">
+import type { IProduct } from '~/types/Product'
+
 const props = defineProps(
     {
         products: Array<IProduct>

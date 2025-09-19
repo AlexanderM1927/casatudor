@@ -19,6 +19,7 @@
 </template>
 <script setup lang="ts">
 import texts from '@/config/texts.json'
+import type { IPost } from '~/types/Post';
 
 const props = defineProps(
     {

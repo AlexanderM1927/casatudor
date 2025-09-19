@@ -1,4 +1,5 @@
-interface IProduct {
+import type { ICategory } from './Category';
+export interface IProduct {
     id: number,
     name: string,
     images: string[],
@@ -6,5 +7,6 @@ interface IProduct {
     category?: ICategory,
     description?: string,
     colors?: [],
-    sizes?: []
+    sizes?: [],
+    price_before_offer?: number,
 }

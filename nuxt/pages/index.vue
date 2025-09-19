@@ -8,7 +8,6 @@
                 class="hero-background"
                 fetchpriority="high"
                 format="webp"
-                sizes="(max-width: 576px) 100vw, 100vw"
                 quality="90"
                 densities="1x 2x"
                 preload
@@ -74,7 +73,7 @@ onMounted(() => {
 
 .container-index {
     position: relative;
-    width: 100%;
+    width: 100vw;
     height: 100vh;
     z-index: 1;
     padding-top: 5rem;

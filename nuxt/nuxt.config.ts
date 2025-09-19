@@ -50,6 +50,13 @@ export default defineNuxtConfig({
     '@nuxt/image',
     'nuxt-icon'
   ],
+  icon: {
+    size: '24px', // default <Icon> size applied
+    class: 'icon', // default <Icon> class applied
+    aliases: {
+      'nuxt': 'logos:nuxt-icon'
+    }
+  },
   image: {
     formats: ['webp', 'avif', 'jpeg'],
     screens: {
@@ -69,7 +76,7 @@ export default defineNuxtConfig({
       }
     }
   },
-  ssr: true,
+  ssr: false, // Disable SSR to avoid hydration issues
   nitro: {
     prerender: {
       routes: ['/'] // Pre-render critical pages

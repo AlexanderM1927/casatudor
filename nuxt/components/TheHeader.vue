@@ -211,6 +211,7 @@ import PageService from "@/services/PageService";
 import { useBreakpoints } from "@/composables/useBreakpoints";
 import SocialMediaLinks from "./SocialMediaLinks.vue";
 import texts from "@/config/texts.json";
+import type { IPage } from "@/types/Page";
 defineProps({
   data: {
     type: Object,

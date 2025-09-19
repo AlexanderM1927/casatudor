@@ -1,4 +1,6 @@
-interface IPage {
+import type { ICategory } from './Category';
+
+export interface IPage {
     id: number,
     urlId: string,
     urlTitle: string,

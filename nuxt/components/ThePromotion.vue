@@ -1,5 +1,5 @@
 <template>
-    <section class="promotion" v-if="data.isEnabled">
+    <section class="promotion" v-if="data && data.isEnabled">
         <div>{{ data.text }}</div>
         <NuxtLink 
             :to="`/promotions/${data.id}`"
@@ -15,7 +15,8 @@ import texts from '@/config/texts.json'
 
 const props = defineProps({
     data: {
-        type: Object
+        type: Object,
+        default: () => ({})
     }
 })
 </script>

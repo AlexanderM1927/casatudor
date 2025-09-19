@@ -1,5 +1,6 @@
 export const useAuth = () => {
-    const user = useState<any | null>('auth:user', () => null)
+    // Use a more descriptive key and ensure consistent state
+    const user = useState<any | null>('auth.user', () => null)
     const loggedIn = computed(() => !!user.value)
 
     const fetchMe = async () => {

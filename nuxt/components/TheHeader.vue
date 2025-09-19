@@ -342,8 +342,9 @@ const setMenuItemsColor = (color: String) => {
   }
 };
 
-const burgerMenuBtn = document.getElementById("burger-menu-btn");
+const burgerMenuBtn = typeof document !== 'undefined' ? document.getElementById("burger-menu-btn") : null;
 const setPositionsFixed = () => {
+  if (typeof document === 'undefined') return;
   const headerHTML = document.getElementById("header");
   const headerMobileHTML = document.getElementById("header-mobile");
   const burgerMenuHTML = document.getElementById("burger-menu");
@@ -358,6 +359,7 @@ const setPositionsFixed = () => {
   }
 };
 const setPositionsAbsolute = () => {
+  if (typeof document === 'undefined') return;
   const headerHTML = document.getElementById("header");
   const headerMobileHTML = document.getElementById("header-mobile");
   const burgerMenuHTML = document.getElementById("burger-menu");
@@ -372,6 +374,7 @@ const setPositionsAbsolute = () => {
   }
 };
 const changeHeaderPerWhite = () => {
+  if (typeof document === 'undefined') return;
   const headerHTML = document.getElementById("header");
   const headerMobileHTML = document.getElementById("header-mobile");
   if (burgerMenuBtn) burgerMenuBtn.style.color = "black";
@@ -380,6 +383,7 @@ const changeHeaderPerWhite = () => {
   setMenuItemsColor("secondary");
 };
 const changeHeaderPerDefault = () => {
+  if (typeof document === 'undefined') return;
   const headerHTML = document.getElementById("header");
   const headerMobileHTML = document.getElementById("header-mobile");
   if (burgerMenuBtn) burgerMenuBtn.style.color = "white";
@@ -406,18 +410,22 @@ const handleScroll = () => {
 
 onMounted(() => {
   getPages();
-  setTimeout(() => {
-    handleScroll();
-    window.addEventListener("scroll", () => {
+  if (typeof window !== 'undefined') {
+    setTimeout(() => {
       handleScroll();
-    });
-  }, 200);
+      window.addEventListener("scroll", () => {
+        handleScroll();
+      });
+    }, 200);
+  }
 });
 
 onUnmounted(() => {
-  window.removeEventListener("scroll", () => {
-    handleScroll();
-  });
+  if (typeof window !== 'undefined') {
+    window.removeEventListener("scroll", () => {
+      handleScroll();
+    });
+  }
 });
 </script>
 

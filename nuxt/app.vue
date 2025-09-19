@@ -1,22 +1,27 @@
 <template>
-    <template v-if="!isLoading">
-        <ThePromotion :data="dataPromotions"></ThePromotion>
-            <div class="main-page">
-                <div id="toast-container">
-                <!-- Toast notifications will appear here -->
-            </div>
-            <TheHeader :data="dataFooter" />
-            <NuxtPage />
-            <TheWhatsAppBtn :data="dataFooter" />
-            <TheFooter :data="dataFooter" />
+    <div>
+        <div id="toast-container">
+            <!-- Toast notifications will appear here -->
         </div>
-    </template>
-    <template v-else>
+        
         <LoadingComponent
+            v-if="isLoading"
             :isLoading="isLoading"
             :id="1"
         ></LoadingComponent>
-    </template>
+        
+        <!-- Main layout - hidden during loading -->
+        <div :style="{ display: isLoading ? 'none' : 'block' }">
+            <ThePromotion :data="dataPromotions"></ThePromotion>
+            <div class="main-page">
+                <TheHeader :data="dataFooter" />
+                <!-- Page content goes here -->
+                <NuxtPage />
+                <TheWhatsAppBtn :data="dataFooter" />
+                <TheFooter :data="dataFooter" />
+            </div>
+        </div>
+    </div>
 </template>
 <script setup lang="ts">
 import ThePromotion from '@/components/ThePromotion.vue'

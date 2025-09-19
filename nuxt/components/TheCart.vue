@@ -101,7 +101,9 @@ const purchaseByWhatsapp = (() => {
 
 const proceedPurchase = (() => {
     if (!user.value) {
+        closeCart()
         navigateTo('/login')
+        ToastHelper.openToast('Tienes que iniciar sesión antes de comprar', 'warning')
     } else {
         processPurchaseByWompi()
     }

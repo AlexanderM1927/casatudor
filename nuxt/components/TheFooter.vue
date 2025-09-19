@@ -29,8 +29,8 @@ const props = defineProps({
 </script>
 
 <style lang="scss" scoped>
-@import "@/styles/_colors.scss";
-@import "@/styles/_breakpoints.scss";
+
+
 .footer {
     padding: 5rem;
     padding-top: 7rem;

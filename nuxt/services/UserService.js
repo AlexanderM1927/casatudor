@@ -17,4 +17,10 @@ export default class UserService {
             body: params
         })
     }
+    async me(params) {
+        return await $fetch(this.config.public.apiBase + '/users/me', {
+            method: 'GET',
+            headers: { Authorization: `Bearer ${params.token}` }
+        })
+    }
 }

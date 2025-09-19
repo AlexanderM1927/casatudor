@@ -68,7 +68,7 @@ onMounted(() => {
 </script>
 
 <style lang="scss" scoped>
-@import "@/styles/_breakpoints.scss";
+
 .container-index {
     position: relative;
     width: 100%;

@@ -75,18 +75,20 @@ export default defineNuxtConfig({
       routes: ['/'] // Pre-render critical pages
     }
   },
+  vite: {
+    css: {
+      preprocessorOptions: {
+        scss: {
+          additionalData: `
+            @use "@/styles/_colors.scss" as *;
+            @use "@/styles/_breakpoints.scss" as *;
+          `
+        }
+      }
+    }
+  },
   $development: {
     vite: {
-      css: {
-        preprocessorOptions: {
-          scss: {
-            additionalData: `
-              @use "@/styles/_colors.scss" as *;
-              @use "@/styles/_breakpoints.scss" as *;
-            `
-          }
-        }
-      },
       server: {
         watch: {
           usePolling: true,

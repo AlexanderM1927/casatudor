@@ -75,8 +75,7 @@ onMounted(() => {
 .container-index {
     position: relative;
     width: 100%;
-    min-height: 100vh;
-    /* Support for iOS Safari */
+    height: 100vh;
     z-index: 1;
     padding-top: 5rem;
     padding-left: 2rem;

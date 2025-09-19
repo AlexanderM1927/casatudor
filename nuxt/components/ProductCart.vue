@@ -10,13 +10,13 @@
             </div>
             <div class="cart-item__info">
                 <h5 class="cad-item__title">{{ product.name }}</h5>
-                <p><b>{{ texts.variant_color }}</b>: {{ product?.selectedVariants?.color }}</p>
-                <p><b>{{ texts.variant_size }}</b>: {{ product?.selectedVariants?.size }}</p>
-                <p><b>{{ texts.cart.quantity }}</b>: {{ product.quantity }}</p>
+                <p v-show="product?.selectedVariants?.color !== ''"><b>{{ texts.variant_color }}</b>: {{ product?.selectedVariants?.color }}</p>
+                <p v-show="product?.selectedVariants?.size !== ''"><b>{{ texts.variant_size }}</b>: {{ product?.selectedVariants?.size }}</p>
                 <div class="d-flex space-between">
+                    <p><b>{{ texts.cart.quantity }}</b>: {{ product.quantity }}</p>
                     <p><b>{{ texts.cart.price }}</b>: {{ formatMiles(product.price) }}</p>
-                    <p><b>{{ texts.cart.total }}</b>: {{ formatMiles((product.price * product.quantity)) }}</p>
                 </div>
+                <p><b>{{ texts.cart.total }}</b>: {{ formatMiles((product.price * product.quantity)) }}</p>
             </div>
             <div class="cart-item__delete">
                 <a title="Remover del carrito" class="btn btn-danger" @click="removeFromCart(product)">
@@ -57,6 +57,7 @@ const removeFromCart = ((product: IProductCart) => {
 .product-cart-card {
     background: $themeBackgroundCards;
     color: $themeColorCards;
+    height: 15rem;
 }
 
 .cart-item {
@@ -83,10 +84,11 @@ const removeFromCart = ((product: IProductCart) => {
     display: flex;
     align-items: center;
     justify-content: center;
+    width: 10rem;
 }
 
 .cart-item__image img {
-    max-height: 3rem;
+    max-width: 100%;
 }
 
 .cart-item__delete {

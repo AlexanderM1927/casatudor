@@ -112,25 +112,13 @@ const proceedPurchase = (() => {
     }
 })
 
-const getUserCart = (async () => {
-    if (!user.value) return
-    const useCart = await useGetUserCart(user.value)
-    if (!useCart) {
-        cart.syncCartWithStrapi()
-    }
-    const cartProducts = useCart?.attributes?.products || []
-
-    const productCarts: IProductCart[] = mapAPICartProductsToIProductCarts(cartProducts)
-    cart.setCart(useCart.id, productCarts)
-})
-
 onMounted(() => {
-    getUserCart()
+    cart.getUserCart()
 })
 
 watch(user, (newUser) => {
     if (newUser) {
-        getUserCart()
+        cart.getUserCart()
     }
 })
 
@@ -268,6 +256,6 @@ const processPurchaseByWompi = (async () => {
 
 .cart-content__container button {
     position: absolute;
-    bottom: 10%;
+    bottom: 7%;
 }
 </style>

@@ -1,4 +1,3 @@
-import CartService from "~/services/CartService"
 import type { IProductCart } from "~/types/ProductCart"
 
 export const useCartStore = defineStore('cart', {
@@ -78,6 +77,17 @@ export const useCartStore = defineStore('cart', {
             } catch (error) {
                 console.error('Failed to sync cart with Strapi:', error)
             }
+        },
+        async getUserCart () {
+            const { user } = useAuth()
+            const useCart = await useGetUserCart(user.value)
+            if (!useCart) {
+                this.syncCartWithStrapi()
+            }
+            const cartProducts = useCart?.attributes?.products || []
+        
+            const productCarts: IProductCart[] = mapAPICartProductsToIProductCarts(cartProducts)
+            this.setCart(useCart.id, productCarts)
         }
     },
     getters: {

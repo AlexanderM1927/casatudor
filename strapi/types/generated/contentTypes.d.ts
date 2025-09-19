@@ -539,6 +539,7 @@ export interface ApiInvoiceInvoice extends Schema.CollectionType {
 export interface ApiOrderOrder extends Schema.CollectionType {
   collectionName: 'orders';
   info: {
+    description: '';
     displayName: 'Order';
     pluralName: 'orders';
     singularName: 'order';
@@ -547,11 +548,6 @@ export interface ApiOrderOrder extends Schema.CollectionType {
     draftAndPublish: true;
   };
   attributes: {
-    carts: Attribute.Relation<
-      'api::order.order',
-      'oneToMany',
-      'api::cart.cart'
-    >;
     createdAt: Attribute.DateTime;
     createdBy: Attribute.Relation<
       'api::order.order',
@@ -559,6 +555,11 @@ export interface ApiOrderOrder extends Schema.CollectionType {
       'admin::user'
     > &
       Attribute.Private;
+    invoice: Attribute.Relation<
+      'api::order.order',
+      'oneToOne',
+      'api::invoice.invoice'
+    >;
     publishedAt: Attribute.DateTime;
     updatedAt: Attribute.DateTime;
     updatedBy: Attribute.Relation<

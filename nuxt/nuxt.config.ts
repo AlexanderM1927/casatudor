@@ -1,5 +1,6 @@
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
+  compatibilityDate: '2025-09-19',
   runtimeConfig: {
     jwtCookie: process.env.NUXT_JWT_COOKIE || 'auth_token',
     public: {
@@ -45,7 +46,6 @@ export default defineNuxtConfig({
     "~/node_modules/bootstrap/dist/css/bootstrap.min.css"
   ],
   modules: [
-    '@nuxt/test-utils/module',
     '@pinia/nuxt',
     '@nuxt/image',
     'nuxt-icon'

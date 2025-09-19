@@ -14,8 +14,6 @@ export default defineNuxtRouteMiddleware(async (to) => {
         }
     }
     
-    console.log('Middleware auth - loggedIn:', loggedIn.value)
-    
     // Redirect if page requires auth and user is not logged in
     if (to.meta.requiresAuth && !loggedIn.value) {
         return navigateTo('/login?next=' + encodeURIComponent(to.fullPath))

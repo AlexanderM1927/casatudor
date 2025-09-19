@@ -3,10 +3,12 @@ import type { Attribute, Schema } from '@strapi/strapi';
 export interface VariantsSize extends Schema.Component {
   collectionName: 'components_variants_sizes';
   info: {
+    description: '';
     displayName: 'Size';
   };
   attributes: {
     name: Attribute.String;
+    quantity: Attribute.Integer;
   };
 }
 
@@ -19,6 +21,7 @@ export interface VariantsVariant extends Schema.Component {
   attributes: {
     hexadecimal: Attribute.String;
     name: Attribute.String;
+    quantity: Attribute.Integer;
   };
 }
 

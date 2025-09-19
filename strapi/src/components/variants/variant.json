@@ -11,6 +11,9 @@
     },
     "hexadecimal": {
       "type": "string"
+    },
+    "quantity": {
+      "type": "integer"
     }
   }
 }

@@ -494,6 +494,43 @@ export interface ApiFooterFooter extends Schema.CollectionType {
   };
 }
 
+export interface ApiInvoiceInvoice extends Schema.CollectionType {
+  collectionName: 'invoices';
+  info: {
+    description: '';
+    displayName: 'invoice';
+    pluralName: 'invoices';
+    singularName: 'invoice';
+  };
+  options: {
+    draftAndPublish: true;
+  };
+  attributes: {
+    cart: Attribute.Relation<
+      'api::invoice.invoice',
+      'oneToOne',
+      'api::cart.cart'
+    >;
+    createdAt: Attribute.DateTime;
+    createdBy: Attribute.Relation<
+      'api::invoice.invoice',
+      'oneToOne',
+      'admin::user'
+    > &
+      Attribute.Private;
+    publishedAt: Attribute.DateTime;
+    total: Attribute.Float;
+    totalPaid: Attribute.Float & Attribute.Private;
+    updatedAt: Attribute.DateTime;
+    updatedBy: Attribute.Relation<
+      'api::invoice.invoice',
+      'oneToOne',
+      'admin::user'
+    > &
+      Attribute.Private;
+  };
+}
+
 export interface ApiOrderOrder extends Schema.CollectionType {
   collectionName: 'orders';
   info: {
@@ -624,7 +661,7 @@ export interface ApiProductProduct extends Schema.CollectionType {
     description: Attribute.RichText;
     image: Attribute.Media<'images' | 'files' | 'videos' | 'audios', true>;
     name: Attribute.String;
-    price: Attribute.Integer;
+    price: Attribute.Float;
     price_before_offer: Attribute.Integer;
     publishedAt: Attribute.DateTime;
     sizes: Attribute.Component<'variants.size', true>;
@@ -1143,6 +1180,7 @@ declare module '@strapi/types' {
       'api::category.category': ApiCategoryCategory;
       'api::content.content': ApiContentContent;
       'api::footer.footer': ApiFooterFooter;
+      'api::invoice.invoice': ApiInvoiceInvoice;
       'api::order.order': ApiOrderOrder;
       'api::page.page': ApiPagePage;
       'api::post.post': ApiPostPost;

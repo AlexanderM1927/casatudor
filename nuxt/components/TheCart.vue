@@ -100,7 +100,7 @@ const purchaseByWhatsapp = (() => {
 })
 
 const proceedPurchase = (() => {
-    if (!user) {
+    if (!user.value) {
         navigateTo('/login')
     } else {
         processPurchaseByWompi()

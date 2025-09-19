@@ -6,19 +6,36 @@ export const useAuth = () => {
         try {
             const res: any = await $fetch('/api/auth/me')
             user.value = res.user
-        } catch {
+            return res.user
+        } catch (error) {
             user.value = null
+            throw error
         }
     }
 
     const login = async (identifier: string, password: string) => {
-        const res: any = await $fetch('/api/auth/login', { method: 'POST', body: { identifier, password } })
-        user.value = res.user
+        try {
+            const res: any = await $fetch('/api/auth/login', { 
+                method: 'POST', 
+                body: { identifier, password } 
+            })
+            user.value = res.user
+            return res.user
+        } catch (error) {
+            user.value = null
+            throw error
+        }
     }
 
     const logout = async () => {
-        await $fetch('/api/auth/logout', { method: 'POST' })
-        user.value = null
+        try {
+            await $fetch('/api/auth/logout', { method: 'POST' })
+        } catch (error) {
+            // Continue with logout even if server request fails
+            console.error('Error during logout:', error)
+        } finally {
+            user.value = null
+        }
     }
 
     return { user, loggedIn, fetchMe, login, logout }

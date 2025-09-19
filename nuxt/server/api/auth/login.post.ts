@@ -13,7 +13,7 @@ export default defineEventHandler(async (event) => {
         setCookie(event, config.jwtCookie, res.jwt, {
             httpOnly: true,
             sameSite: 'lax',
-            secure: true,        // en producción con HTTPS
+            secure: process.env.NODE_ENV === 'production',  // Only secure in production
             path: '/',
             maxAge: 60 * 60 * 24 * 7 // 7 días (ajusta a tu política)
         })

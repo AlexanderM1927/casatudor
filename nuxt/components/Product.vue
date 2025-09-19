@@ -60,9 +60,7 @@
 import texts from '@/config/texts.json'
 import type { PropType } from 'vue'
 import NumberHelper from '~/helpers/NumberHelper'
-import ToastHelper from '~/helpers/ToastHelper'
 
-const cart = useCartStore()
 const favoritesStore = useFavoritesStore()
 const favoritesStoreComputed = storeToRefs(favoritesStore)
 const favoritesProducts: any = favoritesStoreComputed.getProducts

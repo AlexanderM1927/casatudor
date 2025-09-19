@@ -16,6 +16,11 @@ export default defineNuxtConfig({
       htmlAttrs: {
         lang: 'es' // Add your language code here (e.g., 'en', 'es', 'fr')
       },
+      script: [
+        {
+          src: 'https://checkout.wompi.co/widget.js'
+        }
+      ],
       link: [
         {
           rel: 'preconnect',

@@ -365,6 +365,7 @@ export interface AdminUser extends Schema.CollectionType {
 export interface ApiCartCart extends Schema.CollectionType {
   collectionName: 'carts';
   info: {
+    description: '';
     displayName: 'Cart';
     pluralName: 'carts';
     singularName: 'cart';
@@ -376,16 +377,16 @@ export interface ApiCartCart extends Schema.CollectionType {
     createdAt: Attribute.DateTime;
     createdBy: Attribute.Relation<'api::cart.cart', 'oneToOne', 'admin::user'> &
       Attribute.Private;
-    product: Attribute.Relation<
-      'api::cart.cart',
-      'oneToOne',
-      'api::product.product'
-    >;
+    products: Attribute.Component<'products.products', true>;
     publishedAt: Attribute.DateTime;
-    quantity: Attribute.Integer;
     updatedAt: Attribute.DateTime;
     updatedBy: Attribute.Relation<'api::cart.cart', 'oneToOne', 'admin::user'> &
       Attribute.Private;
+    users_permissions_user: Attribute.Relation<
+      'api::cart.cart',
+      'oneToOne',
+      'plugin::users-permissions.user'
+    >;
   };
 }
 
@@ -426,7 +427,7 @@ export interface ApiCategoryCategory extends Schema.CollectionType {
   };
 }
 
-export interface ApiContentContent extends Schema.CollectionType {
+export interface ApiContentContent extends Schema.SingleType {
   collectionName: 'contents';
   info: {
     description: '';
@@ -518,6 +519,10 @@ export interface ApiInvoiceInvoice extends Schema.CollectionType {
       'admin::user'
     > &
       Attribute.Private;
+    paymentStatus: Attribute.Enumeration<
+      ['pending', 'approved', 'declined', 'error']
+    > &
+      Attribute.DefaultTo<'pending'>;
     publishedAt: Attribute.DateTime;
     total: Attribute.Float;
     totalPaid: Attribute.Float & Attribute.Private;

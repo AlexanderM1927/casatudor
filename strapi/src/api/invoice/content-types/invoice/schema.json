@@ -22,6 +22,11 @@
     "totalPaid": {
       "type": "float",
       "private": true
+    },
+    "paymentStatus": {
+      "type": "enumeration",
+      "enum": ["pending", "approved", "declined", "error"],
+      "default": "pending"
     }
   }
 }

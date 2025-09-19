@@ -7,13 +7,8 @@ export default class ContentService {
     }
     async getContent() {
         const query = qs.stringify({
-            populate: '*',
-            sort: ['id:desc'],
-            pagination: {
-                page: 1,
-                pageSize: 1
-            }
+            populate: '*'
         })
-        return await $fetch(this.config.public.apiBase + '/contents?' + query)
+        return await $fetch(this.config.public.apiBase + '/content?' + query)
     }
 }

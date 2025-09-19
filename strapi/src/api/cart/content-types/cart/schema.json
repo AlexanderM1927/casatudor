@@ -4,20 +4,23 @@
   "info": {
     "singularName": "cart",
     "pluralName": "carts",
-    "displayName": "Cart"
+    "displayName": "Cart",
+    "description": ""
   },
   "options": {
     "draftAndPublish": true
   },
   "pluginOptions": {},
   "attributes": {
-    "product": {
+    "users_permissions_user": {
       "type": "relation",
       "relation": "oneToOne",
-      "target": "api::product.product"
+      "target": "plugin::users-permissions.user"
     },
-    "quantity": {
-      "type": "integer"
+    "products": {
+      "type": "component",
+      "repeatable": true,
+      "component": "products.products"
     }
   }
 }

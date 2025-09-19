@@ -49,7 +49,8 @@ const getContent = async () => {
     isLoading.value = true
     try {
         const { data }: any = await contentService.getContent()
-        const { attributes } = data[0]
+        // Single type returns data directly, not in an array
+        const { attributes } = data
         title.value = attributes.titleHomePage
         description.value = attributes.descriptionHomePage
         image.value = attributes.imageHomePage.data.attributes.url

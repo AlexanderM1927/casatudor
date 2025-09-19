@@ -30,10 +30,18 @@
 </template>
 <script setup lang="ts">
 import texts from '@/config/texts.json'
+import CartService from '~/services/CartService';
+import ToastHelper from '~/helpers/ToastHelper'
+import PaymentService from '~/services/PaymentService'
+
+const cartService = new CartService(useRuntimeConfig())
+const paymentService = new PaymentService(useRuntimeConfig())
 const emit = defineEmits(['closeCart'])
 const cart = useCartStore()
+const userState = useUserStore()
 const cartContent: Ref<HTMLDivElement | undefined> = ref()
-
+const notificationType: Ref<string> = ref("");
+const notificationMessage: Ref<string> = ref("");
 const props = defineProps({
     isCartOpen: {
         type: Boolean
@@ -82,16 +90,71 @@ const purchaseByWhatsapp = (() => {
         const element = cartProducts.value[i]
         const productName = element.name
         const quantity = element.quantity
-        const color = element.selectedVariants.color
-        const size = element.selectedVariants.size
+        const color = element?.selectedVariants?.color
+        const size = element?.selectedVariants?.size
         listOfProducts += `${productName} ${color ? '- Color: ' + color : ''} ${size ? '- Talla: ' + size : ''} - Cantidad: ${quantity}`
         listOfProducts += `,%20 %0A`
     }
-    window.open(`https://wa.me/${props.data.whatsappPhone}?text=${listOfProducts}`)
+    window.open(`https://wa.me/${props?.data?.whatsappPhone}?text=${listOfProducts}`)
 })
 
+const userStore = storeToRefs(userState)
+const user = userStore.getUser
 const proceedPurchase = (() => {
-    purchaseByWhatsapp()
+    if (!user.value.logged) {
+        navigateTo('/login')
+    } else {
+        processPurchaseByWompi()
+    }
+})
+
+//TODO: Get cart from backend if not exists and user is logged in
+
+const processPurchaseByWompi = (async () => {
+    try {
+        //TODO: Creates a Cart if the cart is not defined
+        const cartResponse: any = await cartService.createCart({
+            data: {
+                users_permissions_user: user.value.id,
+                products: cartProducts.value.map((product: IProductCart) => {
+                    return {
+                        product: product.id,
+                        quantity: product.quantity,
+                        selectedVariants: {
+                            color: product?.selectedVariants?.color,
+                            size: product?.selectedVariants?.size
+                        }
+                    }
+                })
+            }
+        })
+        const cart: ICart = cartResponse.data
+        const payment: any = await paymentService.processPayment({
+            cartId: cart?.id
+        })
+        const initCheckout = {
+            currency: payment?.currency,
+            amountInCents: payment?.amountInCents,
+            reference: `${payment?.reference}_INVOICE`,
+            publicKey: payment?.publicKey,
+            redirectUrl: payment?.redirectUrl,
+            signature: payment?.signature
+        }
+        const checkout: any = new WidgetCheckout(initCheckout)
+        checkout.open(function (result: any) {
+            //TODO: Implement this
+            // cleanCart()
+            console.log(result.transaction);
+        });
+    } catch (error: any) {
+        if (error) {
+            notificationMessage.value = error.response._data.error.message;
+        } else {
+            notificationMessage.value = "Unexpected error appears";
+        }
+        notificationType.value = "negative";
+        ToastHelper.openToast(notificationMessage.value, notificationType.value);
+    }
 })
 </script>
 

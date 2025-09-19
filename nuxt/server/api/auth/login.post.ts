@@ -1,5 +1,4 @@
 import { defineEventHandler, readBody, setCookie, createError } from 'h3'
-import ToastHelper from '~/helpers/ToastHelper'
 import UserService from '~/services/UserService'
 
 export default defineEventHandler(async (event) => {
@@ -20,7 +19,6 @@ export default defineEventHandler(async (event) => {
 
         return { user: res.user }
     } catch (error: any) {
-        ToastHelper.openToast(error.response._data.error.message, 'error')
     }
 
 })

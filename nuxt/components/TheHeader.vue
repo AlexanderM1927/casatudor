@@ -285,6 +285,7 @@ const goToHome = () => {
 
 const handleLogout = async () => {
   await logout()
+  cartState.clearCart()
   navigateTo('/login')
 };
 

@@ -37,8 +37,9 @@ import type { ICart } from '~/types/Cart';
 import type { IProductCart } from '~/types/ProductCart';
 
 const { user } = useAuth()
-const cartService = new CartService(useRuntimeConfig())
-const paymentService = new PaymentService(useRuntimeConfig())
+const config = useRuntimeConfig()
+const cartService = new CartService(config)
+const paymentService = new PaymentService(config)
 const emit = defineEmits(['closeCart'])
 const cart = useCartStore()
 const cartContent: Ref<HTMLDivElement | undefined> = ref()
@@ -108,6 +109,28 @@ const proceedPurchase = (() => {
         ToastHelper.openToast('Tienes que iniciar sesión antes de comprar', 'warning')
     } else {
         processPurchaseByWompi()
+    }
+})
+
+const getUserCart = (async () => {
+    if (!user.value) return
+    const useCart = await useGetUserCart(user.value)
+    if (!useCart) {
+        cart.syncCartWithStrapi()
+    }
+    const cartProducts = useCart?.attributes?.products || []
+
+    const productCarts: IProductCart[] = mapAPICartProductsToIProductCarts(cartProducts)
+    cart.setCart(useCart.id, productCarts)
+})
+
+onMounted(() => {
+    getUserCart()
+})
+
+watch(user, (newUser) => {
+    if (newUser) {
+        getUserCart()
     }
 })
 

@@ -1,5 +1,5 @@
 <template>
-    <section v-if="!isLoading" class="second-container">
+    <section v-if="!isLoading" class="second-container bg-white">
         <h2 class="title">{{ texts.last_products }}</h2>
         <br>
         <div class="row">

@@ -31,7 +31,6 @@ const props = defineProps(
 )
 </script>
 <style lang="scss" scoped>
-@import "@/styles/_colors.scss";
 
 .post-card {
     background: $themeBackgroundCards;

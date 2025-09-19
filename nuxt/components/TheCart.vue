@@ -34,16 +34,17 @@ import CartService from '~/services/CartService';
 import ToastHelper from '~/helpers/ToastHelper'
 import PaymentService from '~/services/PaymentService'
 
+const { user } = useAuth()
 const cartService = new CartService(useRuntimeConfig())
 const paymentService = new PaymentService(useRuntimeConfig())
 const emit = defineEmits(['closeCart'])
 const cart = useCartStore()
-const userState = useUserStore()
 const cartContent: Ref<HTMLDivElement | undefined> = ref()
 const notificationType: Ref<string> = ref("");
 const notificationMessage: Ref<string> = ref("");
 const props = defineProps({
     isCartOpen: {
+        required: true,
         type: Boolean
     },
     data: {
@@ -98,10 +99,8 @@ const purchaseByWhatsapp = (() => {
     window.open(`https://wa.me/${props?.data?.whatsappPhone}?text=${listOfProducts}`)
 })
 
-const userStore = storeToRefs(userState)
-const user = userStore.getUser
 const proceedPurchase = (() => {
-    if (!user.value.logged) {
+    if (!user) {
         navigateTo('/login')
     } else {
         processPurchaseByWompi()
@@ -115,7 +114,7 @@ const processPurchaseByWompi = (async () => {
         //TODO: Creates a Cart if the cart is not defined
         const cartResponse: any = await cartService.createCart({
             data: {
-                users_permissions_user: user.value.id,
+                users_permissions_user: user?.value?.id,
                 products: cartProducts.value.map((product: IProductCart) => {
                     return {
                         product: product.id,
@@ -174,8 +173,6 @@ const processPurchaseByWompi = (async () => {
 </script>
 
 <style lang="scss" scoped>
-@import "@/styles/_colors.scss";
-@import "@/styles/_breakpoints.scss";
 #overlay {
   position: fixed; /* Sit on top of the page content */
   display: none; /* Hidden by default */

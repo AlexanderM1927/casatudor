@@ -118,7 +118,6 @@ onMounted(() => {
 </script>
 
 <style lang="scss" scoped>
-@import "@/styles/_colors.scss";
 
 .product-card {
     background: $themeBackgroundCards;

@@ -1,16 +1,11 @@
-export default defineNuxtRouteMiddleware((to, from) => {
-    // Skip authentication check during server-side rendering
-    if (process.server) {
-        return
+export default defineNuxtRouteMiddleware(async (to) => {
+    console.log('middleware:', to)
+    const { loggedIn, fetchMe } = useAuth()
+    if (!loggedIn.value) {
+        await fetchMe()
     }
-    
-    // Check authentication only on client-side
-    const isAuthenticated = () => {
-        if (typeof window === 'undefined') return false
-        return localStorage.getItem('jwt') !== '' && localStorage.getItem('jwt') !== null
-    }
-
-    if (!isAuthenticated()) {
-        return navigateTo('/login')
+    console.log('Middleware auth - loggedIn:', loggedIn.value)
+    if (to.meta.requiresAuth && !loggedIn.value) {
+        return navigateTo('/login?next=' + encodeURIComponent(to.fullPath))
     }
 })

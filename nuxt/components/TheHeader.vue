@@ -84,7 +84,7 @@
               </NuxtLink>
             </div>
           </li>
-          <li v-if="!user.logged">
+          <li v-if="!user">
             <NuxtLink
               :title="texts.pages.login"
               class="menu-items-anchor anchor anchor-opacity anchor-underline anchor-primary"
@@ -92,7 +92,7 @@
               >{{ texts.pages.login }}</NuxtLink
             >
           </li>
-          <li v-if="user.logged">
+          <li v-if="user">
             <NuxtLink
               title="Mis Pedidos"
               class="menu-items-anchor anchor anchor-opacity anchor-underline anchor-primary"
@@ -100,11 +100,11 @@
               >Mis Pedidos</NuxtLink
             >
           </li>
-          <li v-if="user.logged">
+          <li v-if="user">
             <a
               title="Logout"
               class="menu-items-anchor anchor anchor-opacity anchor-underline anchor-primary"
-              @click="logout"
+              @click="handleLogout"
               href="#"
               >Logout</a
             >
@@ -180,18 +180,18 @@
             </li>
           </ul>
         </li>
-        <li v-if="!user.logged">
+        <li v-if="!user">
           <NuxtLink class="anchor anchor-third" to="/login" :title="texts.pages.login">{{
             texts.pages.login
           }}</NuxtLink>
         </li>
-        <li v-if="user.logged">
+        <li v-if="user">
           <NuxtLink class="anchor anchor-third" to="/orders" title="Mis Pedidos"
             >Mis Pedidos</NuxtLink
           >
         </li>
-        <li v-if="user.logged">
-          <a title="Logout" class="anchor anchor-third" @click="logout" href="#"
+        <li v-if="user">
+          <a title="Logout" class="anchor anchor-third" @click="handleLogout" href="#"
             >Logout</a
           >
         </li>
@@ -219,18 +219,15 @@ defineProps({
 const route = useRoute();
 
 const { type } = useBreakpoints();
-const userState = useUserStore();
 const cartState = useCartStore();
 const appConfig = useRuntimeConfig();
-
-const userStore = storeToRefs(userState);
-const user = userStore.getUser;
+const { user, logout } = useAuth()
 const cartStoreComputed = storeToRefs(cartState);
 const cartProducts = cartStoreComputed.getProductsCart;
 
 const burgerMenu: Ref<HTMLDivElement | undefined> = ref();
-const isCartOpen: Ref<Boolean> = ref(false);
-const isFavoritesModalOpen: Ref<Boolean> = ref(false);
+const isCartOpen: Ref<boolean> = ref(false);
+const isFavoritesModalOpen: Ref<boolean> = ref(false);
 const pages: Ref<[IPage]> = ref([
   {
     id: 0,
@@ -241,7 +238,7 @@ const pages: Ref<[IPage]> = ref([
     subpages: {},
   },
 ]);
-const isLoading: Ref<Boolean> = ref(false);
+const isLoading: Ref<boolean> = ref(false);
 const productNameSearch: Ref<String> = ref("");
 
 const searchItem = () => {
@@ -285,10 +282,9 @@ const goToHome = () => {
   navigateTo("/");
 };
 
-const logout = () => {
-  userState.removeUser();
-  localStorage.removeItem("userData");
-  localStorage.removeItem("jwt");
+const handleLogout = async () => {
+  await logout()
+  navigateTo('/login')
 };
 
 const openCart = () => {
@@ -408,16 +404,7 @@ const handleScroll = () => {
   }
 };
 
-const checkLogin = () => {
-  if (!user.value.logged) {
-    if (localStorage.getItem("userData")) {
-      userState.setUser(JSON.parse(localStorage.getItem("userData") || "{}"));
-    }
-  }
-};
-
 onMounted(() => {
-  checkLogin();
   getPages();
   setTimeout(() => {
     handleScroll();
@@ -435,8 +422,8 @@ onUnmounted(() => {
 </script>
 
 <style lang="scss" scoped>
-@import "@/styles/_breakpoints.scss";
-@import "@/styles/_colors.scss";
+
+
 
 .header-secondary,
 .ct-bg-secondary {

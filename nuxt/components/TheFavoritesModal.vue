@@ -69,8 +69,6 @@ onMounted(() => {
 </script>
 
 <style lang="scss" scoped>
-@import "@/styles/_breakpoints.scss";
-@import "@/styles/_colors.scss";
 
 #overlay-favorites {
   position: fixed; /* Sit on top of the page content */

@@ -354,8 +354,8 @@ onMounted(() => {
 })
 </script>
 <style lang="scss" scoped>
-@import "@/styles/_colors.scss";
-@import "@/styles/_breakpoints.scss";
+
+
 .store {
     display: flex;
     width: 100%;

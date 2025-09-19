@@ -1,6 +1,27 @@
 
 html {
     font-size: 16px; /* Sets the base font size to 16px */
+    /* iOS Safari viewport fixes */
+    height: -webkit-fill-available;
+}
+
+body {
+    /* iOS Safari viewport fixes */
+    min-height: 100vh;
+    min-height: -webkit-fill-available;
+    /* Prevent horizontal scrolling on mobile */
+    overflow-x: hidden;
+    /* Prevent iOS Safari from zooming when tapping inputs */
+    -webkit-text-size-adjust: 100%;
+}
+
+/* Ensure full viewport coverage on mobile devices */
+@supports (-webkit-touch-callout: none) {
+    .container-index {
+        /* Target iOS Safari specifically */
+        height: -webkit-fill-available;
+        min-height: -webkit-fill-available;
+    }
 }
 
 // Inter from Google Fonts - modern, clean, optimized

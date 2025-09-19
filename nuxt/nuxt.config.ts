@@ -14,7 +14,7 @@ export default defineNuxtConfig({
   app: {
     head: {
       charset: 'utf-8',
-      viewport: 'width=device-width, initial-scale=1',
+      viewport: 'width=device-width, initial-scale=1, viewport-fit=cover, user-scalable=no',
       htmlAttrs: {
         lang: 'es' // Add your language code here (e.g., 'en', 'es', 'fr')
       },

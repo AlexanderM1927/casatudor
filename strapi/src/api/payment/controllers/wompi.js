@@ -3,7 +3,6 @@ const crypto = require('crypto');
 
 module.exports = {
   async init(ctx) {
-    console.log('ctx', ctx)
     const { cartId } = ctx.request.body || {};
 
     // Create invoice if cartId is provided

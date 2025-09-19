@@ -8,8 +8,11 @@
                 class="hero-background"
                 fetchpriority="high"
                 format="webp"
-                sizes="100vw"
+                sizes="(max-width: 576px) 100vw, 100vw"
+                quality="90"
+                densities="1x 2x"
                 preload
+                loading="eager"
             />
             <div :class="`hero-text ${type === 'xs' ? 'hero-text-center' : ''}`">
                 <h2 class="title">
@@ -73,6 +76,7 @@ onMounted(() => {
     position: relative;
     width: 100%;
     min-height: 100vh;
+    /* Support for iOS Safari */
     z-index: 1;
     padding-top: 5rem;
     padding-left: 2rem;
@@ -88,6 +92,7 @@ onMounted(() => {
     width: 100%;
     height: 100%;
     object-fit: cover;
+    object-position: center center;
     z-index: -1;
 }
 
@@ -105,19 +110,41 @@ onMounted(() => {
         padding-left: 1rem;
         padding-right: 1rem;
         padding-top: 3rem;
+        /* Fix for iOS Safari viewport */
+        min-height: 100vh;
+        min-height: -webkit-fill-available;
+        margin-left: 0;
+        margin-right: 0;
+        /* Ensure full width on mobile */
+        width: 100vw;
+        position: relative;
+        left: 50%;
+        transform: translateX(-50%);
     }
     
     .hero-text {
         padding: 1.5rem;
         width: 100%;
         max-width: none;
+        /* Ensure proper positioning on mobile */
+        position: relative;
+        transform: none;
     }
     
     .hero-background {
-        /* Ensure full coverage on mobile */
+        /* Ensure full coverage on mobile - iOS Safari fix */
+        position: fixed;
+        top: 0;
+        left: 0;
         width: 100vw;
         height: 100vh;
+        height: -webkit-fill-available;
+        object-fit: cover;
         object-position: center center;
+        z-index: -1;
+        /* Force hardware acceleration for better performance */
+        transform: translateZ(0);
+        -webkit-transform: translateZ(0);
     }
 }
 
@@ -128,5 +155,8 @@ onMounted(() => {
     left: 50%;
     -ms-transform: translate(-50%, -50%);
     transform: translate(-50%, -50%);
+    /* Ensure proper mobile centering */
+    width: calc(100% - 2rem);
+    max-width: 90%;
 }
 </style>

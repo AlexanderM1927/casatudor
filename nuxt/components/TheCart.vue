@@ -142,6 +142,21 @@ const processPurchaseByWompi = (async () => {
         }
         const checkout: any = new WidgetCheckout(initCheckout)
         checkout.open(function (result: any) {
+            if (result.transaction.status === "APPROVED") {
+                notificationMessage.value = "¡Pago aprobado! Gracias por su compra.";
+                notificationType.value = "success";
+                ToastHelper.openToast(notificationMessage.value, notificationType.value);
+                closeCart()
+                location.href = payment?.redirectUrl
+            } else if (result.transaction.status === "DECLINED") {
+                notificationMessage.value = "El pago fue rechazado, por favor intente nuevamente.";
+                notificationType.value = "error";
+                ToastHelper.openToast(notificationMessage.value, notificationType.value);
+            } else if (result.transaction.status === "PENDING") {
+                notificationMessage.value = "El pago está pendiente, por favor revise su método de pago.";
+                notificationType.value = "warning";
+                ToastHelper.openToast(notificationMessage.value, notificationType.value);
+            }
             //TODO: Implement this
             // cleanCart()
             console.log(result.transaction);

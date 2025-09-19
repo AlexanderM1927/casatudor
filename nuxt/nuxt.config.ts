@@ -1,6 +1,7 @@
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
   runtimeConfig: {
+    jwtCookie: process.env.NUXT_JWT_COOKIE || 'auth_token',
     public: {
       strapiAssets: process.env.STRAPI_ASSETS,
       apiBase: process.env.API_BASE,
@@ -76,6 +77,16 @@ export default defineNuxtConfig({
   },
   $development: {
     vite: {
+      css: {
+        preprocessorOptions: {
+          scss: {
+            additionalData: `
+              @use "@/styles/_colors.scss" as *;
+              @use "@/styles/_breakpoints.scss" as *;
+            `
+          }
+        }
+      },
       server: {
         watch: {
           usePolling: true,

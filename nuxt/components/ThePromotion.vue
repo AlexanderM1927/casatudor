@@ -20,7 +20,7 @@ const props = defineProps({
 })
 </script>
 <style lang="scss" scoped>
-@import "@/styles/_colors.scss";
+
 
 .promotion {
     color: white;

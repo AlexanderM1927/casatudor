@@ -53,7 +53,7 @@ onMounted(() => {
 });
 </script>
 <style scoped lang="scss">
-@import "@/styles/_breakpoints.scss";
+
 
 .top-categories {
   display: flex;

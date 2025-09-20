@@ -40,7 +40,6 @@ const props = defineProps({
     display: flex;
     justify-content: center;
     gap: 1rem;
-    margin-top: 1rem;
     background: $primary;
 }
 

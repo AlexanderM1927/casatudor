@@ -49,6 +49,10 @@
                     </tr>
                 </tbody>
             </table>
+            <Paginator 
+                @getAction="getOrders"
+                :data="paginator"
+            ></Paginator>
         </div>
 
         <!-- Products Modal -->
@@ -110,18 +114,22 @@ import NumberHelper from '~/helpers/NumberHelper'
 
 definePageMeta({ middleware: 'auth', requiresAuth: true })
 
-const page: Ref<number> = ref(1)
 const orders: Ref<IOrder[]> = ref([])
 const isLoading: Ref<boolean> = ref(true)
 const showModal: Ref<boolean> = ref(false)
 const selectedOrder: Ref<IOrder | null> = ref(null)
-
+const paginator: Ref<IPaginator> = ref({
+    currentPage: 1,
+    pageCount: 0,
+    url: '',
+    data: []
+})
 const formatPrice = NumberHelper.miles
 
-const getOrders = async () => {
+const getOrders = async (newPage: number = 1) => {
     try {
         isLoading.value = true
-        const ordersData = await useGetUserOrders(page.value)
+        const ordersData = await useGetUserOrders(newPage)
         
         const ordersMapped: IOrder[] = mapAPIOrderToIOrders(ordersData.map((order: any) => ({
             id: order.id,

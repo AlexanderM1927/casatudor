@@ -73,7 +73,7 @@ onMounted(() => {
 
 .container-index {
     position: relative;
-    width: 100vw;
+    width: 100%;
     height: 100vh;
     z-index: 1;
     padding-top: 5rem;

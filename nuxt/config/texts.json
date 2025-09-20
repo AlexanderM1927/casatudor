@@ -42,6 +42,11 @@
     "favorites": {
         "title": "Favoritos"
     },
+    "payments": {
+        "approved": "¡Pago aprobado! Gracias por su compra.",
+        "declined": "Pago rechazado. Por favor, intente nuevamente.",
+        "pending": "El pago está pendiente, por favor revise su método de pago."
+    },
     "item_added": "Producto agregado al carrito",
     "item_removed": "Producto removido"
 }

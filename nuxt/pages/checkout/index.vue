@@ -209,6 +209,8 @@
 
 <script setup lang="ts">
 import PaymentService from '~/services/PaymentService'
+import texts from '~/config/texts.json'
+import ToastHelper from '~/helpers/ToastHelper'
 definePageMeta({ middleware: 'auth', requiresAuth: true })
 
 const cartStore = useCartStore()
@@ -309,13 +311,13 @@ const onDepartmentChange = async () => {
     }
 }
 
-const getCityById = (id) => {
+const getCityById = (id: any) => {
     return cities.value.find(city => city.id === id)?.name || ''
 }
-const getDepartmentById = (id) => {
+const getDepartmentById = (id: any) => {
     return departments.value.find(dept => dept.id === id)?.name || ''
 }
-const getCountryById = (id) => {
+const getCountryById = (id: any) => {
     return countries.value.find(country => country.id === id)?.name || ''
 }
 
@@ -350,7 +352,7 @@ const handleSubmit = async () => {
     }
 }
 
-const processPayment = (async (data) => {
+const processPayment = (async (data: any) => {
     const payment: any = await paymentService.processPayment(data)
     const initCheckout = {
         currency: payment?.currency,
@@ -363,20 +365,14 @@ const processPayment = (async (data) => {
     const checkout: any = new WidgetCheckout(initCheckout)
     checkout.open(function (result: any) {
         if (result.transaction.status === "APPROVED") {
-            notificationMessage.value = "¡Pago aprobado! Gracias por su compra.";
-            notificationType.value = "success";
-            ToastHelper.openToast(notificationMessage.value, notificationType.value);
-            cartStore.cleanCart()
+            ToastHelper.openToast(texts.payments.approved, "success");
+            cartStore.clearCart()
             cartStore.syncCartWithStrapi()
             location.href = payment?.redirectUrl
         } else if (result.transaction.status === "DECLINED") {
-            notificationMessage.value = "El pago fue rechazado, por favor intente nuevamente.";
-            notificationType.value = "error";
-            ToastHelper.openToast(notificationMessage.value, notificationType.value);
+            ToastHelper.openToast(texts.payments.declined, "error");
         } else if (result.transaction.status === "PENDING") {
-            notificationMessage.value = "El pago está pendiente, por favor revise su método de pago.";
-            notificationType.value = "warning";
-            ToastHelper.openToast(notificationMessage.value, notificationType.value);
+            ToastHelper.openToast(texts.payments.pending, "warning");
         }
         //TODO: Implement this
         // cleanCart()

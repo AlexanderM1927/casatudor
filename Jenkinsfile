@@ -6,7 +6,7 @@ pipeline {
     stages {
         stage('Frontend prepare and build') {
             tools {
-                nodejs 'node-21.11.1'
+                nodejs 'node-20.19.5'
             }
             steps {
                 withCredentials([file(credentialsId: 'envcasatudor-front', variable: 'ENV_FILE')]) {
@@ -21,7 +21,7 @@ pipeline {
         }
         stage('Deploy nuxt') {
             tools {
-                nodejs 'node-21.11.1'
+                nodejs 'node-20.19.5'
             }
             steps {
                 dir('./nuxt') {
@@ -31,7 +31,7 @@ pipeline {
         }
         stage('Backend prepare and build') {
             tools {
-                nodejs 'node-21.11.1'
+                nodejs 'node-20.19.5'
             }
             steps {
                 withCredentials([file(credentialsId: 'envcasatudor', variable: 'ENV_FILE')]) {
@@ -68,7 +68,7 @@ pipeline {
         }
         stage('Deploy strapi') {
             tools {
-                nodejs 'node-21.11.1'
+                nodejs 'node-20.19.5'
             }
             steps {
                 dir('./strapi') {
@@ -78,7 +78,7 @@ pipeline {
         }
         stage('Verify Deployment') {
             tools {
-                nodejs 'node-21.11.1'
+                nodejs 'node-20.19.5'
             }
             steps {
                 script {

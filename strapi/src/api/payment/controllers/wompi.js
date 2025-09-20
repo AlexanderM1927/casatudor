@@ -1,6 +1,6 @@
 'use strict';
 const crypto = require('crypto');
-
+const invoicePrefix = `_INVOICE` + (process.env.NODE_ENV === 'production' ? 'PROD' : 'LOCAL');
 module.exports = {
   async init(ctx) {
     const { cartId, email, phone, shippingAddress } = ctx.request.body || {};
@@ -72,8 +72,8 @@ module.exports = {
     const integritySecret = process.env.WOMPI_INTEGRITY_SECRET;
     const publicKey = process.env.WOMPI_PUBLIC_KEY;
 
-
-    const base = `${invoice?.id}_INVOICE${calculatedAmountInCents}${currency}${integritySecret}`;
+    const invoiceId = `${invoice?.id}` + invoicePrefix;
+    const base = `${invoiceId}${calculatedAmountInCents}${currency}${integritySecret}`;
     const integrity = crypto.createHash('sha256').update(base).digest('hex');
 
     ctx.body = {
@@ -112,7 +112,7 @@ module.exports = {
         // Find invoice by payment reference
         const invoices = await strapi.entityService.findMany('api::invoice.invoice', {
           filters: {
-            id: reference.replace('_INVOICE', '')
+            id: reference.replace(invoicePrefix, '')
           },
           populate: {
             cart: true

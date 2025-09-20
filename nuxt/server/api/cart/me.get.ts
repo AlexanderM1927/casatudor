@@ -9,7 +9,7 @@ export default defineEventHandler(async (event) => {
     const token = getCookie(event, config.jwtCookie)
     if (!token) throw createError({ statusCode: 401, statusMessage: 'No autenticado' })
     // Obtener el usuario desde el token
-    const user = await userService.me({ token })
+    const user: any = await userService.me({ token })
     
     // Usar el ID del usuario obtenido
     const cart = await cartService.getUserCart({ userId: user.id, token })

@@ -1,7 +1,7 @@
-import type { IImageStrapi } from '~/types/IImageStrapi'
+import type { IImageStrapi } from '~/types/ImageStrapi'
 import type { IProductCart } from '~/types/ProductCart'
 
-interface APICartProduct {
+export interface APICartProduct {
     id: number
     quantity: number
     selectedVariants: {
@@ -49,5 +49,5 @@ export const mapAPICartProductToIProductCart = (apiProduct: APICartProduct): IPr
 }
 
 export const mapAPICartProductsToIProductCarts = (apiProducts: APICartProduct[]): IProductCart[] => {
-    return apiProducts.map(mapAPICartProductToIProductCart)
+    return apiProducts.map((product) => mapAPICartProductToIProductCart(product))
 }

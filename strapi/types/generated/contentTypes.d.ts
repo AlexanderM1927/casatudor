@@ -507,11 +507,6 @@ export interface ApiInvoiceInvoice extends Schema.CollectionType {
     draftAndPublish: true;
   };
   attributes: {
-    cart: Attribute.Relation<
-      'api::invoice.invoice',
-      'oneToOne',
-      'api::cart.cart'
-    >;
     createdAt: Attribute.DateTime;
     createdBy: Attribute.Relation<
       'api::invoice.invoice',
@@ -523,6 +518,7 @@ export interface ApiInvoiceInvoice extends Schema.CollectionType {
       ['pending', 'approved', 'declined', 'error']
     > &
       Attribute.DefaultTo<'pending'>;
+    products: Attribute.Component<'products.products', true>;
     publishedAt: Attribute.DateTime;
     total: Attribute.Float;
     totalPaid: Attribute.Float & Attribute.Private;

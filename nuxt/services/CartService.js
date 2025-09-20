@@ -1,6 +1,6 @@
 import qs from 'qs'
 
-export default class UserService {
+export default class CartService {
     config = null
     constructor (config) {
         this.config = config

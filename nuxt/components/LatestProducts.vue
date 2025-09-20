@@ -16,7 +16,7 @@
 <script setup lang="ts">
 import texts from '@/config/texts.json'
 import ProductService from '@/services/ProductService'
-import type { IImageStrapi } from '~/types/IImageStrapi'
+import type { IImageStrapi } from '~/types/ImageStrapi'
 import type { IProduct } from '~/types/Product'
 
 const appConfig = useRuntimeConfig()

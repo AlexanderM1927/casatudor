@@ -11,11 +11,6 @@
     "draftAndPublish": true
   },
   "attributes": {
-    "cart": {
-      "type": "relation",
-      "relation": "oneToOne",
-      "target": "api::cart.cart"
-    },
     "total": {
       "type": "float"
     },
@@ -25,8 +20,18 @@
     },
     "paymentStatus": {
       "type": "enumeration",
-      "enum": ["pending", "approved", "declined", "error"],
+      "enum": [
+        "pending",
+        "approved",
+        "declined",
+        "error"
+      ],
       "default": "pending"
+    },
+    "products": {
+      "type": "component",
+      "repeatable": true,
+      "component": "products.products"
     }
   }
 }

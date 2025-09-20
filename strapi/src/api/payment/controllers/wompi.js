@@ -42,7 +42,7 @@ module.exports = {
 
         invoice = await strapi.entityService.create('api::invoice.invoice', {
           data: {
-            cart: cartId,
+            products: cart.products,
             total: (calculatedTotal),
             totalPaid: 0,
             paymentStatus: 'pending',

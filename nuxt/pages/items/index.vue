@@ -116,7 +116,7 @@ import { useImageFromStrapi } from '@/composables/useImageFromStrapi'
 import { useDebounce } from '@/composables/useDebounce'
 import { useBreakpoints } from '@/composables/useBreakpoints'
 import texts from '@/config/texts.json'
-import type { IImageStrapi } from '~/types/IImageStrapi';
+import type { IImageStrapi } from '~/types/ImageStrapi';
 import type { IProduct } from '~/types/Product';
 import type { IPaginator } from '~/types/Paginator';
 import type { ICategory } from '~/types/Category';

@@ -80,8 +80,8 @@ export const useCartStore = defineStore('cart', {
         },
         async getUserCart () {
             const useCart = await useGetUserCart()
-            if (useCart !== null) {
-                this.syncCartWithStrapi()
+            if (!useCart) {
+                return this.syncCartWithStrapi()
             }
             const cartProducts = useCart?.attributes?.products || []
         

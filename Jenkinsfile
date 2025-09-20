@@ -16,6 +16,7 @@ pipeline {
                 dir('./nuxt') {
                     sh 'rm -rf node_modules package-lock.json'
                     sh 'npm install'
+                    sh 'npm rebuild sharp'
                     sh 'npm run build'
                 }
             }

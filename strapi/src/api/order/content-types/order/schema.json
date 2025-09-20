@@ -49,6 +49,12 @@
     "addressDetails": {
       "type": "text",
       "required": true
+    },
+    "shipmentAgency": {
+      "type": "string"
+    },
+    "shipmentGuide": {
+      "type": "string"
     }
   }
 }

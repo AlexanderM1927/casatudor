@@ -567,6 +567,8 @@ export interface ApiOrderOrder extends Schema.CollectionType {
       'api::invoice.invoice'
     >;
     phone: Attribute.String & Attribute.Required;
+    shipmentAgency: Attribute.String;
+    shipmentGuide: Attribute.String;
     updatedAt: Attribute.DateTime;
     updatedBy: Attribute.Relation<
       'api::order.order',

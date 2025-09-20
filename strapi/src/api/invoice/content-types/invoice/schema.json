@@ -15,8 +15,7 @@
       "type": "float"
     },
     "totalPaid": {
-      "type": "float",
-      "private": true
+      "type": "float"
     },
     "paymentStatus": {
       "type": "enumeration",

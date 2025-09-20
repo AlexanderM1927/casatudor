@@ -521,7 +521,7 @@ export interface ApiInvoiceInvoice extends Schema.CollectionType {
     products: Attribute.Component<'products.products', true>;
     publishedAt: Attribute.DateTime;
     total: Attribute.Float;
-    totalPaid: Attribute.Float & Attribute.Private;
+    totalPaid: Attribute.Float;
     updatedAt: Attribute.DateTime;
     updatedBy: Attribute.Relation<
       'api::invoice.invoice',

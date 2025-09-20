@@ -6,6 +6,7 @@ export const useGetUserCart = async () => {
 
         return cartReq.cart?.data[0] || null
     } catch (error) {
-        console.error('Error fetching cart:', error)
+        console.log('Error fetching cart', error)
+        return null
     }
 }

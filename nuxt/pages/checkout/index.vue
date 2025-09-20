@@ -355,7 +355,7 @@ const processPayment = (async (data: any) => {
     const initCheckout = {
         currency: payment?.currency,
         amountInCents: payment?.amountInCents,
-        reference: `${payment?.reference}_INVOICE`,
+        reference: `${payment?.reference}`,
         publicKey: payment?.publicKey,
         redirectUrl: payment?.redirectUrl,
         signature: payment?.signature

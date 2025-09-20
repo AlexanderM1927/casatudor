@@ -80,24 +80,36 @@ module.exports = {
       publicKey,
       currency,
       amountInCents: calculatedAmountInCents,
-      reference: invoice.id,
+      reference: invoiceId,
       signature: { integrity },
       redirectUrl: process.env.PAYMENT_REDIRECT_URL,
-      env: process.env.WOMPI_ENV,
-      invoice: invoice ? {
-        id: invoice.id,
-        total: invoice.total,
-        createdAt: invoice.createdAt
-      } : null,
+      env: process.env.WOMPI_ENV
     };
   },
 
   async webhook(ctx) {
     try {
-      const { data } = ctx.request.body || {};
+      const { signature, data, timestamp } = ctx.request.body || {};
+      const headerChecksum = (ctx.request.headers['x-event-checksum'] || '').toString();
       
       if (!data || !data.transaction) {
         ctx.throw(400, 'Invalid webhook data');
+      }
+
+      const props = signature?.properties || [];
+      const valueFromPath = (obj, path) =>
+        path.split('.').reduce((acc, k) => (acc ? acc[k] : undefined), obj);
+
+      const concatenatedProps = props.map(p => valueFromPath(data, p)).join('');
+
+      // 2) Agregar timestamp y tu secreto de eventos
+      const toHash = `${concatenatedProps}${timestamp}${process.env.WOMPI_EVENTS_SECRET}`;
+
+      const computed = crypto.createHash('sha256').update(toHash).digest('hex').toUpperCase();
+
+      const provided = (signature?.checksum || headerChecksum || '').toUpperCase();
+      if (!provided || computed !== provided) {
+        ctx.throw(401, 'Invalid Wompi checksum');
       }
 
       const transaction = data.transaction;
@@ -138,7 +150,7 @@ module.exports = {
         // Update invoice status to declined
         const invoices = await strapi.entityService.findMany('api::invoice.invoice', {
           filters: {
-            paymentReference: reference
+            id: reference.replace(invoicePrefix, '')
           }
         });
 

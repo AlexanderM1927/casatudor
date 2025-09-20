@@ -1,5 +1,5 @@
 <template>
-    <section v-if="!isLoading" class="second-container">
+    <section v-if="!isLoading" class="second-container bg-white">
         <h2 class="title">{{ texts.last_posts }}</h2>
         <SliderPosts :posts="posts"></SliderPosts>
         <br>

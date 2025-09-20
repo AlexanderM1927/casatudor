@@ -146,23 +146,23 @@
       </div>
       <ul class="items">
         <li>
-          <NuxtLink :title="texts.pages.index" class="anchor anchor-third" to="/">{{
+          <NuxtLink :title="texts.pages.index" class="anchor anchor-third burger-menu-link" to="/">{{
             texts.pages.index
           }}</NuxtLink>
         </li>
         <li>
-          <NuxtLink :title="texts.pages.posts" class="anchor anchor-third" to="/posts">{{
+          <NuxtLink :title="texts.pages.posts" class="anchor anchor-third burger-menu-link" to="/posts">{{
             texts.pages.posts
           }}</NuxtLink>
         </li>
         <li>
-          <NuxtLink :title="texts.pages.store" class="anchor anchor-third" to="/items">{{
+          <NuxtLink :title="texts.pages.store" class="anchor anchor-third burger-menu-link" to="/items">{{
             texts.pages.store
           }}</NuxtLink>
         </li>
         <li v-for="(page, index) in pages" :key="index">
           <NuxtLink
-            class="anchor anchor-third"
+            class="anchor anchor-third burger-menu-link"
             :to="`/pages/${page.urlId}`"
             :title="page.urlTitle"
           >
@@ -171,7 +171,7 @@
           <ul v-if="page.subpages">
             <li v-for="(subpage, index) in page.subpages.data">
               <NuxtLink
-                class="anchor anchor-third"
+                class="anchor anchor-third burger-menu-link"
                 :to="`/subpages/${subpage.urlId}`"
                 :title="subpage.urlTitle"
               >
@@ -181,17 +181,17 @@
           </ul>
         </li>
         <li v-if="!user">
-          <NuxtLink class="anchor anchor-third" to="/login" :title="texts.pages.login">{{
+          <NuxtLink class="anchor anchor-third burger-menu-link" to="/login" :title="texts.pages.login">{{
             texts.pages.login
           }}</NuxtLink>
         </li>
         <li v-if="user">
-          <NuxtLink class="anchor anchor-third" to="/orders" title="Mis Pedidos"
+          <NuxtLink class="anchor anchor-third burger-menu-link" to="/orders" title="Mis Pedidos"
             >Mis Pedidos</NuxtLink
           >
         </li>
         <li v-if="user">
-          <a title="Logout" class="anchor anchor-third" @click="handleLogout" href="#"
+          <a title="Logout" class="anchor anchor-third burger-menu-link" @click="handleLogout" href="#"
             >Logout</a
           >
         </li>
@@ -657,5 +657,27 @@ onUnmounted(() => {
     padding: 0.5rem;
     font-size: 1rem;
   }
+}
+
+.burger-menu-link {
+  /* Make the link fill the entire li element */
+  display: block;
+  width: 100%;
+  padding: 0.75rem 1rem;
+  
+  /* Add smooth transition for better UX */
+  transition: background-color 0.2s ease, padding-left 0.2s ease;
+  
+  /* Ensure the link takes full height */
+  min-height: 48px; /* Good touch target size for mobile */
+  
+  /* Center content vertically */
+  display: flex;
+  align-items: center;
+}
+
+.burger-menu-link:hover {
+  background-color: rgba(0, 0, 0, 0.05);
+  padding-left: 1.5rem; /* Slight indent on hover for visual feedback */
 }
 </style>

@@ -13,9 +13,9 @@
             <p class="text-sm text-gray-500">Cantidad: {{ product.quantity }}</p>
         </div>
         <div class="text-right">
-            <a title="Remover del carrito" class="btn bg-theme-primary" @click="removeFromCart(product)">
+            <button title="Remover del carrito" class="btn bg-theme-primary" @click="removeFromCart(product)">
                 <Icon name="material-symbols:delete" />
-            </a>
+            </button>
             <p class="font-semibold text-gray-900">
                 ${{ (product.price * product.quantity).toLocaleString() }}
             </p>

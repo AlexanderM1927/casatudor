@@ -20,9 +20,9 @@
                 <p style="white-space: pre-line;">{{ description }}</p>
             </div>
         </section>
+        <LatestProducts></LatestProducts>
         <TopCategories></TopCategories>
         <LatestPosts></LatestPosts>
-        <LatestProducts></LatestProducts>
     </template>
     <template v-else>
         <LoadingComponent

@@ -241,7 +241,7 @@ const resumeOnLeave = () => {
     transform: translateX(-50%);
     display: flex;
     gap: 0.5rem;
-    z-index: 10;
+    z-index: 2;
 }
 
 .carousel-indicators button {
@@ -274,7 +274,7 @@ const resumeOnLeave = () => {
     cursor: pointer;
     transition: all 0.3s ease;
     opacity: 0;
-    z-index: 10;
+    z-index: 2;
     display: flex;
     align-items: center;
     justify-content: center;

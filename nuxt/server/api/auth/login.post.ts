@@ -8,13 +8,13 @@ export default defineEventHandler(async (event) => {
     const userService = new UserService(config)
     try {
         const res: any = await userService.login({ identifier, password })
-        // Guarda JWT en cookie HttpOnly
+
         setCookie(event, config.jwtCookie, res.jwt, {
             httpOnly: true,
             sameSite: 'lax',
-            secure: true,  // Only secure in production
+            secure: true,
             path: '/',
-            maxAge: 60 * 60 * 24 * 7 // 7 días (ajusta a tu política)
+            maxAge: 60 * 60 * 24 * 7
         })
 
         return { user: res.user }

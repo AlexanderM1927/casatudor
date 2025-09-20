@@ -36,14 +36,14 @@ module.exports = {
           }, 0);
         }
 
-        calculatedAmountInCents = Math.round(calculatedTotal * 100)
-
         const shipmentCost = 15000; // Fixed shipping cost
+        calculatedTotal = calculatedTotal + shipmentCost
+        calculatedAmountInCents = Math.round(calculatedTotal * 100)
 
         invoice = await strapi.entityService.create('api::invoice.invoice', {
           data: {
             cart: cartId,
-            total: (calculatedTotal) + shipmentCost,
+            total: (calculatedTotal),
             totalPaid: 0,
             paymentStatus: 'pending',
             publishedAt: new Date(),

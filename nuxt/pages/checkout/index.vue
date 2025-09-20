@@ -80,7 +80,7 @@
                                         class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent disabled:bg-gray-100"
                                     >
                                         <option value="">Seleccionar departamento</option>
-                                        <option v-for="department in departments" :key="department.id" :value="department.name">
+                                        <option v-for="department in departments" :key="department.id" :value="department.id">
                                             {{ department.name }}
                                         </option>
                                     </select>
@@ -99,7 +99,7 @@
                                         class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent disabled:bg-gray-100"
                                     >
                                         <option value="">Seleccionar ciudad</option>
-                                        <option v-for="city in cities" :key="city.id" :value="city.name">
+                                        <option v-for="city in cities" :key="city.id" :value="city.id">
                                             {{ city.name }}
                                         </option>
                                     </select>
@@ -309,6 +309,16 @@ const onDepartmentChange = async () => {
     }
 }
 
+const getCityById = (id) => {
+    return cities.value.find(city => city.id === id)?.name || ''
+}
+const getDepartmentById = (id) => {
+    return departments.value.find(dept => dept.id === id)?.name || ''
+}
+const getCountryById = (id) => {
+    return countries.value.find(country => country.id === id)?.name || ''
+}
+
 // Handle form submission
 const handleSubmit = async () => {
     if (!isFormValid.value) return
@@ -321,9 +331,9 @@ const handleSubmit = async () => {
             email: formData.value.email,
             phone: formData.value.phone,
             shippingAddress: {
-                country: formData.value.country,
-                department: formData.value.department,
-                city: formData.value.city,
+                country: getCountryById(formData.value.country),
+                department: getDepartmentById(formData.value.department),
+                city: getCityById(formData.value.city),
                 address1: formData.value.address1,
                 addressDetails: formData.value.addressDetails
             },

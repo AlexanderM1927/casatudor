@@ -8,7 +8,7 @@
     "description": ""
   },
   "options": {
-    "draftAndPublish": true
+    "draftAndPublish": false
   },
   "pluginOptions": {},
   "attributes": {
@@ -21,6 +21,34 @@
       "type": "relation",
       "relation": "oneToOne",
       "target": "api::invoice.invoice"
+    },
+    "email": {
+      "type": "email",
+      "required": true
+    },
+    "phone": {
+      "type": "string",
+      "required": true
+    },
+    "country": {
+      "type": "string",
+      "required": true
+    },
+    "department": {
+      "type": "string",
+      "required": true
+    },
+    "city": {
+      "type": "string",
+      "required": true
+    },
+    "address1": {
+      "type": "string",
+      "required": true
+    },
+    "addressDetails": {
+      "type": "text",
+      "required": true
     }
   }
 }

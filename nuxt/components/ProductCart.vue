@@ -1,28 +1,24 @@
 <template>
-    <div :class="`product-cart-card card ${childClass}`">
-        <div class="card-body cart-item">
-            <div class="cart-item__image">
-                <NuxtImg
-                    :title="product.name"
-                    :src="product.images[0]"
-                    :alt="product.name" 
-                />
-            </div>
-            <div class="cart-item__info">
-                <h5 class="cad-item__title">{{ product.name }}</h5>
-                <p v-show="product?.selectedVariants?.color !== ''"><b>{{ texts.variant_color }}</b>: {{ product?.selectedVariants?.color }}</p>
-                <p v-show="product?.selectedVariants?.size !== ''"><b>{{ texts.variant_size }}</b>: {{ product?.selectedVariants?.size }}</p>
-                <div class="d-flex space-between">
-                    <p><b>{{ texts.cart.quantity }}</b>: {{ product.quantity }}</p>
-                    <p><b>{{ texts.cart.price }}</b>: {{ formatMiles(product.price) }}</p>
-                </div>
-                <p><b>{{ texts.cart.total }}</b>: {{ formatMiles((product.price * product.quantity)) }}</p>
-            </div>
-            <div class="cart-item__delete">
-                <a title="Remover del carrito" class="btn btn-danger" @click="removeFromCart(product)">
-                    <Icon name="material-symbols:delete" />
-                </a>
-            </div>
+    <div :class="`flex items-center space-x-4 p-3 bg-white rounded-md`">
+        <NuxtImg
+            :src="product.images[0]"
+            :alt="product.name"
+            class="w-16 h-16 object-cover rounded-md"
+        />
+        <div class="flex-1">
+            <h5 class="font-medium card-item__title">{{ product.name }}</h5>
+            <p class="text-sm text-gray-500">
+                {{ product.selectedVariants?.color }} / {{ product.selectedVariants?.size }}
+            </p>
+            <p class="text-sm text-gray-500">Cantidad: {{ product.quantity }}</p>
+        </div>
+        <div class="text-right">
+            <a title="Remover del carrito" class="btn bg-theme-primary" @click="removeFromCart(product)">
+                <Icon name="material-symbols:delete" />
+            </a>
+            <p class="font-semibold text-gray-900">
+                ${{ (product.price * product.quantity).toLocaleString() }}
+            </p>
         </div>
     </div>
 </template>
@@ -37,7 +33,6 @@ const formatMiles = NumberHelper.miles
 
 const cart = useCartStore()
 const props = defineProps({
-    childClass: String,
     product: {
         type: Object as PropType<IProductCart>,
         required: true
@@ -57,7 +52,6 @@ const removeFromCart = ((product: IProductCart) => {
 .product-cart-card {
     background: $themeBackgroundCards;
     color: $themeColorCards;
-    height: 15rem;
 }
 
 .cart-item {
@@ -79,21 +73,28 @@ const removeFromCart = ((product: IProductCart) => {
 }
 
 .cart-item__image {
-    background: transparent;
-    height: 100%;
+    background: white;
+    height: 7rem;
     display: flex;
     align-items: center;
     justify-content: center;
     width: 10rem;
+    
 }
 
 .cart-item__image img {
     max-width: 100%;
+    max-height: 100%;
+    object-fit: contain;
 }
 
 .cart-item__delete {
     display: flex;
     align-items: flex-start;
     flex-direction: row;
+}
+
+.card-item__total, .card-item__title {
+    color: $themeColorText;
 }
 </style>

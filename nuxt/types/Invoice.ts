@@ -1,4 +1,4 @@
-export interface ICart {
+export interface IInvoice {
     id: number,
     total?: number
     totalPaid?: number,

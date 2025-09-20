@@ -3,7 +3,7 @@ const crypto = require('crypto');
 
 module.exports = {
   async init(ctx) {
-    const { cartId } = ctx.request.body || {};
+    const { cartId, email, phone, shippingAddress } = ctx.request.body || {};
 
     // Create invoice if cartId is provided
     let invoice = null;
@@ -16,6 +16,9 @@ module.exports = {
           populate: {
             products: {
               populate: ['product']
+            },
+            users_permissions_user: {
+              populate: ['*']
             }
           }
         });
@@ -35,13 +38,29 @@ module.exports = {
 
         calculatedAmountInCents = Math.round(calculatedTotal * 100)
 
+        const shipmentCost = 15000; // Fixed shipping cost
+
         invoice = await strapi.entityService.create('api::invoice.invoice', {
           data: {
             cart: cartId,
-            total: calculatedTotal,
+            total: (calculatedTotal) + shipmentCost,
             totalPaid: 0,
             paymentStatus: 'pending',
             publishedAt: new Date(),
+          }
+        });
+
+        const order = await strapi.entityService.create('api::order.order', {
+          data: {
+            users_permissions_user: cart.users_permissions_user.id,
+            invoice: invoice.id,
+            email: email,
+            phone: phone,
+            country: shippingAddress.country,
+            city: shippingAddress.city,
+            department: shippingAddress.department,
+            address1: shippingAddress.address1,
+            addressDetails: shippingAddress.addressDetails
           }
         });
 
@@ -55,7 +74,6 @@ module.exports = {
 
 
     const base = `${invoice?.id}_INVOICE${calculatedAmountInCents}${currency}${integritySecret}`;
-    console.log('base string for integrity:', base);
     const integrity = crypto.createHash('sha256').update(base).digest('hex');
 
     ctx.body = {

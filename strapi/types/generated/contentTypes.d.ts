@@ -545,9 +545,13 @@ export interface ApiOrderOrder extends Schema.CollectionType {
     singularName: 'order';
   };
   options: {
-    draftAndPublish: true;
+    draftAndPublish: false;
   };
   attributes: {
+    address1: Attribute.String & Attribute.Required;
+    addressDetails: Attribute.Text & Attribute.Required;
+    city: Attribute.String & Attribute.Required;
+    country: Attribute.String & Attribute.Required;
     createdAt: Attribute.DateTime;
     createdBy: Attribute.Relation<
       'api::order.order',
@@ -555,12 +559,14 @@ export interface ApiOrderOrder extends Schema.CollectionType {
       'admin::user'
     > &
       Attribute.Private;
+    department: Attribute.String & Attribute.Required;
+    email: Attribute.Email & Attribute.Required;
     invoice: Attribute.Relation<
       'api::order.order',
       'oneToOne',
       'api::invoice.invoice'
     >;
-    publishedAt: Attribute.DateTime;
+    phone: Attribute.String & Attribute.Required;
     updatedAt: Attribute.DateTime;
     updatedBy: Attribute.Relation<
       'api::order.order',

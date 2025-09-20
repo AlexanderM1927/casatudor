@@ -48,6 +48,7 @@ export default defineNuxtConfig({
   modules: [
     '@pinia/nuxt',
     '@nuxt/image',
+    '@nuxtjs/tailwindcss',
     'nuxt-icon'
   ],
   icon: {

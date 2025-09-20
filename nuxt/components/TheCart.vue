@@ -1,5 +1,5 @@
 <template>
-    <div class="cart-content" ref="cartContent">
+    <div class="cart-content bg-gray-50" ref="cartContent">
         <div class="cart-content__container">
             <div class="cart-content-header">
                 <h2 class="title">{{ texts.cart.title }}</h2>
@@ -7,23 +7,28 @@
                     <Icon name="material-symbols:close" @click="closeCart()" />
                 </div>
             </div>
-            <div class="cart-content-items">
-                <div class="row">
+            
+            <!-- Scrollable content area -->
+            <div class="cart-content-body">
+                <div class="cart-content-items">
                     <ProductCart
                         v-for="(product, index) in cartProducts"
                         :key="index"
                         :product="product"
-                        :childClass="`col-12`"
                     ></ProductCart>
                 </div>
             </div>
-            <button 
-                :title="texts.cart.proceed" 
-                class="btn btn-success w-100"
-                @click="proceedPurchase"
-            >
-                {{ texts.cart.proceed }}
-            </button>
+
+            <!-- Fixed button at bottom -->
+            <div class="cart-content-footer" v-show="cartProducts.length > 0">
+                <button 
+                    :title="texts.cart.proceed" 
+                    class="btn btn-success w-100"
+                    @click="proceedPurchase"
+                >
+                    {{ texts.cart.proceed }}
+                </button>
+            </div>
         </div>
     </div>
     <div id="overlay" @click="closeCart()"></div>
@@ -32,14 +37,11 @@
 import texts from '@/config/texts.json'
 import CartService from '~/services/CartService';
 import ToastHelper from '~/helpers/ToastHelper'
-import PaymentService from '~/services/PaymentService'
-import type { ICart } from '~/types/Cart';
 import type { IProductCart } from '~/types/ProductCart';
 
 const { user } = useAuth()
 const config = useRuntimeConfig()
 const cartService = new CartService(config)
-const paymentService = new PaymentService(config)
 const emit = defineEmits(['closeCart'])
 const cart = useCartStore()
 const cartContent: Ref<HTMLDivElement | undefined> = ref()
@@ -127,54 +129,25 @@ watch(user, (newUser) => {
 const processPurchaseByWompi = (async () => {
     try {
         //TODO: Creates a Cart if the cart is not defined
-        const cartResponse: any = await cartService.createCart({
-            data: {
-                users_permissions_user: user?.value?.id,
-                products: cartProducts.value.map((product: IProductCart) => {
-                    return {
-                        product: product.id,
-                        quantity: product.quantity,
-                        selectedVariants: {
-                            color: product?.selectedVariants?.color,
-                            size: product?.selectedVariants?.size
-                        }
-                    }
-                })
-            }
-        })
-        const cart: ICart = cartResponse.data
-        const payment: any = await paymentService.processPayment({
-            cartId: cart?.id
-        })
-        const initCheckout = {
-            currency: payment?.currency,
-            amountInCents: payment?.amountInCents,
-            reference: `${payment?.reference}_INVOICE`,
-            publicKey: payment?.publicKey,
-            redirectUrl: payment?.redirectUrl,
-            signature: payment?.signature
-        }
-        const checkout: any = new WidgetCheckout(initCheckout)
-        checkout.open(function (result: any) {
-            if (result.transaction.status === "APPROVED") {
-                notificationMessage.value = "¡Pago aprobado! Gracias por su compra.";
-                notificationType.value = "success";
-                ToastHelper.openToast(notificationMessage.value, notificationType.value);
-                closeCart()
-                location.href = payment?.redirectUrl
-            } else if (result.transaction.status === "DECLINED") {
-                notificationMessage.value = "El pago fue rechazado, por favor intente nuevamente.";
-                notificationType.value = "error";
-                ToastHelper.openToast(notificationMessage.value, notificationType.value);
-            } else if (result.transaction.status === "PENDING") {
-                notificationMessage.value = "El pago está pendiente, por favor revise su método de pago.";
-                notificationType.value = "warning";
-                ToastHelper.openToast(notificationMessage.value, notificationType.value);
-            }
-            //TODO: Implement this
-            // cleanCart()
-            console.log(result.transaction);
-        });
+        navigateTo('/checkout')
+        closeCart()
+        // const cartResponse: any = await cartService.createCart({
+        //     data: {
+        //         users_permissions_user: user?.value?.id,
+        //         products: cartProducts.value.map((product: IProductCart) => {
+        //             return {
+        //                 product: product.id,
+        //                 quantity: product.quantity,
+        //                 selectedVariants: {
+        //                     color: product?.selectedVariants?.color,
+        //                     size: product?.selectedVariants?.size
+        //                 }
+        //             }
+        //         })
+        //     }
+        // })
+        // const cart: ICart = cartResponse.data
+        
     } catch (error: any) {
         if (error) {
             notificationMessage.value = error.response._data.error.message;
@@ -189,17 +162,17 @@ const processPurchaseByWompi = (async () => {
 
 <style lang="scss" scoped>
 #overlay {
-  position: fixed; /* Sit on top of the page content */
-  display: none; /* Hidden by default */
-  width: 100%; /* Full width (cover the whole page) */
-  height: 100%; /* Full height (cover the whole page) */
+  position: fixed;
+  display: none;
+  width: 100%;
+  height: 100%;
   top: 0;
   left: 0;
   right: 0;
   bottom: 0;
-  background-color: rgba(0,0,0,0.5); /* Black background with opacity */
-  z-index: 4; /* Specify a stack order in case you're using a different order for other elements */
-  cursor: pointer; /* Add a pointer on hover */
+  background-color: rgba(0,0,0,0.5);
+  z-index: 4;
+  cursor: pointer;
   overflow-y: auto;
 }
 
@@ -209,13 +182,13 @@ const processPurchaseByWompi = (async () => {
     width: 30%;
     right: 0;
     height: 100vh;
-    background: $themeBackground;
     color: $themeColorText;
     visibility: hidden;
     opacity: 0;
-    padding: 1rem;
     z-index: 5;
     transition: visibility 0s, opacity 0.5s linear;
+    display: flex;
+    flex-direction: column;
 }
 
 .cart-content h2 {
@@ -227,10 +200,84 @@ const processPurchaseByWompi = (async () => {
         width: 100%;
     }
 }
+
+.cart-content__container {
+    display: flex;
+    flex-direction: column;
+    height: 100dvh;
+    padding: 1rem;
+}
+
 .cart-content-header {
+    flex-shrink: 0; /* Don't shrink */
     display: flex;
     justify-content: space-between;
+    align-items: center;
     border-bottom: 1px solid $themeColorText;
+}
+
+.cart-content-body {
+    flex: 1; /* Take up remaining space */
+    overflow: hidden; /* Prevent overflow */
+    display: flex;
+    flex-direction: column;
+    min-height: 0; /* Important for flex children with overflow */
+}
+
+.cart-content-items {
+    flex: 1;
+    overflow-y: auto;
+    overflow-x: hidden;
+    padding: 1rem 0;
+    
+    /* Custom scrollbar styling */
+    &::-webkit-scrollbar {
+        width: 6px;
+    }
+    
+    &::-webkit-scrollbar-track {
+        background: #f1f1f1;
+        border-radius: 3px;
+    }
+    
+    &::-webkit-scrollbar-thumb {
+        background: #c1c1c1;
+        border-radius: 3px;
+        
+        &:hover {
+            background: #a8a8a8;
+        }
+    }
+}
+
+.cart-content-footer {
+    flex-shrink: 0; /* Don't shrink */
+    padding-top: 1rem;
+    border-top: 1px solid rgba(0, 0, 0, 0.1);
+    
+    button {
+        width: 100%;
+        padding: 1rem;
+        font-weight: 600;
+        border-radius: 8px;
+        transition: all 0.2s ease;
+        
+        &:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+        }
+    }
+}
+
+.close-btn {
+    cursor: pointer;
+    padding: 0.5rem;
+    border-radius: 50%;
+    transition: background-color 0.2s ease;
+    
+    &:hover {
+        background-color: rgba(0, 0, 0, 0.1);
+    }
 }
 
 .cart-content h1 {
@@ -239,23 +286,48 @@ const processPurchaseByWompi = (async () => {
     font-weight: 700;
 }
 
-.cart-content-items {
-    overflow-y: auto;
-    overflow-x: hidden;
-    height: 80%;
-}
-
-.close-btn {
-    cursor: pointer;
-}
-
-.cart-content__container {
-    position: relative;
+/* Empty cart state */
+.cart-content-items:empty::after {
+    content: 'Tu carrito está vacío';
+    display: flex;
+    align-items: center;
+    justify-content: center;
     height: 100%;
+    color: #666;
+    font-style: italic;
 }
 
-.cart-content__container button {
-    position: absolute;
-    bottom: 7%;
+/* Responsive improvements */
+@media only screen and (max-width: $grid-breakpoints-sm) {
+    .cart-content__container {
+        padding: 0.75rem;
+    }
+    
+    .cart-content-items {
+        padding: 0.75rem 0;
+    }
+    
+    .cart-content-footer button {
+        padding: 0.875rem;
+        font-size: 0.9rem;
+    }
+}
+
+@media only screen and (max-width: 480px) {
+    .cart-content__container {
+        padding: 0.5rem;
+    }
+    
+    .cart-content-header {
+        padding-bottom: 0.75rem;
+    }
+    
+    .cart-content-items {
+        padding: 0.5rem 0;
+    }
+    
+    .cart-content-footer {
+        padding-top: 0.75rem;
+    }
 }
 </style>

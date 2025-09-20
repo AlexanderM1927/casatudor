@@ -3,12 +3,12 @@
         <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
             <!-- Checkout Form -->
             <div class="order-2 lg:order-1">
-                <h1 class="text-2xl font-bold text-gray-900 mb-6">Información de Envío</h1>
+                <h1 class="text-2xl font-bold mb-6">Información de Envío</h1>
                 
                 <form @submit.prevent="handleSubmit" class="space-y-6">
                     <!-- Contact Information -->
                     <div class="bg-gray-50 p-6 rounded-lg">
-                        <h2 class="text-lg font-semibold text-gray-800 mb-4">Información de Contacto</h2>
+                        <h2 class="text-lg font-semibold mb-4">Información de Contacto</h2>
                         
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                             <div>
@@ -43,7 +43,7 @@
 
                     <!-- Shipping Address -->
                     <div class="bg-gray-50 p-6 rounded-lg">
-                        <h2 class="text-lg font-semibold text-gray-800 mb-4">Dirección de Envío</h2>
+                        <h2 class="text-lg font-semibold mb-4">Dirección de Envío</h2>
                         
                         <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
                             <!-- Country -->
@@ -151,7 +151,7 @@
             <!-- Order Summary -->
             <div class="order-1 lg:order-2">
                 <div class="bg-gray-50 p-6 rounded-lg sticky top-4">
-                    <h2 class="text-lg font-semibold text-gray-800 mb-4">Resumen del Pedido</h2>
+                    <h2 class="text-lg font-semibold mb-4">Resumen del Pedido</h2>
                     
                     <!-- Cart Items -->
                     <div class="space-y-4 mb-6">

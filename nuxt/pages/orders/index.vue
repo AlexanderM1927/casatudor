@@ -29,13 +29,13 @@
                         <td>{{ order.id }}</td>
                         <td>${{ formatPrice(order.invoice?.total || 0) }}</td>
                         <td>${{ formatPrice(order.invoice?.totalPaid || 0) }}</td>
-                        <td>{{ order.shipmentAgency }}</td>
-                        <td>{{ order.shipmentGuide }}</td>
                         <td>
                             <span :class="getStatusClass(order.invoice?.paymentStatus)">
                                 {{ getStatusText(order.invoice?.paymentStatus) }}
                             </span>
                         </td>
+                        <td>{{ order.shipmentAgency }}</td>
+                        <td>{{ order.shipmentGuide }}</td>
                         <td>{{ formatDate(order.createdAt) }}</td>
                         <td>
                             <button 

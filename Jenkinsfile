@@ -6,7 +6,7 @@ pipeline {
     stages {
         stage('Frontend prepare and build') {
             tools {
-                nodejs 'node-20.19.5'
+                nodejs 'node-20.19.4'
             }
             steps {
                 withCredentials([file(credentialsId: 'envcasatudor-front', variable: 'ENV_FILE')]) {
@@ -14,19 +14,15 @@ pipeline {
                     sh 'cp "\$ENV_FILE" ./nuxt/.env'
                 }
                 dir('./nuxt') {
-                     sh 'rm -rf node_modules package-lock.json'
-                        sh 'npm cache clean --force'
-                        sh 'npm install'
-                        sh 'npm uninstall sharp || true'
-                        sh 'npm install --platform=linux --arch=x64 sharp || true'
-                        sh 'npm rebuild sharp || true'
-                        sh 'npm run build'
+                    sh 'rm -rf node_modules package-lock.json'
+                    sh 'npm install'
+                    sh 'npm run build'
                 }
             }
         }
         stage('Deploy nuxt') {
             tools {
-                nodejs 'node-20.19.5'
+                nodejs 'node-20.19.4'
             }
             steps {
                 dir('./nuxt') {
@@ -36,7 +32,7 @@ pipeline {
         }
         stage('Backend prepare and build') {
             tools {
-                nodejs 'node-20.19.5'
+                nodejs 'node-20.19.4'
             }
             steps {
                 withCredentials([file(credentialsId: 'envcasatudor', variable: 'ENV_FILE')]) {
@@ -74,7 +70,7 @@ pipeline {
         }
         stage('Deploy strapi') {
             tools {
-                nodejs 'node-20.19.5'
+                nodejs 'node-20.19.4'
             }
             steps {
                 dir('./strapi') {
@@ -84,7 +80,7 @@ pipeline {
         }
         stage('Verify Deployment') {
             tools {
-                nodejs 'node-20.19.5'
+                nodejs 'node-20.19.4'
             }
             steps {
                 script {

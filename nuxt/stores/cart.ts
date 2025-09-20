@@ -79,8 +79,7 @@ export const useCartStore = defineStore('cart', {
             }
         },
         async getUserCart () {
-            const { user } = useAuth()
-            const useCart = await useGetUserCart(user.value)
+            const useCart = await useGetUserCart()
             if (!useCart) {
                 this.syncCartWithStrapi()
             }

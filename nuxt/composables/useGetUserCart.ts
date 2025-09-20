@@ -1,12 +1,7 @@
-import type { IUser } from "~/types/User"
-
-export const useGetUserCart = async (user: IUser) => {
+export const useGetUserCart = async () => {
     try {
         const cartReq: any = await $fetch('/api/cart/me', {
-            method: 'GET',
-            params: {
-                userId: user.id,
-            }
+            method: 'GET'
         })
 
         return cartReq.cart?.data[0] || null

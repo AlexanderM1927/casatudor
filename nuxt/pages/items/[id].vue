@@ -1,5 +1,5 @@
 <template>
-    <div class="first-container product-page">
+    <div class="first-container product-page bg-white">
         <div class="product-container">
             <div class="product-container__image">
                 <NuxtImg
@@ -266,7 +266,7 @@ onMounted(() => {
 }
 
 .variants__colors-input:checked {
-    border: 0.2rem solid #FFF;
+    border: 0.2rem solid $secondary;
 }
 
 .variants__size {

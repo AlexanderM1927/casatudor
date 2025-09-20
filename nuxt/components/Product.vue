@@ -1,17 +1,38 @@
 <template>
-    <div v-if="product" :class="`product-card card ${childClass}`">
-        <NuxtImg
-            :src="product.images[0]" 
-            :alt="product.name"
-            :title="product.name"
-            class="card-img-top product-card__img"
-            :loading="isFirstProduct ? 'eager' : 'lazy'"
-            :fetchpriority="isFirstProduct ? 'high' : 'auto'"
-            format="webp"
-            sizes="sm:100vw md:50vw lg:25vw"
-            @click="navigateTo('/items/' + product.id)"
-        />
-        <div class="card-body">
+    <div
+        v-if="product"
+        :class="`product-card ${childClass}`"
+        @click="navigateTo('/items/' + product.id)"
+    >
+        <div class="product-card__image">
+            <NuxtImg
+                :src="product.images[0]" 
+                :alt="product.name"
+                :title="product.name"
+                :loading="isFirstProduct ? 'eager' : 'lazy'"
+                :fetchpriority="isFirstProduct ? 'high' : 'auto'"
+                format="webp"
+            />
+            <div class="product-card__image-btn">
+                <button 
+                    v-if="!isProductOnFavorites" 
+                    title="Agregar a favoritos" 
+                    class="text-red-700 border border-red-700 hover:bg-red-700 hover:text-white focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-full text-md p-3 text-center inline-flex items-center dark:border-red-500 dark:text-red-500 dark:hover:text-white dark:focus:ring-red-800 dark:hover:bg-red-50" 
+                    @click.stop="addToFavorites(product)"
+                >
+                    <Icon name="material-symbols:favorite" />
+                </button>
+                <button 
+                    v-else
+                    title="Elminar de favoritos" 
+                    class="text-gray-700 border border-gray-700 hover:bg-gray-700 hover:text-white focus:ring-4 focus:outline-none focus:ring-gray-300 font-medium rounded-full text-md p-3 text-center inline-flex items-center dark:border-gray-500 dark:text-gray-500 dark:hover:text-white dark:focus:ring-gray-800 dark:hover:bg-gray-50" 
+                    @click.stop="removeFromFavorites(product)"
+                >
+                    <Icon name="carbon:favorite-half" />
+                </button>
+            </div>
+        </div>
+        <div class="product-card__body">
             <h5 
                 class="card-title product-card__title" 
                 @click="navigateTo('/items/' + product.id)"
@@ -32,22 +53,6 @@
                     @click="navigateTo('/items/' + product.id)"
                 >
                     <Icon name="material-symbols:visibility-outline" />
-                </button>
-                <button 
-                    v-if="!isProductOnFavorites" 
-                    title="Agregar a favoritos" 
-                    class="add-cart-btn btn btn-danger" 
-                    @click="addToFavorites(product)"
-                >
-                    <Icon name="material-symbols:favorite" />
-                </button>
-                <button 
-                    v-else
-                    title="Elminar de favoritos" 
-                    class="add-cart-btn btn btn-danger" 
-                    @click="removeFromFavorites(product)"
-                >
-                    <Icon name="carbon:favorite-half" />
                 </button>
             </div>
         </div>
@@ -121,9 +126,12 @@ onMounted(() => {
 <style lang="scss" scoped>
 
 .product-card {
-    background: $themeBackgroundCards;
     color: $themeColorCards;
-    padding-top: 1rem;
+    padding: 1rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    cursor: pointer;
 }
 
 .add-cart-btn {
@@ -133,10 +141,30 @@ onMounted(() => {
     justify-content: space-between;
 }
 
-.product-card__img {
-    cursor: pointer;
+.product-card__image {
+    background: $themeBackgroundProductCards;
+    height: 15rem;
     width: 100%;
-    height: 10rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center; /* Esto centra verticalmente */
+    position: relative;
+    padding: 0.5rem;
+    border-radius: 0.5rem 0.5rem 0rem 0rem;
+
+}
+
+.product-card__image-btn {
+    position: absolute;
+    top: 0.5rem;
+    right: 0.5rem;
+}
+
+.product-card__image img {
+    width: 10rem;
+    max-height: 100%;
+    align-items: center;
 }
 
 .product-card__btns {
@@ -156,5 +184,15 @@ onMounted(() => {
 
 .product-card__title {
     cursor: pointer;
+}
+
+.product-card__body {
+    background: $themeBackgroundCards;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 0.5rem;
+    border-radius: 0rem 0rem 0.5rem 0.5rem;
 }
 </style>

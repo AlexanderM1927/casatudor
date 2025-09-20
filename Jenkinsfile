@@ -14,10 +14,13 @@ pipeline {
                     sh 'cp "\$ENV_FILE" ./nuxt/.env'
                 }
                 dir('./nuxt') {
-                    sh 'rm -rf node_modules package-lock.json'
-                    sh 'npm install'
-                    sh 'npm rebuild sharp'
-                    sh 'npm run build'
+                     sh 'rm -rf node_modules package-lock.json'
+                        sh 'npm cache clean --force'
+                        sh 'npm install'
+                        sh 'npm uninstall sharp || true'
+                        sh 'npm install --platform=linux --arch=x64 sharp || true'
+                        sh 'npm rebuild sharp || true'
+                        sh 'npm run build'
                 }
             }
         }

@@ -99,7 +99,7 @@ onMounted(() => {
     z-index: 1;
     padding: 2rem;
     border-radius: 1rem;
-    width: 20rem;
+    width: 30rem;
     max-width: calc(100% - 2rem); /* Ensure it doesn't overflow on mobile */
 }
 

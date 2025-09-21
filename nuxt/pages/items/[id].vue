@@ -4,7 +4,7 @@
             <div class="product-container__image">
                 <NuxtImg
                     :title="product.name"
-                    :src="product.images[0]"
+                    :src="currentMainImage || product.images[0]"
                     :alt="product.name"
                     id="main-image"
                 />
@@ -107,6 +107,9 @@ import ProductService from '@/services/ProductService'
 import NumberHelper from '~/helpers/NumberHelper'
 import { useImageFromStrapi } from '@/composables/useImageFromStrapi'
 import ToastHelper from '~/helpers/ToastHelper'
+import type { IProduct } from '~/types/Product'
+import type { IProductCart } from '~/types/ProductCart'
+import type { IImageStrapi } from '~/types/ImageStrapi'
 
 const cart = useCartStore()
 const favoritesStore = useFavoritesStore()
@@ -118,6 +121,7 @@ const formatMiles = NumberHelper.miles
 const route = useRoute()
 
 const isLoading: Ref<Boolean> = ref(true)
+const currentMainImage: Ref<string> = ref('')
 
 const product: Ref<IProduct> = ref({
     id: 1,
@@ -142,6 +146,11 @@ const getProduct = async (newPage: number = 1) => {
         }
         return product
     })[0]
+
+    // Establecer la primera imagen como imagen principal cuando se carga el producto
+    if (product.value.images && product.value.images.length > 0) {
+        currentMainImage.value = product.value.images[0]
+    }
 
     isLoading.value = false
 }
@@ -192,7 +201,7 @@ const removeFromFavorites = ((product: IProduct) => {
 })
 
 const changeMainImage = (image: string) => {
-    (document.getElementById('main-image') as HTMLImageElement).src = image
+    currentMainImage.value = image
 }
 
 onMounted(() => {
@@ -223,8 +232,8 @@ onMounted(() => {
 }
 
 .product-container__image img {
-    max-width: 100%;
-    height: 20rem;
+    width: auto;
+    height: 30rem;
 }
 
 .product-container__content {

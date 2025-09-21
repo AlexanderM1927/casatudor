@@ -37,6 +37,7 @@ export interface VariantsVariant extends Schema.Component {
   };
   attributes: {
     hexadecimal: Attribute.String;
+    image: Attribute.Media<'images' | 'files' | 'videos' | 'audios'>;
     name: Attribute.String;
     quantity: Attribute.Integer;
   };

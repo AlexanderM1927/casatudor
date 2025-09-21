@@ -65,7 +65,7 @@ onMounted(() => {
 }
 
 .top-categories__category {
-  width: 50%;
+  width: 33.3%;
   aspect-ratio: 1/1;
   background-repeat: no-repeat;
   background-size: cover;

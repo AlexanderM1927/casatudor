@@ -11,7 +11,9 @@
           <Icon name="iconamoon:menu-burger-horizontal-fill" @click="openBurger" />
         </div>
         <div class="company-name" @click="goToHome()">
-          {{ appConfig.public.storeName }}
+          <NuxtImg
+            src="/img/logo.png"
+          />
         </div>
         <div class="menu-icon">
           <div class="menu-items__product">
@@ -34,7 +36,9 @@
         }`"
       >
         <div class="company-name" @click="goToHome()">
-          {{ appConfig.public.storeName }}
+          <NuxtImg
+            src="/img/logo.png"
+          />
         </div>
         <ul class="menu-items">
           <li>
@@ -437,9 +441,9 @@ onUnmounted(() => {
 
 .header-secondary,
 .ct-bg-secondary {
-  background: $primary;
+  background: $headerBackground;
   border-bottom: 1px solid rgba(60, 60, 60, 0.12);
-  color: white;
+  color: $headerTextColor;
 }
 
 .header-transparent,
@@ -472,8 +476,6 @@ onUnmounted(() => {
   position: absolute;
   display: flex;
   font-size: 1.5rem;
-  padding-top: 1rem;
-  padding-bottom: 1rem;
   padding-left: 4rem;
   padding-right: 4rem;
   width: 100%;
@@ -485,6 +487,11 @@ onUnmounted(() => {
 .company-name {
   cursor: pointer;
   font-family: "Inter";
+}
+
+.company-name img {
+  height: 7rem;
+  width: auto;
 }
 
 .header .menu-items {
@@ -527,11 +534,11 @@ onUnmounted(() => {
 }
 
 .anchor-primary {
-  color: white;
+  color: $headerTextColor;
 }
 
 .anchor-primary:after {
-  background-color: white;
+  background-color: $headerTextColor;
 }
 
 .anchor-underline {

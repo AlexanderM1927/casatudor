@@ -1,5 +1,5 @@
 <template>
-    <section v-if="!isLoading" class="second-container">
+    <section v-if="!isLoading" class="second-container latest-products">
         <h2 class="title">{{ texts.last_products }}</h2>
         <br>
         <div class="row">
@@ -50,3 +50,5 @@ onMounted(() => {
 })
 
 </script>
+<style lang="scss">
+</style>

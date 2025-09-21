@@ -30,7 +30,7 @@ const props = defineProps({
     align-items: center;
     padding: 0.5rem;
     width: 100%;
-    background: $primary;
+    background: $themePromotion;
     font-family: system-ui;
     gap: 0.5rem;
 }

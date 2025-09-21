@@ -34,7 +34,7 @@
         </div>
         <div class="product-card__body">
             <h5 
-                class="card-title product-card__title" 
+                class="product-card__title" 
                 @click="navigateTo('/items/' + product.id)"
             >{{ product.name }}</h5>
             <div class="product-card__price">

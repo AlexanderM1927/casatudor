@@ -18,16 +18,19 @@ $cartItemsQuantityHeaderBackground: #FF0000; // normal: #FF0000 || #000000
 
     
 $secondary: #2c3f50;
-$primary: #1ba7a1; // 
-$themeBackground: #ccf6f4; //darkmode: #1F1A24 || #FFFFFF
-$themeColorText: #1ba7a1; //darkmode: #FFFFFF || #000000
+$primary: #FF6F3C; // 
+$themeBackground: #F9F4EE;; //darkmode: #1F1A24 || #FFFFFF
+$themeColorText: #FF6F3C; //darkmode: #FFFFFF || #000000
 $themeBackgroundCards: #FFFFFF; //darkmode: #1F1A24 || #FFFFFF
 $themeColorCards: #000000; //darkmode: #1F1A24 || #FFFFFF
 $themePromotionButton: #000; // normal: red
-$cartItemsQuantityHeaderBackground: #1ba7a1; // normal: #FF0000 || #000000
+$themePromotion: #FF6F3C;
+$cartItemsQuantityHeaderBackground: #FF6F3C; // normal: #FF0000 || #000000
 $colorToasts: #FFF;
-$themeBtnPrimaryColor: #1ba7a1; // Button Primary Color
+$themeBtnPrimaryColor: #FF6F3C; // Button Primary Color
 $themeBackgroundProductCards: #f8fbff;
+$headerBackground: #E6ECFC; 
+$headerTextColor: #1A23E7;
 
 .bg-theme-primary {
     background-color: $themeBtnPrimaryColor !important;

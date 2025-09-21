@@ -400,7 +400,7 @@ const changeHeaderPerDefault = () => {
 
 const handleScroll = () => {
   const bodyScrollTop = document.documentElement.scrollTop || document.body.scrollTop;
-  if (bodyScrollTop > 70) {
+  if (bodyScrollTop > 100) {
     changeHeaderPerWhite();
     setPositionsFixed();
   } else {
@@ -518,11 +518,11 @@ onUnmounted(() => {
 }
 
 .anchor-secondary {
-  color: white;
+  color: #FFF;
 }
 
 .anchor-secondary:after {
-  background-color: white;
+  background-color: #FFF;
 }
 
 .anchor-third {

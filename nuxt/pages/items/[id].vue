@@ -47,6 +47,7 @@
                                 :id='color.id'
                                 name="colors"
                                 :value="color.name"
+                                @change="onColorVariantChange(color)"
                             >
                         </div>
                     </div>
@@ -107,7 +108,7 @@ import ProductService from '@/services/ProductService'
 import NumberHelper from '~/helpers/NumberHelper'
 import { useImageFromStrapi } from '@/composables/useImageFromStrapi'
 import ToastHelper from '~/helpers/ToastHelper'
-import type { IProduct } from '~/types/Product'
+import type { IProduct, IColor } from '~/types/Product'
 import type { IProductCart } from '~/types/ProductCart'
 import type { IImageStrapi } from '~/types/ImageStrapi'
 
@@ -142,6 +143,16 @@ const getProduct = async (newPage: number = 1) => {
             images: attributes.image.data.map((el: IImageStrapi) => {
                 return useImageFromStrapi(el?.attributes?.url)
             }),
+            colors: attributes.colors?.map((color: any) => ({
+                id: color.id,
+                name: color.name,
+                hexadecimal: color.hexadecimal,
+                image: color.image?.data ? useImageFromStrapi(color.image.data.attributes.url) : null
+            })) || [],
+            sizes: attributes.sizes?.map((size: any) => ({
+                id: size.id,
+                name: size.name
+            })) || [],
             id: id
         }
         return product
@@ -202,6 +213,16 @@ const removeFromFavorites = ((product: IProduct) => {
 
 const changeMainImage = (image: string) => {
     currentMainImage.value = image
+}
+
+const onColorVariantChange = (color: IColor) => {
+    // Si la variante de color tiene una imagen, cambiar a esa imagen
+    if (color.image) {
+        currentMainImage.value = color.image
+    } else {
+        // Si no tiene imagen, volver a la primera imagen del producto
+        currentMainImage.value = product.value.images[0]
+    }
 }
 
 onMounted(() => {

@@ -1,4 +1,17 @@
 import type { ICategory } from './Category';
+
+export interface IColor {
+    id: number,
+    name: string,
+    hexadecimal: string,
+    image?: string
+}
+
+export interface ISize {
+    id: number,
+    name: string
+}
+
 export interface IProduct {
     id: number,
     name: string,
@@ -6,7 +19,7 @@ export interface IProduct {
     price: number
     category?: ICategory,
     description?: string,
-    colors?: [],
-    sizes?: [],
+    colors?: IColor[],
+    sizes?: ISize[],
     price_before_offer?: number,
 }

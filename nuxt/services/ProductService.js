@@ -60,7 +60,11 @@ export default class ProductService {
     }
     async getSingleProduct(id) {
         const query = qs.stringify({
-            populate: '*',
+            populate: [
+                'image',
+                'colors.image',
+                'sizes'
+            ],
             filters: {
                 id: id
             }

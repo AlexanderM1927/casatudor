@@ -545,7 +545,7 @@ export interface ApiOrderOrder extends Schema.CollectionType {
   };
   attributes: {
     address1: Attribute.String & Attribute.Required;
-    addressDetails: Attribute.Text & Attribute.Required;
+    addressDetails: Attribute.Text;
     city: Attribute.String & Attribute.Required;
     country: Attribute.String & Attribute.Required;
     createdAt: Attribute.DateTime;

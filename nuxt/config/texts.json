@@ -1,5 +1,5 @@
 {
-    "last_posts": "Últimas publicaciones",
+    "last_posts": "Nuestro blog",
     "last_products": "Nuevos productos",
     "top_products": "Productos top",
     "top_categories": "Categorias",
@@ -16,7 +16,7 @@
     "variant_size": "Talla",
     "pages": {
         "index": "Inicio",
-        "posts": "Publicaciones",
+        "posts": "Blog",
         "store": "Tienda",
         "login": "Login"
     },

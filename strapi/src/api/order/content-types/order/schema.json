@@ -48,7 +48,7 @@
     },
     "addressDetails": {
       "type": "text",
-      "required": true
+      "required": false
     },
     "shipmentAgency": {
       "type": "string"

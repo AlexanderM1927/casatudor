@@ -7,7 +7,7 @@
         />
         <div class="flex-1">
             <h5 class="font-medium card-item__title">{{ product.name }}</h5>
-            <p class="text-sm text-gray-500">
+            <p class="text-sm text-gray-500" v-show="product.selectedVariants?.color || product.selectedVariants?.size">
                 {{ product.selectedVariants?.color }} / {{ product.selectedVariants?.size }}
             </p>
             <p class="text-sm text-gray-500">Cantidad: {{ product.quantity }}</p>
@@ -26,10 +26,7 @@
 import texts from '@/config/texts.json'
 import type { PropType } from 'vue'
 import ToastHelper from '~/helpers/ToastHelper'
-import NumberHelper from '~/helpers/NumberHelper'
 import type { IProductCart } from '~/types/ProductCart'
-
-const formatMiles = NumberHelper.miles
 
 const cart = useCartStore()
 const props = defineProps({

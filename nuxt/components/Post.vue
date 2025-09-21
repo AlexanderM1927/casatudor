@@ -40,7 +40,7 @@ const props = defineProps(
 }
 
 .post-img {
-    width: 100%;
     height: 10rem;
+    width: auto;
 }
 </style>

@@ -44,7 +44,7 @@
           <li>
             <NuxtLink
               :title="texts.pages.index"
-              class="menu-items-anchor anchor anchor-opacity anchor-underline anchor-primary"
+              class="menu-items-anchor anchor anchor-opacity anchor-underline anchor-secondary"
               to="/"
               >{{ texts.pages.index }}</NuxtLink
             >
@@ -52,7 +52,7 @@
           <li>
             <NuxtLink
               :title="texts.pages.store"
-              class="menu-items-anchor anchor anchor-opacity anchor-underline anchor-primary"
+              class="menu-items-anchor anchor anchor-opacity anchor-underline anchor-secondary"
               to="/items"
               >{{ texts.pages.store }}</NuxtLink
             >
@@ -60,7 +60,7 @@
           <li>
             <NuxtLink
               :title="texts.pages.posts"
-              class="menu-items-anchor anchor anchor-opacity anchor-underline anchor-primary"
+              class="menu-items-anchor anchor anchor-opacity anchor-underline anchor-secondary"
               to="/posts"
               >{{ texts.pages.posts }}</NuxtLink
             >
@@ -68,7 +68,7 @@
           <li class="subnav" v-for="(page, index) in pages" :key="index">
             <NuxtLink
               :title="page.urlTitle"
-              class="menu-items-anchor anchor anchor-opacity anchor-underline anchor-primary"
+              class="menu-items-anchor anchor anchor-opacity anchor-underline anchor-secondary"
               :to="`/pages/${page.urlId}`"
               >{{ page.urlTitle }}</NuxtLink
             >
@@ -80,7 +80,7 @@
             >
               <NuxtLink
                 v-for="(subpage, index) in page.subpages.data"
-                class="menu-items-anchor anchor anchor-opacity anchor-underline anchor-primary"
+                class="menu-items-anchor anchor anchor-opacity anchor-underline anchor-secondary"
                 :to="`/subpages/${subpage.urlId}`"
                 :title="subpage.urlTitle"
               >
@@ -91,7 +91,7 @@
           <li v-if="!user">
             <NuxtLink
               :title="texts.pages.login"
-              class="menu-items-anchor anchor anchor-opacity anchor-underline anchor-primary"
+              class="menu-items-anchor anchor anchor-opacity anchor-underline anchor-secondary"
               to="/login"
               >{{ texts.pages.login }}</NuxtLink
             >
@@ -99,7 +99,7 @@
           <li v-if="user">
             <NuxtLink
               title="Mis Pedidos"
-              class="menu-items-anchor anchor anchor-opacity anchor-underline anchor-primary"
+              class="menu-items-anchor anchor anchor-opacity anchor-underline anchor-secondary"
               to="/orders"
               >Mis Pedidos</NuxtLink
             >
@@ -107,7 +107,7 @@
           <li v-if="user">
             <a
               title="Logout"
-              class="menu-items-anchor anchor anchor-opacity anchor-underline anchor-primary"
+              class="menu-items-anchor anchor anchor-opacity anchor-underline anchor-secondary"
               @click="handleLogout"
               href="#"
               >Logout</a

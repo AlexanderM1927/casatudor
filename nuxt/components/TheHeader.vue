@@ -57,14 +57,6 @@
               >{{ texts.pages.store }}</NuxtLink
             >
           </li>
-          <li>
-            <NuxtLink
-              :title="texts.pages.posts"
-              class="menu-items-anchor anchor anchor-opacity anchor-underline anchor-secondary"
-              to="/posts"
-              >{{ texts.pages.posts }}</NuxtLink
-            >
-          </li>
           <li class="subnav" v-for="(page, index) in pages" :key="index">
             <NuxtLink
               :title="page.urlTitle"
@@ -157,11 +149,6 @@
         <li>
           <NuxtLink :title="texts.pages.store" class="anchor anchor-third burger-menu-link" to="/items">{{
             texts.pages.store
-          }}</NuxtLink>
-        </li>
-        <li>
-          <NuxtLink :title="texts.pages.posts" class="anchor anchor-third burger-menu-link" to="/posts">{{
-            texts.pages.posts
           }}</NuxtLink>
         </li>
         <li v-for="(page, index) in pages" :key="index">

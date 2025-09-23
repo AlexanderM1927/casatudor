@@ -56,7 +56,7 @@ const fixHtml = (elText: string) => {
 
 const loadContent = () => {
     isLoading.value = true
-    const textWithHTML = fixHtml(markdown.render(props.source))
+    const textWithHTML = fixHtml(markdown.render(props.source ?? ''))
     textHtml.value = textWithHTML
     isLoading.value = false
 }

@@ -44,7 +44,9 @@
           <li>
             <NuxtLink
               :title="texts.pages.index"
-              class="menu-items-anchor anchor anchor-opacity anchor-underline anchor-secondary"
+              :class="`menu-items-anchor anchor anchor-opacity anchor-underline ${
+                route.name === 'index' ? 'anchor-secondary' : 'anchor-primary'
+              }`"
               to="/"
               >{{ texts.pages.index }}</NuxtLink
             >
@@ -52,7 +54,9 @@
           <li>
             <NuxtLink
               :title="texts.pages.store"
-              class="menu-items-anchor anchor anchor-opacity anchor-underline anchor-secondary"
+              :class="`menu-items-anchor anchor anchor-opacity anchor-underline ${
+                route.name === 'index' ? 'anchor-secondary' : 'anchor-primary'
+              }`"
               to="/items"
               >{{ texts.pages.store }}</NuxtLink
             >
@@ -60,7 +64,9 @@
           <li>
             <NuxtLink
               :title="texts.pages.posts"
-              class="menu-items-anchor anchor anchor-opacity anchor-underline anchor-secondary"
+              :class="`menu-items-anchor anchor anchor-opacity anchor-underline ${
+                route.name === 'index' ? 'anchor-secondary' : 'anchor-primary'
+              }`"
               to="/posts"
               >{{ texts.pages.posts }}</NuxtLink
             >
@@ -68,7 +74,9 @@
           <li class="subnav" v-for="(page, index) in pages" :key="index">
             <NuxtLink
               :title="page.urlTitle"
-              class="menu-items-anchor anchor anchor-opacity anchor-underline anchor-secondary"
+              :class="`menu-items-anchor anchor anchor-opacity anchor-underline ${
+                route.name === 'index' ? 'anchor-secondary' : 'anchor-primary'
+              }`"
               :to="`/pages/${page.urlId}`"
               >{{ page.urlTitle }}</NuxtLink
             >
@@ -80,7 +88,9 @@
             >
               <NuxtLink
                 v-for="(subpage, index) in page.subpages.data"
-                class="menu-items-anchor anchor anchor-opacity anchor-underline anchor-secondary"
+                :class="`menu-items-anchor anchor anchor-opacity anchor-underline ${
+                  route.name === 'index' ? 'anchor-secondary' : 'anchor-primary'
+                }`"
                 :to="`/subpages/${subpage.urlId}`"
                 :title="subpage.urlTitle"
               >
@@ -91,7 +101,9 @@
           <li v-if="!user">
             <NuxtLink
               :title="texts.pages.login"
-              class="menu-items-anchor anchor anchor-opacity anchor-underline anchor-secondary"
+              :class="`menu-items-anchor anchor anchor-opacity anchor-underline ${
+                route.name === 'index' ? 'anchor-secondary' : 'anchor-primary'
+              }`"
               to="/login"
               >{{ texts.pages.login }}</NuxtLink
             >
@@ -99,7 +111,9 @@
           <li v-if="user">
             <NuxtLink
               title="Mis Pedidos"
-              class="menu-items-anchor anchor anchor-opacity anchor-underline anchor-secondary"
+              :class="`menu-items-anchor anchor anchor-opacity anchor-underline ${
+                route.name === 'index' ? 'anchor-secondary' : 'anchor-primary'
+              }`"
               to="/orders"
               >Mis Pedidos</NuxtLink
             >
@@ -107,7 +121,9 @@
           <li v-if="user">
             <a
               title="Logout"
-              class="menu-items-anchor anchor anchor-opacity anchor-underline anchor-secondary"
+              :class="`menu-items-anchor anchor anchor-opacity anchor-underline ${
+                route.name === 'index' ? 'anchor-secondary' : 'anchor-primary'
+              }`"
               @click="handleLogout"
               href="#"
               >Logout</a
@@ -327,14 +343,16 @@ const setMenuItemsColor = (color: String) => {
   const menuItems = document.getElementsByClassName("menu-items-anchor");
   const elemntsModalWithBgWhite = document.getElementsByClassName("subnav-content");
   for (let i = 0; i < menuItems.length; i++) {
-    if (color === "secondary") {
+    if (color === "primary") {
+      // Cambiar a primary (color oscuro para header blanco)
       menuItems[i].classList.replace("anchor-secondary", "anchor-primary");
     } else {
+      // Cambiar a secondary (color blanco para header transparente)
       menuItems[i].classList.replace("anchor-primary", "anchor-secondary");
     }
   }
   for (let i = 0; i < elemntsModalWithBgWhite.length; i++) {
-    if (color === "secondary") {
+    if (color === "primary") {
       elemntsModalWithBgWhite[i]?.classList.replace(
         "ct-bg-transparent",
         "ct-bg-secondary"
@@ -386,7 +404,7 @@ const changeHeaderPerWhite = () => {
   if (burgerMenuBtn) burgerMenuBtn.style.color = "black";
   headerHTML?.classList.replace("header-transparent", "header-secondary");
   headerMobileHTML?.classList.replace("header-transparent", "header-secondary");
-  setMenuItemsColor("secondary");
+  setMenuItemsColor("primary"); // Cambia a anchor-primary (color oscuro)
 };
 const changeHeaderPerDefault = () => {
   if (typeof document === 'undefined') return;
@@ -395,7 +413,7 @@ const changeHeaderPerDefault = () => {
   if (burgerMenuBtn) burgerMenuBtn.style.color = "white";
   headerHTML?.classList.replace("header-secondary", "header-transparent");
   headerMobileHTML?.classList.replace("header-secondary", "header-transparent");
-  setMenuItemsColor("primary");
+  setMenuItemsColor("secondary"); // Cambia a anchor-secondary (color blanco)
 };
 
 const handleScroll = () => {

@@ -19,6 +19,7 @@ export default defineEventHandler(async (event) => {
 
         return { user: res.user }
     } catch (error: any) {
+        throw error
     }
 
 })

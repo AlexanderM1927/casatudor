@@ -476,7 +476,7 @@ onUnmounted(() => {
   top: 0px;
   z-index: 3;
   font-size: 1.5rem;
-  padding: 1rem;
+  padding: 0rem 1rem;
   vertical-align: middle;
   width: 100%;
   place-items: center;
@@ -592,6 +592,8 @@ onUnmounted(() => {
   z-index: 3;
   transition: all 0.3s ease;
   top: 0;
+  overflow-x: hidden;
+  overflow-y: auto;
 }
 
 .burger-menu-header {
@@ -685,18 +687,9 @@ onUnmounted(() => {
 }
 
 .burger-menu-link {
-  /* Make the link fill the entire li element */
   display: block;
   width: 100%;
-  padding: 0.75rem 1rem;
-  
-  /* Add smooth transition for better UX */
   transition: background-color 0.2s ease, padding-left 0.2s ease;
-  
-  /* Ensure the link takes full height */
-  min-height: 48px; /* Good touch target size for mobile */
-  
-  /* Center content vertically */
   display: flex;
   align-items: center;
 }

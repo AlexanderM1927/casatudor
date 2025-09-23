@@ -48,5 +48,6 @@
         "pending": "El pago está pendiente, por favor revise su método de pago."
     },
     "item_added": "Producto agregado al carrito",
-    "item_removed": "Producto removido"
+    "item_removed": "Producto removido",
+    "validate_information": "Por favor valide sus datos"
 }

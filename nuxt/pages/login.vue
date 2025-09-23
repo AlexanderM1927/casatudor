@@ -18,6 +18,7 @@
 </template>
 <script setup lang="ts">
 import ToastHelper from '~/helpers/ToastHelper';
+import texts from '@/config/texts.json'
 
 const email: Ref<string> = ref('')
 const password: Ref<string> = ref('')
@@ -36,7 +37,7 @@ const handleLogin = async (e: Event) => {
         await login(user.identifier, user.password)
         navigateTo('/orders')
     } catch (error: any) {
-        notificationMessage.value = error.response._data.error.message
+        notificationMessage.value = texts.validate_information
         notificationType.value = 'error'
         ToastHelper.openToast(notificationMessage.value, notificationType.value)
     }

@@ -20,7 +20,6 @@ export const useAuth = () => {
                 method: 'POST', 
                 body: { identifier, password } 
             })
-            console.log('res', res)
             user.value = res.user
             return res.user
         } catch (error) {

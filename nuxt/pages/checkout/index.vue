@@ -372,9 +372,6 @@ const processPayment = (async (data: any) => {
         } else if (result.transaction.status === "PENDING") {
             ToastHelper.openToast(texts.payments.pending, "warning");
         }
-        //TODO: Implement this
-        // cleanCart()
-        console.log(result.transaction);
     });
 })
 </script>

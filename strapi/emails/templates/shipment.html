@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <style>
+      body { font-family: Arial, sans-serif; background:#f7f7f7; }
+      .card { max-width:600px; margin:24px auto; background:#fff; padding:24px; border-radius:12px; }
+      h1 { margin-top:0; color:#059669; }
+      .btn { display:inline-block; padding:10px 16px; border-radius:8px; text-decoration:none; background:#111827; color:#fff; }
+      .shipment-info { background:#f0fdf4; padding:16px; border-radius:8px; margin:16px 0; border-left:4px solid #059669; }
+      .order-details { background:#f9fafb; padding:16px; border-radius:8px; margin:16px 0; }
+    </style>
+  </head>
+  <body>
+    <div class="card">
+      <h1>¡Tu pedido ha sido despachado, {{user.name}}!</h1>
+      
+      <p>Nos complace informarte que tu pedido ha sido enviado y está en camino.</p>
+      
+      <div class="shipment-info">
+        <h3>📦 Información de Envío</h3>
+        <p><strong>{{dispatchMessage}}</strong></p>
+        <ul>
+          <li>Empresa de envío: <strong>{{shipment.agency}}</strong></li>
+          <li>Número de guía: <strong>{{shipment.guide}}</strong></li>
+        </ul>
+      </div>
+
+      <div class="order-details">
+        <h3>Detalles de tu Pedido</h3>
+        <ul>
+          <li>ID de la orden: <strong>#{{order.id}}</strong></li>
+          <li>Total: <strong>${{invoice.total}}</strong></li>
+          <li>Dirección de entrega: <strong>{{order.address1}}, {{order.city}}, {{order.department}}</strong></li>
+        </ul>
+      </div>
+
+      <p>Puedes usar el número de guía para rastrear tu paquete en el sitio web de la empresa de envío.</p>
+      
+      <p>¡Gracias por tu compra!</p>
+      
+      <p style="color:#6b7280; font-size:14px; margin-top:24px;">
+        Si tienes alguna pregunta sobre tu pedido, no dudes en contactarnos.
+      </p>
+    </div>
+  </body>
+</html>

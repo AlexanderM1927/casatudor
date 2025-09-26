@@ -25,27 +25,14 @@
 </template>
 <script setup lang="ts">
 import ThePromotion from '@/components/ThePromotion.vue'
-import FooterService from '@/services/FooterService'
 import PromotionService from '@/services/PromotionService'
 
 const appConfig = useRuntimeConfig()
-const footerService = new FooterService(appConfig)
+const { footerData, fetchFooter } = useFooter()
 const promotionService = new PromotionService(appConfig)
-const dataFooter = ref({})
+const dataFooter = footerData
 const dataPromotions = ref({})
 const isLoading: Ref<Boolean> = ref(true)
-
-const getFooter = async () => {
-    try {
-        const { data }: any = await footerService.getFooter()
-        if (data) {
-            const { attributes } = data
-            dataFooter.value = attributes
-        }
-    } catch (error) {
-        console.error('Error fetching footer data:', error)
-    }
-}
 
 const getPromotions = async () => {
     try {
@@ -63,7 +50,7 @@ const getPromotions = async () => {
 }
 
 onMounted(async () => {
-    await getFooter()
+    await fetchFooter()
     await getPromotions()
     isLoading.value = false
 })

@@ -151,13 +151,12 @@ import ToastHelper from '~/helpers/ToastHelper'
 import type { IProduct, IColor } from '~/types/Product'
 import type { IProductCart } from '~/types/ProductCart'
 import type { IImageStrapi } from '~/types/ImageStrapi'
-import FooterService from '~/services/FooterService'
 
 const cart = useCartStore()
 const favoritesStore = useFavoritesStore()
 const favoritesStoreComputed = storeToRefs(favoritesStore)
 const favoritesProducts: any = favoritesStoreComputed.getProducts
-const appConfig = useRuntimeConfig()
+const { footerData, fetchFooter } = useFooter()
 
 const formatMiles = NumberHelper.miles
 
@@ -166,7 +165,7 @@ const route = useRoute()
 const isLoading: Ref<Boolean> = ref(true)
 const currentMainImage: Ref<string> = ref('')
 const selectedQuantity: Ref<number> = ref(1)
-const dataFooter: any = ref({})
+const dataFooter = footerData
 
 const product: Ref<IProduct> = ref({
     id: 1,
@@ -175,8 +174,7 @@ const product: Ref<IProduct> = ref({
     price: 0
 })
 
-const footerService = new FooterService(appConfig)
-const productService = new ProductService(appConfig)
+const productService = new ProductService(useRuntimeConfig())
 
 
 const getProduct = async (newPage: number = 1) => {
@@ -304,24 +302,12 @@ const onColorVariantChange = (color: IColor) => {
     }
 }
 
-const getFooter = async () => {
-    try {
-        const { data }: any = await footerService.getFooter()
-        if (data) {
-            const { attributes } = data
-            dataFooter.value = attributes
-        }
-    } catch (error) {
-        console.error('Error fetching footer data:', error)
-    }
-}
-
 onMounted(() => {
     getProduct()
     const favoritesLS = localStorage.getItem('favorites')
     const favorites: [IProduct] = favoritesLS ? JSON.parse(favoritesLS) : []
     favoritesStore.set(favorites)
-    getFooter()
+    fetchFooter()
 })
 </script>
 <style lang="scss">

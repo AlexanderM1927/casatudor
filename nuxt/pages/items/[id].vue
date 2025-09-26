@@ -107,16 +107,14 @@
                         @click="addToFavorites(product)"
                     >
                         <Icon name="material-symbols:favorite" />
-                        {{ texts.add_to_favorites }}
                     </button>
                     <button 
                         v-else
                         title="Elminar de favoritos" 
-                        class="add-cart-btn btn btn-danger" 
+                        class="add-cart-btn btn text-gray-700 border border-gray-700 hover:bg-gray-700" 
                         @click="removeFromFavorites(product)"
                     >
                         <Icon name="carbon:favorite-half" />
-                        {{ texts.remove_from_favorites }}
                     </button>
                 </div>
                 <div>
@@ -339,6 +337,24 @@ onMounted(() => {
 .product-container__btns {
     display: flex;
     justify-content: space-between;
+    gap: 1rem;
+}
+
+.product-container__btns div:last-child {
+    display: flex;
+    gap: 0.5rem;
+}
+
+@media only screen and (max-width: $grid-breakpoints-sm) {
+    .product-container__btns {
+        flex-direction: column;
+    }
+    .product-container__btns div:last-child {
+        flex-direction: column;
+        button {
+            width: 100%;
+        }
+    }
 }
 
 .product-container__btns > a {

@@ -448,6 +448,9 @@ export interface ApiContentContent extends Schema.SingleType {
       Attribute.Private;
     descriptionHomePage: Attribute.Text;
     imageHomePage: Attribute.Media<'images'>;
+    imageHomePageMobile: Attribute.Media<
+      'images' | 'files' | 'videos' | 'audios'
+    >;
     publishedAt: Attribute.DateTime;
     titleHomePage: Attribute.String;
     updatedAt: Attribute.DateTime;

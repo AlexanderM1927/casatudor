@@ -3,7 +3,7 @@
         <section class="container-index">
             <!-- Hero image with high priority -->
             <NuxtImg
-                :src="useImageFromStrapi(image)"
+                :src="useImageFromStrapi(currentImage)"
                 :alt="title"
                 class="hero-background"
                 fetchpriority="high"
@@ -41,10 +41,16 @@ const { type } = useBreakpoints()
 const title: Ref<string> = ref('')
 const description: Ref<string> = ref('')
 const image: Ref<string> = ref('')
+const mobileImage: Ref<string> = ref('')
 const isLoading: Ref<Boolean> = ref(true)
 
 const appConfig = useRuntimeConfig()
 const contentService = new ContentService(appConfig)
+
+// Computed property to select the appropriate image based on screen size
+const currentImage = computed(() => {
+    return type.value === 'xs' ? mobileImage.value : image.value
+})
 
 
 const getContent = async () => {
@@ -56,6 +62,8 @@ const getContent = async () => {
         title.value = attributes.titleHomePage
         description.value = attributes.descriptionHomePage
         image.value = attributes.imageHomePage.data.attributes.url
+        // Handle mobile image - check if it exists
+        mobileImage.value = attributes.imageHomePageMobile?.data?.attributes?.url || attributes.imageHomePage.data.attributes.url
     } catch (e) {
         console.log(e)
     } finally {

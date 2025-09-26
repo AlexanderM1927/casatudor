@@ -99,32 +99,44 @@
                     </div>
                 </div>
                 <div class="product-container__btns">
-                <button 
-                    v-if="!isProductOnFavorites" 
-                    title="Agregar a favoritos" 
-                    class="add-cart-btn btn btn-danger" 
-                    @click="addToFavorites(product)"
-                >
-                    <Icon name="material-symbols:favorite" />
-                    {{ texts.add_to_favorites }}
-                </button>
-                <button 
-                    v-else
-                    title="Elminar de favoritos" 
-                    class="add-cart-btn btn btn-danger" 
-                    @click="removeFromFavorites(product)"
-                >
-                    <Icon name="carbon:favorite-half" />
-                    {{ texts.remove_from_favorites }}
-                </button>
-                <button 
-                    title="Agregar al carrito" 
-                    class="add-cart-btn btn btn-primary" 
-                    @click="addToCart(product)"
-                >
-                    <Icon name="material-symbols:add-shopping-cart" />
-                    {{ texts.add_to_cart }}
-                </button>
+                <div>
+                    <button 
+                        v-if="!isProductOnFavorites" 
+                        title="Agregar a favoritos" 
+                        class="add-cart-btn btn btn-danger" 
+                        @click="addToFavorites(product)"
+                    >
+                        <Icon name="material-symbols:favorite" />
+                        {{ texts.add_to_favorites }}
+                    </button>
+                    <button 
+                        v-else
+                        title="Elminar de favoritos" 
+                        class="add-cart-btn btn btn-danger" 
+                        @click="removeFromFavorites(product)"
+                    >
+                        <Icon name="carbon:favorite-half" />
+                        {{ texts.remove_from_favorites }}
+                    </button>
+                </div>
+                <div>
+                    <button 
+                        title="Agregar al carrito" 
+                        class="add-cart-btn btn btn-success" 
+                        @click="purchaseByWhatsapp(product)"
+                    >
+                        <Icon name="mdi:whatsapp" />
+                        {{ texts.buy_on_whatsapp }}
+                    </button>
+                    <button 
+                        title="Agregar al carrito" 
+                        class="add-cart-btn btn btn-primary" 
+                        @click="addToCart(product)"
+                    >
+                        <Icon name="material-symbols:add-shopping-cart" />
+                        {{ texts.add_to_cart }}
+                    </button>
+                </div>
             </div>
             </div>
         </div>
@@ -139,11 +151,13 @@ import ToastHelper from '~/helpers/ToastHelper'
 import type { IProduct, IColor } from '~/types/Product'
 import type { IProductCart } from '~/types/ProductCart'
 import type { IImageStrapi } from '~/types/ImageStrapi'
+import FooterService from '~/services/FooterService'
 
 const cart = useCartStore()
 const favoritesStore = useFavoritesStore()
 const favoritesStoreComputed = storeToRefs(favoritesStore)
 const favoritesProducts: any = favoritesStoreComputed.getProducts
+const appConfig = useRuntimeConfig()
 
 const formatMiles = NumberHelper.miles
 
@@ -152,6 +166,7 @@ const route = useRoute()
 const isLoading: Ref<Boolean> = ref(true)
 const currentMainImage: Ref<string> = ref('')
 const selectedQuantity: Ref<number> = ref(1)
+const dataFooter: any = ref({})
 
 const product: Ref<IProduct> = ref({
     id: 1,
@@ -160,7 +175,8 @@ const product: Ref<IProduct> = ref({
     price: 0
 })
 
-const productService = new ProductService(useRuntimeConfig())
+const footerService = new FooterService(appConfig)
+const productService = new ProductService(appConfig)
 
 
 const getProduct = async (newPage: number = 1) => {
@@ -209,6 +225,28 @@ const addToCart = ((product: IProduct) => {
         }
     }
     cart.addProducts(productCart)
+})
+
+const purchaseByWhatsapp = ((product: IProduct) => {
+    let listOfProducts = '¡Hola!,%20estoy%20interesado%20en%20comprar%20estos%20productos:%0A'
+    const colorSelected = (document.querySelector('input[name="colors"]:checked') as HTMLInputElement)?.value
+    const sizeSelected = (document.getElementById('variant-size') as HTMLInputElement)?.value
+
+    const productCart: IProductCart = {
+        ...product,
+        quantity: selectedQuantity.value,
+        selectedVariants: {
+            color: colorSelected ?? '',
+            size: sizeSelected ?? '',
+        }
+    }
+    const productName = productCart.name
+    const quantity = productCart.quantity
+    const color = productCart?.selectedVariants?.color
+    const size = productCart?.selectedVariants?.size
+    listOfProducts += `${productName} ${color ? '- Color: ' + color : ''} ${size ? '- Talla: ' + size : ''} - Cantidad: ${quantity}`
+    listOfProducts += `,%20 %0A`
+    window.open(`https://wa.me/${dataFooter?.value?.whatsappPhone}?text=${listOfProducts}`)
 })
 
 const increaseQuantity = () => {
@@ -266,14 +304,24 @@ const onColorVariantChange = (color: IColor) => {
     }
 }
 
-onMounted(() => {
-    const favoritesLS = localStorage.getItem('favorites')
-    const favorites: [IProduct] = favoritesLS ? JSON.parse(favoritesLS) : []
-    favoritesStore.set(favorites)
-})
+const getFooter = async () => {
+    try {
+        const { data }: any = await footerService.getFooter()
+        if (data && data[0]) {
+            const { attributes } = data[0]
+            dataFooter.value = attributes
+        }
+    } catch (error) {
+        console.error('Error fetching footer data:', error)
+    }
+}
 
 onMounted(() => {
     getProduct()
+    const favoritesLS = localStorage.getItem('favorites')
+    const favorites: [IProduct] = favoritesLS ? JSON.parse(favoritesLS) : []
+    favoritesStore.set(favorites)
+    getFooter()
 })
 </script>
 <style lang="scss">

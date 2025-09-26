@@ -23,10 +23,18 @@
             <div class="cart-content-footer" v-show="cartProducts.length > 0">
                 <button 
                     :title="texts.cart.proceed" 
-                    class="btn btn-success w-100"
+                    class="btn btn-primary w-100"
                     @click="proceedPurchase"
                 >
                     {{ texts.cart.proceed }}
+                </button>
+                <button 
+                    :title="texts.cart.proceed" 
+                    class="btn btn-success w-100"
+                    @click="purchaseByWhatsapp"
+                >
+                    <Icon name="mdi:whatsapp" />
+                    {{ texts.buy_on_whatsapp }}
                 </button>
             </div>
         </div>
@@ -40,7 +48,6 @@ import ToastHelper from '~/helpers/ToastHelper'
 
 const { user } = useAuth()
 const config = useRuntimeConfig()
-const cartService = new CartService(config)
 const emit = defineEmits(['closeCart'])
 const cart = useCartStore()
 const cartContent: Ref<HTMLDivElement | undefined> = ref()

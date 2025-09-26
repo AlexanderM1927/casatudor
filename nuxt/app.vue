@@ -38,8 +38,8 @@ const isLoading: Ref<Boolean> = ref(true)
 const getFooter = async () => {
     try {
         const { data }: any = await footerService.getFooter()
-        if (data && data[0]) {
-            const { attributes } = data[0]
+        if (data) {
+            const { attributes } = data
             dataFooter.value = attributes
         }
     } catch (error) {

@@ -460,9 +460,10 @@ export interface ApiContentContent extends Schema.SingleType {
   };
 }
 
-export interface ApiFooterFooter extends Schema.CollectionType {
+export interface ApiFooterFooter extends Schema.SingleType {
   collectionName: 'footers';
   info: {
+    description: '';
     displayName: 'Footer';
     pluralName: 'footers';
     singularName: 'footer';

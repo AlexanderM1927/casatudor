@@ -14,6 +14,6 @@ export default class FooterService {
                 pageSize: 1
             }
         })
-        return await $fetch(this.config.public.apiBase + '/footers?' + query)
+        return await $fetch(this.config.public.apiBase + '/footer?' + query)
     }
 }

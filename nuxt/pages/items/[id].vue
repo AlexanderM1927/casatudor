@@ -70,6 +70,34 @@
                         </div>
                     </div>
                 </div>
+                <div class="product-container__quantity">
+                    <label for="quantity"><b>{{ texts.quantity || 'Cantidad' }}:</b></label>
+                    <div class="quantity-input">
+                        <button 
+                            type="button" 
+                            class="quantity-btn" 
+                            @click="decreaseQuantity"
+                            :disabled="selectedQuantity <= 1"
+                        >
+                            -
+                        </button>
+                        <input 
+                            id="quantity"
+                            v-model.number="selectedQuantity" 
+                            type="number" 
+                            min="1" 
+                            max="99"
+                            class="quantity-field"
+                        />
+                        <button 
+                            type="button" 
+                            class="quantity-btn" 
+                            @click="increaseQuantity"
+                        >
+                            +
+                        </button>
+                    </div>
+                </div>
                 <div class="product-container__btns">
                 <button 
                     v-if="!isProductOnFavorites" 
@@ -123,6 +151,7 @@ const route = useRoute()
 
 const isLoading: Ref<Boolean> = ref(true)
 const currentMainImage: Ref<string> = ref('')
+const selectedQuantity: Ref<number> = ref(1)
 
 const product: Ref<IProduct> = ref({
     id: 1,
@@ -173,7 +202,7 @@ const addToCart = ((product: IProduct) => {
 
     const productCart: IProductCart = {
         ...product,
-        quantity: 1,
+        quantity: selectedQuantity.value,
         selectedVariants: {
             color: colorSelected ?? '',
             size: sizeSelected ?? '',
@@ -181,6 +210,18 @@ const addToCart = ((product: IProduct) => {
     }
     cart.addProducts(productCart)
 })
+
+const increaseQuantity = () => {
+    if (selectedQuantity.value < 99) {
+        selectedQuantity.value++
+    }
+}
+
+const decreaseQuantity = () => {
+    if (selectedQuantity.value > 1) {
+        selectedQuantity.value--
+    }
+}
 
 const isProductOnFavorites = computed(() => {
     if (favoritesProducts) {
@@ -301,6 +342,56 @@ onMounted(() => {
 
 .variants__size {
     margin-bottom: 0.5rem;
+}
+
+.product-container__quantity {
+    margin-bottom: 1rem;
+}
+
+.quantity-input {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-top: 0.5rem;
+}
+
+.quantity-btn {
+    background: #007bff;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    width: 2rem;
+    height: 2rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    font-size: 1.2rem;
+    transition: background-color 0.2s;
+}
+
+.quantity-btn:hover:not(:disabled) {
+    background: #0056b3;
+}
+
+.quantity-btn:disabled {
+    background: #ccc;
+    cursor: not-allowed;
+}
+
+.quantity-field {
+    width: 4rem;
+    height: 2rem;
+    text-align: center;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-size: 1rem;
+}
+
+.quantity-field:focus {
+    outline: none;
+    border-color: #007bff;
+    box-shadow: 0 0 0 2px rgba(0, 123, 255, 0.25);
 }
 
 .slider-product {

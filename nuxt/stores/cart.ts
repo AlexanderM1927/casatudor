@@ -16,8 +16,8 @@ export const useCartStore = defineStore('cart', {
                 if (this.products[i].id === product.id &&
                     this.products[i].selectedVariants?.color === product.selectedVariants?.color &&
                     this.products[i].selectedVariants?.size === product.selectedVariants?.size) {
+                    this.products[i].quantity = this.products[i].quantity + product.quantity
                     isOnCart = true
-                    this.products[i].quantity = this.products[i].quantity + 1
                 }
             }
             if (!isOnCart) this.products.push(product)

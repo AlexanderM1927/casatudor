@@ -7,6 +7,8 @@
                     :src="currentMainImage || product.images[0]"
                     :alt="product.name"
                     id="main-image"
+                    @mouseenter="stopImageRotation"
+                    @mouseleave="startImageRotation"
                 />
                 <div class="slider-product" v-show="product.images.length > 1">
                     <div
@@ -164,6 +166,8 @@ const isLoading: Ref<Boolean> = ref(true)
 const currentMainImage: Ref<string> = ref('')
 const selectedQuantity: Ref<number> = ref(1)
 const dataFooter = footerData
+const currentImageIndex: Ref<number> = ref(0)
+const imageInterval: Ref<NodeJS.Timeout | null> = ref(null)
 
 const product: Ref<IProduct> = ref({
     id: 1,
@@ -202,6 +206,9 @@ const getProduct = async (newPage: number = 1) => {
     // Establecer la primera imagen como imagen principal cuando se carga el producto
     if (product.value.images && product.value.images.length > 0) {
         currentMainImage.value = product.value.images[0]
+        currentImageIndex.value = 0
+        // Iniciar rotación automática si hay más de una imagen
+        startImageRotation()
     }
 
     isLoading.value = false
@@ -288,16 +295,51 @@ const removeFromFavorites = ((product: IProduct) => {
 
 const changeMainImage = (image: string) => {
     currentMainImage.value = image
+    // Actualizar el índice cuando se cambia manualmente
+    const index = product.value.images.findIndex(img => img === image)
+    if (index !== -1) {
+        currentImageIndex.value = index
+    }
+}
+
+const startImageRotation = () => {
+    if (product.value.images && product.value.images.length > 1) {
+        imageInterval.value = setInterval(() => {
+            currentImageIndex.value = (currentImageIndex.value + 1) % product.value.images.length
+            currentMainImage.value = product.value.images[currentImageIndex.value]
+        }, 5000) // Cambiar cada 5 segundos
+    }
+}
+
+const stopImageRotation = () => {
+    if (imageInterval.value) {
+        clearInterval(imageInterval.value)
+        imageInterval.value = null
+    }
 }
 
 const onColorVariantChange = (color: IColor) => {
+    // Detener la rotación automática cuando se selecciona un color
+    stopImageRotation()
+    
     // Si la variante de color tiene una imagen, cambiar a esa imagen
     if (color.image) {
         currentMainImage.value = color.image
+        // Buscar el índice de esta imagen en el array de imágenes
+        const index = product.value.images.findIndex(img => img === color.image)
+        if (index !== -1) {
+            currentImageIndex.value = index
+        }
     } else {
         // Si no tiene imagen, volver a la primera imagen del producto
         currentMainImage.value = product.value.images[0]
+        currentImageIndex.value = 0
     }
+    
+    // Reiniciar la rotación automática después de 3 segundos
+    setTimeout(() => {
+        startImageRotation()
+    }, 3000)
 }
 
 onMounted(() => {
@@ -306,6 +348,11 @@ onMounted(() => {
     const favorites: [IProduct] = favoritesLS ? JSON.parse(favoritesLS) : []
     favoritesStore.set(favorites)
     fetchFooter()
+})
+
+onUnmounted(() => {
+    // Limpiar el intervalo al desmontar el componente
+    stopImageRotation()
 })
 </script>
 <style lang="scss">

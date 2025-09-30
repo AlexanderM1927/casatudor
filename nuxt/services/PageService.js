@@ -7,7 +7,6 @@ export default class PageService {
     }
     async getPages(page = 1) {
         const query = qs.stringify({
-            populate: '*',
             sort: ['sort:asc'],
             pagination: {
                 page: page,
@@ -15,7 +14,10 @@ export default class PageService {
             },
             populate: {
                 subpages: {
-                  fields: ['urlTitle', 'urlId']
+                    fields: ['urlTitle', 'urlId']
+                },
+                categories: {
+                    fields: ['id', 'name']
                 }
             }
         })
@@ -23,7 +25,15 @@ export default class PageService {
     }
     async getSinglePageByUrlId(id) {
         const query = qs.stringify({
-            populate: '*',
+            populate: {
+                subpages: {
+                    fields: ['urlTitle', 'urlId']
+                },
+                categories: {
+                    populate: ['image'],
+                    fields: ['id', 'name']
+                }
+            },
             filters: {
                 urlId: id
             }

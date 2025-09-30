@@ -2,10 +2,12 @@
     <div class="first-container">
         <h2 class="title">{{ page.title }}</h2>
         <Markdown :source="page.content" />
-        <template v-if="!isLoading && page.category && page.category.data">
+        
+        <!-- Mostrar todos los productos mezclados -->
+        <template v-if="!isLoading && allProducts.length > 0">
             <div class="row">
                 <Product 
-                    v-for="(product, index) in page.category.data.products"
+                    v-for="(product, index) in allProducts"
                     :product="product"
                     :childClass="`col-md-3 col-xs-12`"
                     :key="index"
@@ -37,7 +39,9 @@ const page: Ref<IPage> = ref({
     content: '',
     urlId: '',
     urlTitle: '',
-    subpages: {}
+    subpages: {},
+    categories: { data: [] },
+    isHeaderLink: false
 })
 
 const appConfig = useRuntimeConfig()
@@ -51,54 +55,84 @@ const paginatorProducts: Ref<IPaginator> = ref({
     data: []
 })
 
+const allProducts: Ref<IProduct[]> = ref([])
+
 
 const getPage = async (newPage: number = 1) => {
     isLoading.value = true
     const { data }: any = await pageService.getSinglePageByUrlId(route.params.id)
     page.value = data.map(({ id, attributes }: { id: number, attributes: any }) => {
-        const page: IPage = {
+        const pageData: IPage = {
             ...attributes,
             id: id
         }
-        return page
+        
+        // Mapear las categorías si existen
+        if (attributes.categories && attributes.categories.data) {
+            pageData.categories = {
+                data: attributes.categories.data.map(({ id, attributes: catAttributes }: { id: number, attributes: any }) => ({
+                    id,
+                    name: catAttributes.name,
+                    products: []
+                }))
+            }
+        }
+        
+        return pageData
     })[0]
-    getProducts()
+    
+    await getProducts()
     isLoading.value = false
 }
 
 const getProducts = async (newPage = 1) => {
-    if (page.value && page.value.category && page.value.category.data) {
+    if (page.value && page.value.categories && page.value.categories.data && page.value.categories.data.length > 0) {
         paginatorProducts.value.currentPage = newPage
         isLoading.value = true
-        const categoryId = page.value.category.data.id
-        const { data, meta }: any = await productService.getProductsWithFilters(paginatorProducts.value.currentPage, '', {
-            id: categoryId
-        }, '')
-        const products = data.map(({ id, attributes }: { id: number, attributes: any }) => {
-            const product: IProduct = {
-                ...attributes,
-                images: attributes.image.data.map((el: IImageStrapi) => {
-                    return useImageFromStrapi(el?.attributes?.url)
-                }),
-                id: id
-            }
-            return product
-        })
-        page.value = {
-            ...page.value,
-            category: {
-                data: {
-                    id: categoryId,
-                    products: products
+        
+        let allProductsFromCategories: IProduct[] = []
+        
+        // Obtener productos para cada categoría
+        for (const category of page.value.categories.data) {
+            try {
+                const { data, meta }: any = await productService.getProductsWithFilters(
+                    paginatorProducts.value.currentPage, 
+                    '', 
+                    { id: category.id }, 
+                    ''
+                )
+                
+                const categoryProducts = data.map(({ id, attributes }: { id: number, attributes: any }) => {
+                    const product: IProduct = {
+                        ...attributes,
+                        images: attributes.image.data.map((el: IImageStrapi) => {
+                            return useImageFromStrapi(el?.attributes?.url)
+                        }),
+                        id: id
+                    }
+                    return product
+                })
+                
+                // Agregar a la lista total de productos
+                allProductsFromCategories = [...allProductsFromCategories, ...categoryProducts]
+                
+                // Usar la paginación de la primera categoría
+                if (category === page.value.categories.data[0]) {
+                    paginatorProducts.value = {
+                        currentPage: meta.pagination.page,
+                        pageCount: meta.pagination.pageCount,
+                        data: allProductsFromCategories,
+                        url: ''
+                    }
                 }
+            } catch (error) {
+                console.error(`Error fetching products for category ${category.id}:`, error)
             }
         }
-        paginatorProducts.value = {
-            currentPage: meta.pagination.page,
-            pageCount: meta.pagination.pageCount,
-            data: products,
-            url: ''
-        }
+        
+        // Mezclar los productos aleatoriamente
+        allProducts.value = allProductsFromCategories.sort(() => Math.random() - 0.5)
+        
         isLoading.value = false
     }
 }

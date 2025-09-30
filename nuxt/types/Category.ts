@@ -1,7 +1,9 @@
+import type { IProduct } from './Product';
+
 export interface ICategory {
     id: number,
     name: string,
-    products?: []
+    products?: IProduct[]
     data?: any,
     image?: string
 }

@@ -33,9 +33,9 @@
       "target": "api::subpage.subpage",
       "mappedBy": "page"
     },
-    "category": {
+    "categories": {
       "type": "relation",
-      "relation": "oneToOne",
+      "relation": "oneToMany",
       "target": "api::category.category"
     },
     "isHeaderLink": {

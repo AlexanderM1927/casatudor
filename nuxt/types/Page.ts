@@ -7,10 +7,10 @@ export interface IPage {
     title: string,
     content: string,
     subpages: {
-        data?: [IPage]
+        data?: IPage[]
     },
-    category?: {
-        data?: [ICategory]
+    categories?: {
+        data?: ICategory[]
     },
     isHeaderLink: boolean
 }

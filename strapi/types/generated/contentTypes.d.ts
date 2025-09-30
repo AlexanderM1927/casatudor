@@ -596,9 +596,9 @@ export interface ApiPagePage extends Schema.CollectionType {
     draftAndPublish: true;
   };
   attributes: {
-    category: Attribute.Relation<
+    categories: Attribute.Relation<
       'api::page.page',
-      'oneToOne',
+      'oneToMany',
       'api::category.category'
     >;
     content: Attribute.RichText;

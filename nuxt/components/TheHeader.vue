@@ -181,24 +181,44 @@
           }}</NuxtLink>
         </li>
         <li v-for="(page, index) in pages" :key="index">
-          <NuxtLink
-            class="anchor anchor-third burger-menu-link"
-            :to="`/pages/${page.urlId}`"
-            :title="page.urlTitle"
-          >
-            {{ page.urlTitle }}
-          </NuxtLink>
-          <ul v-if="page.subpages">
-            <li v-for="(subpage, index) in page.subpages.data">
-              <NuxtLink
-                class="anchor anchor-third burger-menu-link"
-                :to="`/subpages/${subpage.urlId}`"
-                :title="subpage.urlTitle"
-              >
-                {{ subpage.urlTitle }}
-              </NuxtLink>
-            </li>
-          </ul>
+          <div v-if="page.subpages && page.subpages.data && page.subpages.data.length > 0">
+            <!-- Page with subpages - clickable to toggle -->
+            <a
+              class="anchor anchor-third burger-menu-link burger-menu-parent"
+              @click="toggleSubpages(page.id)"
+              href="#"
+              :title="page.urlTitle"
+            >
+              {{ page.urlTitle }}
+              <Icon 
+                name="material-symbols:keyboard-arrow-down" 
+                :class="{ 'rotated': expandedPages.has(page.id) }"
+                class="arrow-icon"
+              />
+            </a>
+            <!-- Subpages list - shown/hidden based on parent state -->
+            <ul v-show="expandedPages.has(page.id)" class="subpages-list">
+              <li v-for="(subpage, subIndex) in page.subpages.data" :key="subIndex">
+                <NuxtLink
+                  class="anchor anchor-third burger-menu-link subpage-link"
+                  :to="`/subpages/${subpage.urlId}`"
+                  :title="subpage.urlTitle"
+                >
+                  {{ subpage.urlTitle }}
+                </NuxtLink>
+              </li>
+            </ul>
+          </div>
+          <div v-else>
+            <!-- Page without subpages - direct link -->
+            <NuxtLink
+              class="anchor anchor-third burger-menu-link"
+              :to="`/pages/${page.urlId}`"
+              :title="page.urlTitle"
+            >
+              {{ page.urlTitle }}
+            </NuxtLink>
+          </div>
         </li>
         <li v-if="!user">
           <NuxtLink class="anchor anchor-third burger-menu-link" to="/login" :title="texts.pages.login">{{
@@ -261,9 +281,18 @@ const pages: Ref<[IPage]> = ref([
 ]);
 const isLoading: Ref<boolean> = ref(false);
 const productNameSearch: Ref<String> = ref("");
+const expandedPages: Ref<Set<number>> = ref(new Set());
 
 const searchItem = () => {
   navigateTo("/items?q=" + productNameSearch.value);
+};
+
+const toggleSubpages = (pageId: number) => {
+  if (expandedPages.value.has(pageId)) {
+    expandedPages.value.delete(pageId);
+  } else {
+    expandedPages.value.add(pageId);
+  }
 };
 
 const pageService = new PageService(appConfig);
@@ -330,6 +359,8 @@ const closeBurger = () => {
     burgerMenu.value.style.opacity = "0";
     burgerMenu.value.style.left = "-70%";
   }
+  // Reset expanded pages when closing burger menu
+  expandedPages.value.clear();
 };
 
 const openBurger = () => {
@@ -694,8 +725,37 @@ onUnmounted(() => {
   align-items: center;
 }
 
-.burger-menu-link:hover {
-  background-color: rgba(0, 0, 0, 0.05);
-  padding-left: 1.5rem; /* Slight indent on hover for visual feedback */
+.burger-menu-parent {
+  justify-content: space-between;
+  cursor: pointer;
+}
+
+.arrow-icon {
+  transition: transform 0.3s ease;
+  font-size: 1.2rem;
+}
+
+.arrow-icon.rotated {
+  transform: rotate(180deg);
+}
+
+.subpages-list {
+  list-style: none;
+  padding-left: 0;
+  margin: 0;
+}
+
+.subpages-list li {
+  border-bottom: 1px solid #f0f0f0;
+  border-top: none;
+}
+
+.subpage-link {
+  padding-left: 1rem !important;
+  font-size: 1.1rem;
+}
+
+.subpage-link:hover {
+  padding-left: 2.5rem !important;
 }
 </style>

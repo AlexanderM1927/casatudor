@@ -71,7 +71,7 @@
               >{{ texts.pages.posts }}</NuxtLink
             >
           </li>
-          <li class="subnav" v-for="(page, index) in pages" :key="index">
+          <li class="subnav" v-for="(page, index) in pages" :key="index" v-show="page.isHeaderLink">
             <NuxtLink
               :title="page.urlTitle"
               :class="`menu-items-anchor anchor anchor-opacity anchor-underline ${

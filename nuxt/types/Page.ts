@@ -11,5 +11,6 @@ export interface IPage {
     },
     category?: {
         data?: [ICategory]
-    }
+    },
+    isHeaderLink: boolean
 }

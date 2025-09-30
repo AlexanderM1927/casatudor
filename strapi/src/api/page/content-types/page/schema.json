@@ -37,6 +37,9 @@
       "type": "relation",
       "relation": "oneToOne",
       "target": "api::category.category"
+    },
+    "isHeaderLink": {
+      "type": "boolean"
     }
   }
 }

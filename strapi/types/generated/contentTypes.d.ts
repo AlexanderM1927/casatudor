@@ -605,6 +605,7 @@ export interface ApiPagePage extends Schema.CollectionType {
     createdAt: Attribute.DateTime;
     createdBy: Attribute.Relation<'api::page.page', 'oneToOne', 'admin::user'> &
       Attribute.Private;
+    isHeaderLink: Attribute.Boolean;
     publishedAt: Attribute.DateTime;
     sort: Attribute.Integer;
     subpages: Attribute.Relation<

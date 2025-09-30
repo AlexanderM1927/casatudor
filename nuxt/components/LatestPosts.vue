@@ -1,7 +1,6 @@
 <template>
     <section v-if="!isLoading" class="second-container">
         <h2 class="title">{{ texts.last_posts }}</h2>
-        <SliderPosts :posts="posts"></SliderPosts>
         <br>
         <div class="row">
             <Post 

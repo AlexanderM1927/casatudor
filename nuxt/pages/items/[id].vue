@@ -165,7 +165,7 @@ const route = useRoute()
 const isLoading: Ref<Boolean> = ref(true)
 const currentMainImage: Ref<string> = ref('')
 const selectedQuantity: Ref<number> = ref(1)
-const dataFooter = footerData
+const dataFooter: any = footerData
 const currentImageIndex: Ref<number> = ref(0)
 const imageInterval: Ref<NodeJS.Timeout | null> = ref(null)
 

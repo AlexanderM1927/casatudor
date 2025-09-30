@@ -938,12 +938,8 @@ onUnmounted(() => {
 }
 
 .subpage-link {
-  padding-left: 1rem !important;
+  padding-left: 1rem;
   font-size: 1.1rem;
-}
-
-.subpage-link:hover {
-  padding-left: 2.5rem !important;
 }
 
 :global(body.has-subnav .first-container) {

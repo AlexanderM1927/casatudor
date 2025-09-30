@@ -23,6 +23,10 @@
 <script setup lang="ts">
 import PageService from '@/services/PageService'
 import ProductService from '@/services/ProductService'
+import type { IImageStrapi } from '~/types/ImageStrapi';
+import type { IPage } from '~/types/Page';
+import type { IPaginator } from '~/types/Paginator';
+import type { IProduct } from '~/types/Product';
 const route = useRoute()
 
 const isLoading: Ref<Boolean> = ref(true);

@@ -80,23 +80,6 @@
               :to="`/pages/${page.urlId}`"
               >{{ page.urlTitle }}</NuxtLink
             >
-            <div
-              :class="`subnav-content ${
-                route.name === 'index' ? 'ct-bg-transparent' : 'ct-bg-secondary'
-              }`"
-              v-if="page.subpages.data && page.subpages.data.length > 0"
-            >
-              <NuxtLink
-                v-for="(subpage, index) in page.subpages.data"
-                :class="`menu-items-anchor anchor anchor-opacity anchor-underline ${
-                  route.name === 'index' ? 'anchor-secondary' : 'anchor-primary'
-                }`"
-                :to="`/subpages/${subpage.urlId}`"
-                :title="subpage.urlTitle"
-              >
-                {{ subpage.urlTitle }}
-              </NuxtLink>
-            </div>
           </li>
           <li v-if="!user">
             <NuxtLink
@@ -145,6 +128,29 @@
         </ul>
       </div>
     </template>
+    
+    <!-- Subnavigation menu - appears below main header -->
+    <div 
+      v-if="type !== 'xs' && currentPageWithSubpages && currentPageWithSubpages.subpages?.data?.length > 0"
+      :class="subnavBarClasses"
+    >
+      <div class="subnav-container">
+        <ul class="subnav-items">
+          <li v-for="(subpage, index) in currentPageWithSubpages.subpages.data" :key="index">
+            <NuxtLink
+              :class="`subnav-link anchor anchor-opacity anchor-underline ${
+                route.path.includes(`/subpages/${subpage.urlId}`) ? 'subnav-link-active' : ''
+              }`"
+              :to="`/subpages/${subpage.urlId}`"
+              :title="subpage.urlTitle"
+            >
+              {{ subpage.urlTitle }}
+            </NuxtLink>
+          </li>
+        </ul>
+      </div>
+    </div>
+    
     <div class="burger-menu" id="burger-menu" ref="burgerMenu">
       <div class="burger-menu-header">
         <h1 class="subtitle">{{ appConfig.public.storeName }}</h1>
@@ -180,7 +186,7 @@
             texts.pages.posts
           }}</NuxtLink>
         </li>
-        <li v-for="(page, index) in pages" :key="index">
+        <li v-for="(page, index) in pages" :key="index" v-show="page.isHeaderLink">
           <div v-if="page.subpages && page.subpages.data && page.subpages.data.length > 0">
             <!-- Page with subpages - clickable to toggle -->
             <a
@@ -295,6 +301,51 @@ const toggleSubpages = (pageId: number) => {
   }
 };
 
+// Computed property to check if current route matches a page that has subpages
+const currentPageWithSubpages = computed(() => {
+  // Check if we're on a main page that has subpages
+  const mainPage = pages.value.find(page => 
+    route.path.includes(`/pages/${page.urlId}`) && 
+    page.subpages?.data && 
+    page.subpages.data.length > 0
+  );
+  
+  if (mainPage) return mainPage;
+  
+  // Check if we're on a subpage, then find its parent page
+  for (const page of pages.value) {
+    if (page.subpages?.data && page.subpages.data.length > 0) {
+      const isOnSubpage = page.subpages.data.some(subpage => 
+        route.path.includes(`/subpages/${subpage.urlId}`)
+      );
+      if (isOnSubpage) {
+        return page;
+      }
+    }
+  }
+  
+  return null;
+});
+
+// Computed property for subnav bar classes
+const subnavBarClasses = computed(() => {
+  return `subnav-bar ${route.name === 'index' ? 'subnav-bar-transparent' : ''}`;
+});
+
+// Add body class when subnav is visible
+const updateBodyPadding = () => {
+  if (typeof document === 'undefined') return;
+  
+  const body = document.body;
+  const hasSubnav = currentPageWithSubpages.value && currentPageWithSubpages?.value?.subpages?.data?.length > 0;
+  
+  if (hasSubnav && type.value !== 'xs') {
+    body.classList.add('has-subnav');
+  } else {
+    body.classList.remove('has-subnav');
+  }
+};
+
 const pageService = new PageService(appConfig);
 
 const getPages = async () => {
@@ -325,6 +376,21 @@ watch(
   () => {
     handleScroll();
     closeBurger();
+    // Force update subnav positioning after route change
+    nextTick(() => {
+      handleScroll();
+    });
+  }
+);
+
+watch(
+  () => currentPageWithSubpages.value,
+  () => {
+    // When the subpage visibility changes, update positioning
+    nextTick(() => {
+      handleScroll();
+      updateBodyPadding();
+    });
   }
 );
 
@@ -403,6 +469,8 @@ const setPositionsFixed = () => {
   const headerHTML = document.getElementById("header");
   const headerMobileHTML = document.getElementById("header-mobile");
   const burgerMenuHTML = document.getElementById("burger-menu");
+  const subnavBar = document.querySelector(".subnav-bar") as HTMLElement;
+  
   if (headerHTML) {
     headerHTML.style.position = "fixed";
   }
@@ -412,12 +480,19 @@ const setPositionsFixed = () => {
   if (burgerMenuHTML) {
     burgerMenuHTML.style.position = "fixed";
   }
+  if (subnavBar) {
+    subnavBar.style.top = "7rem"; // Fixed position below header
+    subnavBar.style.position = "fixed";
+    subnavBar.style.zIndex = "2"; // Ensure it's below main header
+  }
 };
 const setPositionsAbsolute = () => {
   if (typeof document === 'undefined') return;
   const headerHTML = document.getElementById("header");
   const headerMobileHTML = document.getElementById("header-mobile");
   const burgerMenuHTML = document.getElementById("burger-menu");
+  const subnavBar = document.querySelector(".subnav-bar") as HTMLElement;
+  
   if (headerHTML) {
     headerHTML.style.position = "absolute";
   }
@@ -426,6 +501,11 @@ const setPositionsAbsolute = () => {
   }
   if (burgerMenuHTML) {
     burgerMenuHTML.style.position = "absolute";
+  }
+  if (subnavBar) {
+    subnavBar.style.top = "7rem"; // Maintain position below header
+    subnavBar.style.position = "absolute"; // Change to absolute when main header is absolute
+    subnavBar.style.zIndex = "2";
   }
 };
 const changeHeaderPerWhite = () => {
@@ -461,6 +541,20 @@ const handleScroll = () => {
       setPositionsAbsolute();
     }
   }
+  
+  // Ensure subnav positioning is always correct
+  nextTick(() => {
+    const subnavBar = document.querySelector(".subnav-bar") as HTMLElement;
+    if (subnavBar) {
+      subnavBar.style.top = "7rem";
+      subnavBar.style.zIndex = "2";
+      if (bodyScrollTop > 100) {
+        subnavBar.style.position = "fixed";
+      } else {
+        subnavBar.style.position = route.name === "index" ? "absolute" : "absolute";
+      }
+    }
+  });
 };
 
 onMounted(() => {
@@ -468,6 +562,7 @@ onMounted(() => {
   if (typeof window !== 'undefined') {
     setTimeout(() => {
       handleScroll();
+      updateBodyPadding();
       window.addEventListener("scroll", () => {
         handleScroll();
       });
@@ -475,11 +570,25 @@ onMounted(() => {
   }
 });
 
+// Watch for route changes to update subnav
+watch(() => route.path, () => {
+  nextTick(() => {
+    setTimeout(() => {
+      handleScroll();
+      updateBodyPadding();
+    }, 100);
+  });
+});
+
 onUnmounted(() => {
   if (typeof window !== 'undefined') {
     window.removeEventListener("scroll", () => {
       handleScroll();
     });
+  }
+  // Clean up body class
+  if (typeof document !== 'undefined') {
+    document.body.classList.remove('has-subnav');
   }
 });
 </script>
@@ -552,6 +661,99 @@ onUnmounted(() => {
   margin-bottom: 0;
   align-items: center;
   font-weight: 700;
+}
+
+.subnav-bar {
+  position: fixed;
+  top: 7rem; /* Position below the main header */
+  left: 0;
+  right: 0;
+  background: white;
+  border-bottom: 1px solid rgba(60, 60, 60, 0.12);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  z-index: 2;
+  transition: all 0.3s ease;
+  width: 100%;
+}
+
+.subnav-bar-transparent {
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+}
+
+.subnav-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 2rem;
+}
+
+.subnav-items {
+  display: flex;
+  justify-content: center;
+  gap: 2rem;
+  list-style: none;
+  margin: 0;
+  padding: 1rem 0;
+  font-family: "Inter";
+  font-weight: 600;
+}
+
+.subnav-link {
+  color: $headerTextColor;
+  text-decoration: none;
+  padding: 0.5rem 1rem;
+  border-radius: 0.5rem;
+  transition: all 0.3s ease;
+  position: relative;
+  font-size: 0.95rem;
+}
+
+.subnav-link:hover {
+  color: $headerTextColor;
+}
+
+.subnav-link-active {
+  color: $headerTextColor;
+  font-weight: 700;
+}
+
+.subnav-link:after {
+  background-color: $headerTextColor;
+}
+
+@media only screen and (max-width: $grid-breakpoints-md) {
+  .subnav-container {
+    padding: 0 1rem;
+  }
+  
+  .subnav-items {
+    gap: 1rem;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+  
+  .subnav-link {
+    font-size: 0.9rem;
+    padding: 0.4rem 0.8rem;
+  }
+}
+
+@media only screen and (max-width: $grid-breakpoints-sm) {
+  .subnav-bar {
+    display: none; /* Hide subnav on mobile - use burger menu instead */
+  }
+}
+
+// Global styles for pages with subnav
+:global(.first-container-with-subnav) {
+  padding-top: 12rem !important; /* Extra padding for subnav */
+}
+
+@media only screen and (max-width: $grid-breakpoints-sm) {
+  :global(.first-container-with-subnav) {
+    padding-top: 8rem !important; /* Less padding on mobile since subnav is hidden */
+  }
 }
 
 .anchor {
@@ -672,21 +874,6 @@ onUnmounted(() => {
   display: inline-block;
 }
 
-.subnav .subnav-content {
-  display: none;
-  position: absolute;
-  padding: 0.5rem 1rem;
-  border-radius: 0.5rem;
-}
-
-.subnav:hover .subnav-content {
-  display: block;
-}
-
-.subnav:hover .subnav-content a {
-  display: block;
-}
-
 .menu-items__product {
   position: relative;
 }
@@ -757,5 +944,20 @@ onUnmounted(() => {
 
 .subpage-link:hover {
   padding-left: 2.5rem !important;
+}
+
+:global(body.has-subnav .first-container) {
+  padding-top: 12rem !important; /* 10rem (header) + 2rem (subnav) */
+}
+
+@media only screen and (max-width: $grid-breakpoints-sm) {
+  :global(body.has-subnav .first-container) {
+    padding-top: 10rem !important; /* Normal padding on mobile since subnav is hidden */
+  }
+}
+
+/* Transition for smooth spacing changes */
+:global(.first-container) {
+  transition: padding-top 0.3s ease;
 }
 </style>

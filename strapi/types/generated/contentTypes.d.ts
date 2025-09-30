@@ -738,6 +738,11 @@ export interface ApiSubpageSubpage extends Schema.CollectionType {
     draftAndPublish: true;
   };
   attributes: {
+    category: Attribute.Relation<
+      'api::subpage.subpage',
+      'oneToOne',
+      'api::category.category'
+    >;
     content: Attribute.RichText;
     createdAt: Attribute.DateTime;
     createdBy: Attribute.Relation<

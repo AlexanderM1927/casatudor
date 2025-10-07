@@ -37,10 +37,16 @@ const props = defineProps(
     background: $themeBackgroundCards;
     color: $themeColorCards;
     padding-top: 1rem;
+    display: flex;
+    flex-direction: column;
+    height: 100%;
 }
 
 .post-img {
-    height: 10rem;
-    width: auto;
+    width: 100%;
+    height: 200px;
+    object-fit: cover;
+    object-position: center;
+    border-radius: 0.375rem 0.375rem 0 0;
 }
 </style>

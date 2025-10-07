@@ -23,6 +23,9 @@ Disallow: /api/
 Disallow: /*.json$
 Disallow: /*?*
 
+# Remove this invalid line:
+# Content-signal: search=yes,ai-train=no
+
 # Permitir bots específicos para imágenes
 User-agent: Googlebot-Image
 Allow: /img/

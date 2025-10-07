@@ -44,7 +44,7 @@ const props = defineProps(
 
 .post-img {
     width: 100%;
-    height: 200px;
+    height: auto;
     object-fit: cover;
     object-position: center;
     border-radius: 0.375rem 0.375rem 0 0;

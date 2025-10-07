@@ -27,6 +27,7 @@
                     v-else
                     :src="useImageFromStrapi(banner.imageForMobile || banner.imageForDesktop)"
                     :alt="`Banner ${index + 1}`"
+                    :title="banner.urlForRedirect ? 'Click to navigate' : ''"
                     class="hero-background"
                     fetchpriority="high"
                     format="webp"

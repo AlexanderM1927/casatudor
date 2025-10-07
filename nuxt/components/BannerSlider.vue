@@ -13,6 +13,7 @@
                     v-if="type !== 'xs'"
                     :src="useImageFromStrapi(banner.imageForDesktop)"
                     :alt="`Banner ${index + 1}`"
+                    :title="banner.urlForRedirect ? 'Click to navigate' : ''"
                     class="hero-background"
                     fetchpriority="high"
                     format="webp"

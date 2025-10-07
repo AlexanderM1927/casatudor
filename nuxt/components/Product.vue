@@ -33,10 +33,10 @@
             </div>
         </div>
         <div class="product-card__body">
-            <h5 
+            <b 
                 class="product-card__title" 
                 @click="navigateTo('/items/' + product.id)"
-            >{{ product.name }}</h5>
+            >{{ product.name }}</b>
             <div class="product-card__price">
                 <p 
                     v-if="product.price_before_offer"

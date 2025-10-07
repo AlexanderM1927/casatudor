@@ -7,7 +7,7 @@
             :alt="post.title"
         />
         <div class="card-body">
-            <h5 class="card-title">{{ post.title }}</h5>
+            <b class="card-title">{{ post.title }}</b>
             <p class="card-text">{{ post.summary }}</p>
             <NuxtLink
                 :to="`/posts/${post.id}`"

@@ -1,8 +1,6 @@
 <template>
     <div v-if="!isLoading" class="first-container">
         <h2 class="title">{{ texts.pages.posts }}</h2>
-        <SliderPosts :posts="sliderPosts"></SliderPosts>
-        <hr>    
         <div class="row">
             <Post v-for="(post, index) in posts" :key="index" :post="post" :childClass="`col-md-3 col-xs-12`"></Post>
         </div>

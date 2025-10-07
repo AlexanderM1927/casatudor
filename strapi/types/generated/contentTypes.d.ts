@@ -774,6 +774,7 @@ export interface ApiSubpageSubpage extends Schema.CollectionType {
 export interface ApiTopCategorieTopCategorie extends Schema.CollectionType {
   collectionName: 'top_categories';
   info: {
+    description: '';
     displayName: 'Top Categorie';
     pluralName: 'top-categories';
     singularName: 'top-categorie';
@@ -782,11 +783,7 @@ export interface ApiTopCategorieTopCategorie extends Schema.CollectionType {
     draftAndPublish: true;
   };
   attributes: {
-    categories: Attribute.Relation<
-      'api::top-categorie.top-categorie',
-      'oneToMany',
-      'api::category.category'
-    >;
+    category: Attribute.Component<'top-categories.top-categories', true>;
     createdAt: Attribute.DateTime;
     createdBy: Attribute.Relation<
       'api::top-categorie.top-categorie',

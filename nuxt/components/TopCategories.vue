@@ -3,14 +3,14 @@
     <h2 class="title">{{ texts.top_categories }}</h2>
     <div class="top-categories">
       <div
-        v-for="category in categories"
-        :key="category.id"
+        v-for="categoryItem in categories"
+        :key="categoryItem.id"
         class="top-categories__category"
-        :style="`background-image: url(${category.image})`"
-        @click="navigateTo('/items?c=' + category.id)"
+        :style="`background-image: url(${categoryItem.image})`"
+        @click="navigateTo(categoryItem.urlForRedirect || '/items?c=' + categoryItem.category.id)"
       >
         <div class="top-categories__category-name">
-          {{ category.name }}
+          {{ categoryItem.category.name }}
         </div>
       </div>
     </div>
@@ -19,12 +19,22 @@
 <script setup lang="ts">
 import texts from "@/config/texts.json";
 import TopCategoryService from "@/services/TopCategoryService";
-import type { ICategory } from "~/types/Category";
+import { useImageFromStrapi } from '@/composables/useImageFromStrapi'
+
+interface ITopCategory {
+  id: number;
+  category: {
+    id: number;
+    name: string;
+  };
+  image: string;
+  urlForRedirect?: string;
+}
 
 const appConfig = useRuntimeConfig();
 const topCategoryService = new TopCategoryService(appConfig);
 const isLoading: Ref<Boolean> = ref(true);
-const categories: Ref<[ICategory] | []> = ref([]);
+const categories: Ref<ITopCategory[]> = ref([]);
 
 const getTopCategories = async () => {
   isLoading.value = true;
@@ -32,15 +42,21 @@ const getTopCategories = async () => {
     const { data: dataFromRequest }: any = await topCategoryService.getTopCategories();
     const topCategory = dataFromRequest[0];
     if (!topCategory) return;
-    const { data } = topCategory.attributes.categories;
-    if (!data) return;
-    categories.value = data.map(({ id, attributes }: { id: number; attributes: any }) => {
-      const categorie: ICategory = {
-        ...attributes,
-        image: useImageFromStrapi(attributes?.image?.data?.attributes?.url),
-        id: id,
+    
+    const { category: categoryComponents } = topCategory.attributes;
+    if (!categoryComponents) return;
+    
+    categories.value = categoryComponents.map((component: any) => {
+      const topCategory: ITopCategory = {
+        id: component.id,
+        category: {
+          id: component.category.data.id,
+          name: component.category.data.attributes.name
+        },
+        image: useImageFromStrapi(component.image.data[0].attributes.url),
+        urlForRedirect: component.urlForRedirect
       };
-      return categorie;
+      return topCategory;
     });
   } catch (e) {
     console.log(e);

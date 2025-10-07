@@ -1,13 +1,24 @@
 import qs from 'qs'
 
-export default class PromotionService {
+export default class TopCategoryService {
     config = null
     constructor (config) {
         this.config = config
     }
     async getTopCategories() {
         const query = qs.stringify({
-            populate: 'categories.image',
+            populate: {
+                category: {
+                    populate: {
+                        category: {
+                            fields: ['id', 'name']
+                        },
+                        image: {
+                            fields: ['url']
+                        }
+                    }
+                }
+            },
             sort: ['id:desc'],
             pagination: {
                 page: 1,

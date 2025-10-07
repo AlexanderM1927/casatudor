@@ -1,0 +1,27 @@
+{
+  "collectionName": "components_top_categories_top_categories",
+  "info": {
+    "displayName": "topCategories"
+  },
+  "options": {},
+  "attributes": {
+    "urlForRedirect": {
+      "type": "string"
+    },
+    "image": {
+      "allowedTypes": [
+        "images",
+        "files",
+        "videos",
+        "audios"
+      ],
+      "type": "media",
+      "multiple": true
+    },
+    "category": {
+      "type": "relation",
+      "relation": "oneToOne",
+      "target": "api::category.category"
+    }
+  }
+}

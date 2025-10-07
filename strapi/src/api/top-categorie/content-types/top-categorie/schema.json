@@ -4,17 +4,19 @@
   "info": {
     "singularName": "top-categorie",
     "pluralName": "top-categories",
-    "displayName": "Top Categorie"
+    "displayName": "Top Categorie",
+    "description": ""
   },
   "options": {
     "draftAndPublish": true
   },
   "pluginOptions": {},
   "attributes": {
-    "categories": {
-      "type": "relation",
-      "relation": "oneToMany",
-      "target": "api::category.category"
+    "category": {
+      "displayName": "topCategories",
+      "type": "component",
+      "repeatable": true,
+      "component": "top-categories.top-categories"
     }
   }
 }

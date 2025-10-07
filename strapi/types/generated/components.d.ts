@@ -17,6 +17,22 @@ export interface ProductsProducts extends Schema.Component {
   };
 }
 
+export interface TopCategoriesTopCategories extends Schema.Component {
+  collectionName: 'components_top_categories_top_categories';
+  info: {
+    displayName: 'topCategories';
+  };
+  attributes: {
+    category: Attribute.Relation<
+      'top-categories.top-categories',
+      'oneToOne',
+      'api::category.category'
+    >;
+    image: Attribute.Media<'images' | 'files' | 'videos' | 'audios', true>;
+    urlForRedirect: Attribute.String;
+  };
+}
+
 export interface VariantsSize extends Schema.Component {
   collectionName: 'components_variants_sizes';
   info: {
@@ -47,6 +63,7 @@ declare module '@strapi/types' {
   export module Shared {
     export interface Components {
       'products.products': ProductsProducts;
+      'top-categories.top-categories': TopCategoriesTopCategories;
       'variants.size': VariantsSize;
       'variants.variant': VariantsVariant;
     }

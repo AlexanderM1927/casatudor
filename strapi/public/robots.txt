@@ -1,33 +1,3 @@
 # To prevent search engines from seeing the site altogether, uncomment the next two lines:
 # User-Agent: *
 # Disallow: /
-User-agent: *
-Allow: /
-
-# Permitir páginas principales
-Allow: /items
-Allow: /posts
-Allow: /pages/
-Allow: /subpages/
-
-# Bloquear páginas de usuario y administrativas
-Disallow: /login
-Disallow: /checkout
-Disallow: /orders
-Disallow: /admin
-
-# Bloquear APIs
-Disallow: /api/
-
-# Bloquear archivos temporales y de sistema
-Disallow: /*.json$
-Disallow: /*?*
-
-# Permitir bots específicos para imágenes
-User-agent: Googlebot-Image
-Allow: /img/
-Allow: /_nuxt/
-Allow: /uploads/
-
-# Sitemap location
-Sitemap: https://mandarastore.com/sitemap.xml

@@ -39,6 +39,8 @@
       >
         <div class="company-name" @click="goToHome()">
           <NuxtImg
+            :alt="appConfig.public.storeName"
+            :title="appConfig.public.storeName"
             src="/img/logo.png"
           />
         </div>

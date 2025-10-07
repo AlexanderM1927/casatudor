@@ -23,35 +23,31 @@ body {
         min-height: -webkit-fill-available;
     }
 }
-
-// Inter from Google Fonts - modern, clean, optimized
-$font-inter: 'Montserrat', sans-serif;
 // Marcellus from Google Fonts - similar to Trajan Pro (classical inscriptional capitals)
-$font-trajan: 'Marcellus', 'Times New Roman', Georgia, serif;
-$font-system: system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+$font-marcellus: 'Marcellus';
 
 h1, h2, h3 {
-    font-family: $font-trajan;
+    font-family: $font-marcellus;
     font-weight: 400; // Marcellus only has regular weight
 }
 
 .title {
-    font-family: $font-trajan;
+    font-family: $font-marcellus;
     font-weight: 400;
 }
 
 .subtitle {
-    font-family: $font-trajan;
+    font-family: $font-marcellus;
     font-weight: 400;
 }
 
 p {
-    font-family: $font-inter;
+    font-family: $font-marcellus;
     font-weight: 400; // Regular weight for body text
 }
 
 h5 {
-    font-family: $font-inter;
+    font-family: $font-marcellus;
 }
 
 .main-page {
@@ -199,11 +195,11 @@ blockquote {
 
 // Trajan-style typography utility classes
 .font-trajan {
-    font-family: $font-trajan;
+    font-family: $font-marcellus;
 }
 
 .font-trajan-caps {
-    font-family: $font-trajan;
+    font-family: $font-marcellus;
     font-weight: 400;
     text-transform: uppercase;
     letter-spacing: 0.1em;
@@ -211,20 +207,20 @@ blockquote {
 
 // Special styling for classical/Roman headings
 .heading-classical {
-    font-family: $font-trajan;
+    font-family: $font-marcellus;
     font-weight: 400;
     letter-spacing: 0.15em;
     text-transform: uppercase;
 }
 
 .heading-elegant {
-    font-family: $font-trajan;
+    font-family: $font-marcellus;
     font-weight: 400;
     letter-spacing: 0.05em;
 }
 
 .heading-elegant-normal {
-    font-family: $font-trajan;
+    font-family: $font-marcellus;
     font-weight: 400;
     letter-spacing: 0.02em;
 }

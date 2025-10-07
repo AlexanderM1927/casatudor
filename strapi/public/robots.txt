@@ -30,4 +30,4 @@ Allow: /_nuxt/
 Allow: /uploads/
 
 # Sitemap location
-Sitemap: https://tudominio.com/sitemap.xml
+Sitemap: https://mandarastore.com/sitemap.xml

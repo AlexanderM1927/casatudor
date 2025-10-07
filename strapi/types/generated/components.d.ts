@@ -1,5 +1,17 @@
 import type { Attribute, Schema } from '@strapi/strapi';
 
+export interface BannerBanners extends Schema.Component {
+  collectionName: 'components_banner_banners';
+  info: {
+    displayName: 'banners';
+  };
+  attributes: {
+    imageForDesktop: Attribute.Media<'images' | 'files' | 'videos' | 'audios'>;
+    imageForMobile: Attribute.Media<'images' | 'files' | 'videos' | 'audios'>;
+    urlForRedirect: Attribute.String;
+  };
+}
+
 export interface ProductsProducts extends Schema.Component {
   collectionName: 'components_products_products';
   info: {
@@ -62,6 +74,7 @@ export interface VariantsVariant extends Schema.Component {
 declare module '@strapi/types' {
   export module Shared {
     export interface Components {
+      'banner.banners': BannerBanners;
       'products.products': ProductsProducts;
       'top-categories.top-categories': TopCategoriesTopCategories;
       'variants.size': VariantsSize;

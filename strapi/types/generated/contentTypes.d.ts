@@ -439,6 +439,7 @@ export interface ApiContentContent extends Schema.SingleType {
     draftAndPublish: true;
   };
   attributes: {
+    banner: Attribute.Component<'banner.banners', true>;
     createdAt: Attribute.DateTime;
     createdBy: Attribute.Relation<
       'api::content.content',
@@ -446,13 +447,7 @@ export interface ApiContentContent extends Schema.SingleType {
       'admin::user'
     > &
       Attribute.Private;
-    descriptionHomePage: Attribute.Text;
-    imageHomePage: Attribute.Media<'images'>;
-    imageHomePageMobile: Attribute.Media<
-      'images' | 'files' | 'videos' | 'audios'
-    >;
     publishedAt: Attribute.DateTime;
-    titleHomePage: Attribute.String;
     updatedAt: Attribute.DateTime;
     updatedBy: Attribute.Relation<
       'api::content.content',

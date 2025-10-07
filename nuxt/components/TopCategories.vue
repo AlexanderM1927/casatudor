@@ -20,16 +20,7 @@
 import texts from "@/config/texts.json";
 import TopCategoryService from "@/services/TopCategoryService";
 import { useImageFromStrapi } from '@/composables/useImageFromStrapi'
-
-interface ITopCategory {
-  id: number;
-  category: {
-    id: number;
-    name: string;
-  };
-  image: string;
-  urlForRedirect?: string;
-}
+import type { ITopCategory } from "~/types/TopCategory";
 
 const appConfig = useRuntimeConfig();
 const topCategoryService = new TopCategoryService(appConfig);

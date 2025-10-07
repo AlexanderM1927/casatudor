@@ -1,0 +1,32 @@
+{
+  "collectionName": "components_banner_banners",
+  "info": {
+    "displayName": "banners"
+  },
+  "options": {},
+  "attributes": {
+    "urlForRedirect": {
+      "type": "string"
+    },
+    "imageForDesktop": {
+      "allowedTypes": [
+        "images",
+        "files",
+        "videos",
+        "audios"
+      ],
+      "type": "media",
+      "multiple": false
+    },
+    "imageForMobile": {
+      "allowedTypes": [
+        "images",
+        "files",
+        "videos",
+        "audios"
+      ],
+      "type": "media",
+      "multiple": false
+    }
+  }
+}

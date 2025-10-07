@@ -12,29 +12,11 @@
   },
   "pluginOptions": {},
   "attributes": {
-    "titleHomePage": {
-      "type": "string"
-    },
-    "descriptionHomePage": {
-      "type": "text"
-    },
-    "imageHomePage": {
-      "type": "media",
-      "multiple": false,
-      "required": false,
-      "allowedTypes": [
-        "images"
-      ]
-    },
-    "imageHomePageMobile": {
-      "allowedTypes": [
-        "images",
-        "files",
-        "videos",
-        "audios"
-      ],
-      "type": "media",
-      "multiple": false
+    "banner": {
+      "displayName": "banners",
+      "type": "component",
+      "repeatable": true,
+      "component": "banner.banners"
     }
   }
 }

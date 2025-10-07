@@ -7,7 +7,18 @@ export default class ContentService {
     }
     async getContent() {
         const query = qs.stringify({
-            populate: '*'
+            populate: {
+                banner: {
+                    populate: {
+                        imageForDesktop: {
+                            fields: ['url']
+                        },
+                        imageForMobile: {
+                            fields: ['url']
+                        }
+                    }
+                }
+            }
         })
         return await $fetch(this.config.public.apiBase + '/content?' + query)
     }

@@ -44,6 +44,7 @@
                 class="slider-control slider-control-prev" 
                 @click.stop="prevSlide"
                 :disabled="currentSlide === 0 && !loop"
+                :name="texts.previous"
             >
                 <Icon name="material-symbols:chevron-left" />
             </button>
@@ -53,6 +54,7 @@
                 class="slider-control slider-control-next" 
                 @click.stop="nextSlide"
                 :disabled="currentSlide === banners.length - 1 && !loop"
+                :name="texts.next"
             >
                 <Icon name="material-symbols:chevron-right" />
             </button>
@@ -64,6 +66,7 @@
                     :key="index"
                     :class="['indicator', { 'active': index === currentSlide }]"
                     @click.stop="goToSlide(index)"
+                    :name="`Go to banner ${index + 1}`"
                 ></button>
             </div>
         </div>
@@ -75,6 +78,7 @@ import { useBreakpoints } from '@/composables/useBreakpoints'
 import { useImageFromStrapi } from '@/composables/useImageFromStrapi'
 import ContentService from '@/services/ContentService'
 import type { IBanner } from '~/types/Banner'
+import texts from '@/config/texts.json'
 
 const { type } = useBreakpoints()
 

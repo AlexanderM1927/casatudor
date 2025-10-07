@@ -51,5 +51,7 @@
     "item_added": "Producto agregado al carrito",
     "item_removed": "Producto removido",
     "validate_information": "Por favor valide sus datos",
-    "quantity": "Cantidad"
+    "quantity": "Cantidad",
+    "previous": "Anterior",
+    "next": "Siguiente"
 }

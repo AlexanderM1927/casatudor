@@ -86,4 +86,10 @@ const appConfig = useRuntimeConfig();
 .footer__links li a:hover {
     opacity: 1;
 }
+
+@media only screen and (max-width: $grid-breakpoints-md) {
+    .footer {
+        text-align: center;
+    }
+}
 </style>

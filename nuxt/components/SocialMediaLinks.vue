@@ -47,12 +47,17 @@ const hasAnyData = computed(() => {
     return !!(props.data.whatsappPhone || props.data.facebookUrl || props.data.instagramUrl)
 })
 </script>
-<style>
+<style lang="scss" scoped>
 .social-media {
     font-size: 2rem;
     display: flex;
 }
 
+@media only screen and (max-width: $grid-breakpoints-md) {
+    .social-media {
+        justify-content: center;
+    }
+}
 .social-media a {
     color: white;
     text-decoration: none;

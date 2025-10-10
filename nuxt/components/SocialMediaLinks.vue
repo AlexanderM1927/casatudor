@@ -51,7 +51,6 @@ const hasAnyData = computed(() => {
 .social-media {
     font-size: 2rem;
     display: flex;
-    justify-content: center;
 }
 
 .social-media a {

@@ -29,6 +29,12 @@
     },
     "urls": {
       "type": "json"
+    },
+    "contact": {
+      "type": "text"
+    },
+    "companyName": {
+      "type": "string"
     }
   }
 }

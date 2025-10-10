@@ -1,11 +1,17 @@
 <template>
     <div class="footer">
         <div class="footer__column">
-            <h4 class="text-centered">{{ data.title }}</h4>
+            <div class="company-name" @click="goToHome()">
+                <h4 class="">{{ data.companyName }}</h4>
+                <SocialMediaLinks :data="data" :color="'white'"></SocialMediaLinks>
+            </div>
+        </div>
+        <div class="footer__column">
+            <h4 class="">{{ data.title }}</h4>
             <p style="white-space: pre-line;">{{ data.description }}</p>
         </div>
-        <div class="footer__column text-centered">
-            <h4>Links</h4>
+        <div class="footer__column ">
+            <h4>{{ texts.links }}</h4>
             <ul class="footer__links">
                 <li v-for="(url, index) in data.urls" :key="index">
                     <a :title="url.title" :href="url.url">{{ url.title }}</a>
@@ -13,8 +19,8 @@
             </ul>
         </div>
         <div class="footer__column">
-            <h4 class="text-centered">{{ texts.social_media }}</h4>
-            <SocialMediaLinks :data="data" :color="'white'"></SocialMediaLinks>
+            <h4 class="">{{ texts.contact }}</h4>
+            <p style="white-space: pre-line;">{{ data.contact }}</p>
         </div>
     </div>
 </template>
@@ -26,6 +32,8 @@ const props = defineProps({
         type: Object
     }
 })
+
+const appConfig = useRuntimeConfig();
 </script>
 
 <style lang="scss" scoped>
@@ -39,12 +47,13 @@ const props = defineProps({
     width: 100%;
     display: flex;
     justify-content: center;
-    gap: 1rem;
+    gap: 5rem;
     background: $primary;
 }
 
-.footer__column {
-    flex: 1 1 0;
+.company-name img{
+    height: 7rem;
+    width: auto;;
 }
 
 @media only screen and (max-width: $grid-breakpoints-sm) {

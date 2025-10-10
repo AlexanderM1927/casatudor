@@ -470,6 +470,8 @@ export interface ApiFooterFooter extends Schema.SingleType {
     draftAndPublish: true;
   };
   attributes: {
+    companyName: Attribute.String;
+    contact: Attribute.Text;
     createdAt: Attribute.DateTime;
     createdBy: Attribute.Relation<
       'api::footer.footer',

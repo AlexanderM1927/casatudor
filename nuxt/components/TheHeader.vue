@@ -65,16 +65,6 @@
               >{{ texts.pages.store }}</NuxtLink
             >
           </li>
-          <li>
-            <NuxtLink
-              :title="texts.pages.posts"
-              :class="`menu-items-anchor anchor anchor-opacity anchor-underline ${
-                route.name === 'index' ? 'anchor-secondary' : 'anchor-primary'
-              }`"
-              to="/posts"
-              >{{ texts.pages.posts }}</NuxtLink
-            >
-          </li>
           <li class="subnav" v-for="(page, index) in pages" :key="index" v-show="page.isHeaderLink">
             <NuxtLink
               :title="page.urlTitle"
@@ -83,6 +73,16 @@
               }`"
               :to="`/pages/${page.urlId}`"
               >{{ page.urlTitle }}</NuxtLink
+            >
+          </li>
+          <li>
+            <NuxtLink
+              :title="texts.pages.posts"
+              :class="`menu-items-anchor anchor anchor-opacity anchor-underline ${
+                route.name === 'index' ? 'anchor-secondary' : 'anchor-primary'
+              }`"
+              to="/posts"
+              >{{ texts.pages.posts }}</NuxtLink
             >
           </li>
           <li v-if="!user">
@@ -185,11 +185,6 @@
             texts.pages.store
           }}</NuxtLink>
         </li>
-        <li>
-          <NuxtLink :title="texts.pages.posts" class="anchor anchor-third burger-menu-link" to="/posts">{{
-            texts.pages.posts
-          }}</NuxtLink>
-        </li>
         <li v-for="(page, index) in pages" :key="index" v-show="page.isHeaderLink">
           <div v-if="page.subpages && page.subpages.data && page.subpages.data.length > 0">
             <!-- Page with subpages - clickable to toggle -->
@@ -229,6 +224,11 @@
               {{ page.urlTitle }}
             </NuxtLink>
           </div>
+        </li>
+        <li>
+          <NuxtLink :title="texts.pages.posts" class="anchor anchor-third burger-menu-link" to="/posts">{{
+            texts.pages.posts
+          }}</NuxtLink>
         </li>
         <li v-if="!user">
           <NuxtLink class="anchor anchor-third burger-menu-link" to="/login" :title="texts.pages.login">{{

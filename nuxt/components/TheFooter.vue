@@ -6,10 +6,6 @@
                 <SocialMediaLinks :data="data" :color="'white'"></SocialMediaLinks>
             </div>
         </div>
-        <div class="footer__column">
-            <h4 class="">{{ data.title }}</h4>
-            <p style="white-space: pre-line;">{{ data.description }}</p>
-        </div>
         <div class="footer__column ">
             <h4>{{ texts.links }}</h4>
             <ul class="footer__links">
@@ -21,6 +17,10 @@
         <div class="footer__column">
             <h4 class="">{{ texts.contact }}</h4>
             <p style="white-space: pre-line;">{{ data.contact }}</p>
+        </div>
+        <div class="footer__column">
+            <h4 class="">{{ data.title }}</h4>
+            <p style="white-space: pre-line;">{{ data.description }}</p>
         </div>
     </div>
 </template>

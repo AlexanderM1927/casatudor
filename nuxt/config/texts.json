@@ -15,6 +15,7 @@
     "remove": "Quitar",
     "variant_color": "Color",
     "variant_size": "Talla",
+    "related_products": "Productos relacionados",
     "pages": {
         "index": "Inicio",
         "posts": "Blog",
@@ -55,5 +56,7 @@
     "previous": "Anterior",
     "next": "Siguiente",
     "links": "Servicio al cliente",
-    "contact": "Contacto"
+    "contact": "Contacto",
+    "pay_with": "Paga seguro con",
+    "payment_gateways": "Metodos de pago"
 }

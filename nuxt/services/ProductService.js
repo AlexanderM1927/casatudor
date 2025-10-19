@@ -63,10 +63,32 @@ export default class ProductService {
             populate: [
                 'image',
                 'colors.image',
-                'sizes'
+                'sizes',
+                'category'
             ],
             filters: {
                 id: id
+            }
+        })
+        return await $fetch(this.config.public.apiBase + '/products?' + query)
+    }
+    
+    async getRelatedProducts(categoryId, excludeProductId, limit = 4) {
+        const query = qs.stringify({
+            populate: '*',
+            filters: {
+                category: {
+                    id: {
+                        $eq: categoryId
+                    }
+                },
+                id: {
+                    $ne: excludeProductId
+                }
+            },
+            pagination: {
+                page: 1,
+                pageSize: limit * 3 // Obtenemos más productos para poder seleccionar aleatoriamente
             }
         })
         return await $fetch(this.config.public.apiBase + '/products?' + query)

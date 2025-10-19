@@ -141,6 +141,20 @@
             </div>
         </div>
     </div>
+    
+    <!-- Productos relacionados -->
+    <section v-if="relatedProducts.length > 0" class="second-container">
+        <h3 class="related-title">{{ texts.related_products || 'Productos relacionados' }}</h3>
+        <div class="row">
+            <Product
+                v-for="(relatedProduct, index) in relatedProducts"
+                :key="relatedProduct.id"
+                :product="relatedProduct"
+                :childClass="`col-lg-3 col-md-6 col-sm-12`"
+                :isFirstProduct="index === 0"
+            />
+        </div>
+    </section>
 </template>
 <script setup lang="ts">
 import texts from '@/config/texts.json'
@@ -176,6 +190,7 @@ const product: Ref<IProduct> = ref({
     price: 0
 })
 
+const relatedProducts: Ref<IProduct[]> = ref([])
 const productService = new ProductService(useRuntimeConfig())
 
 
@@ -198,6 +213,10 @@ const getProduct = async (newPage: number = 1) => {
                 id: size.id,
                 name: size.name
             })) || [],
+            category: attributes.category?.data ? {
+                id: attributes.category.data.id,
+                ...attributes.category.data.attributes
+            } : null,
             id: id
         }
         return product
@@ -211,7 +230,48 @@ const getProduct = async (newPage: number = 1) => {
         startImageRotation()
     }
 
+    // Obtener productos relacionados si el producto tiene categoría
+    if (product.value.category) {
+        await getRelatedProducts(product.value.category.id, product.value.id)
+    }
+
     isLoading.value = false
+}
+
+const getRelatedProducts = async (categoryId: number, excludeProductId: number) => {
+    try {
+        const { data }: any = await productService.getRelatedProducts(categoryId, excludeProductId, 4)
+        
+        // Mapear los productos relacionados
+        let mappedProducts = data.map(({ id, attributes }: { id: number, attributes: any }) => {
+            const product: IProduct = {
+                ...attributes,
+                images: attributes.image.data.map((el: IImageStrapi) => {
+                    return useImageFromStrapi(el?.attributes?.url)
+                }),
+                colors: attributes.colors?.map((color: any) => ({
+                    id: color.id,
+                    name: color.name,
+                    hexadecimal: color.hexadecimal,
+                    image: color.image?.data ? useImageFromStrapi(color.image.data.attributes.url) : null
+                })) || [],
+                sizes: attributes.sizes?.map((size: any) => ({
+                    id: size.id,
+                    name: size.name
+                })) || [],
+                id: id
+            }
+            return product
+        })
+
+        // Seleccionar 4 productos aleatorios
+        const shuffled = mappedProducts.sort(() => 0.5 - Math.random())
+        relatedProducts.value = shuffled.slice(0, 4)
+        
+    } catch (error) {
+        console.error('Error fetching related products:', error)
+        relatedProducts.value = []
+    }
 }
 
 const addToCart = ((product: IProduct) => {
@@ -514,5 +574,36 @@ onUnmounted(() => {
 .slider-product__item img {
     width: 5rem;
     height: 5rem;
+}
+
+.related-products-section {
+    margin-top: 3rem;
+    border-top: 1px solid #e9ecef;
+}
+
+.related-title {
+    color: $primary;
+    font-size: 1.8rem;
+    font-weight: 600;
+    text-align: center;
+    margin-bottom: 2rem;
+}
+
+.related-products-section .container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 1rem;
+}
+
+@media only screen and (max-width: $grid-breakpoints-md) {
+    .related-products-section {
+        margin-top: 2rem;
+        padding: 1.5rem 0;
+    }
+    
+    .related-title {
+        font-size: 1.5rem;
+        margin-bottom: 1.5rem;
+    }
 }
 </style>

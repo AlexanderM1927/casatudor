@@ -18,6 +18,23 @@ export default defineNuxtConfig({
       htmlAttrs: {
         lang: 'es' // Add your language code here (e.g., 'en', 'es', 'fr')
       },
+      meta: [
+        // Open Graph meta tags for social media previews
+        { property: 'og:type', content: 'website' },
+        { property: 'og:title', content: process.env.STORE_NAME },
+        { property: 'og:description', content: process.env.DESCRIPTION },
+        { property: 'og:image', content: '/img/logo.png' },
+        { property: 'og:image:width', content: '1200' },
+        { property: 'og:image:height', content: '630' },
+        { property: 'og:image:type', content: 'image/png' },
+        // Twitter Card meta tags
+        { name: 'twitter:card', content: 'summary_large_image' },
+        { name: 'twitter:title', content: process.env.STORE_NAME },
+        { name: 'twitter:description', content: process.env.DESCRIPTION },
+        { name: 'twitter:image', content: '/img/logo.png' },
+        // WhatsApp specific
+        { property: 'og:site_name', content: process.env.STORE_NAME }
+      ],
       script: [
         {
           src: 'https://checkout.wompi.co/widget.js'

@@ -161,6 +161,7 @@ import texts from '@/config/texts.json'
 import ProductService from '@/services/ProductService'
 import NumberHelper from '~/helpers/NumberHelper'
 import { useImageFromStrapi } from '@/composables/useImageFromStrapi'
+import { useSeo } from '@/composables/useSeo'
 import ToastHelper from '~/helpers/ToastHelper'
 import type { IProduct, IColor } from '~/types/Product'
 import type { IProductCart } from '~/types/ProductCart'
@@ -171,6 +172,7 @@ const favoritesStore = useFavoritesStore()
 const favoritesStoreComputed = storeToRefs(favoritesStore)
 const favoritesProducts: any = favoritesStoreComputed.getProducts
 const { footerData, fetchFooter } = useFooter()
+const { setProductSeo } = useSeo()
 
 const formatMiles = NumberHelper.miles
 
@@ -229,6 +231,14 @@ const getProduct = async (newPage: number = 1) => {
         // Iniciar rotación automática si hay más de una imagen
         startImageRotation()
     }
+
+    // Configurar SEO para el producto
+    setProductSeo({
+        name: product.value.name,
+        description: product.value.description,
+        image: product.value.images?.[0] || '/img/logo.png',
+        price: product.value.price
+    })
 
     // Obtener productos relacionados si el producto tiene categoría
     if (product.value.category) {

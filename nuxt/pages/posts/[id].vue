@@ -15,8 +15,11 @@
 <script setup lang="ts">
 import PostService from '@/services/PostService';
 import { useImageFromStrapi } from '@/composables/useImageFromStrapi'
+import { useSeo } from '@/composables/useSeo'
+import type { IPost } from '~/types/Post'
 
 const route = useRoute()
+const { setPostSeo } = useSeo()
 
 const isLoading: Ref<Boolean> = ref(true);
 
@@ -41,6 +44,13 @@ const getPost = async (newPage: number = 1) => {
         }
         return post
     })[0]
+
+    // Configurar SEO para el post
+    setPostSeo({
+        title: post.value.title,
+        excerpt: post.value.summary,
+        featuredImage: post.value.image || '/img/logo.png'
+    })
 
     isLoading.value = false
 }

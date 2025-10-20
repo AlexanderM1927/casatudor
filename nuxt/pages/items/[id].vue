@@ -236,7 +236,7 @@ const getProduct = async (newPage: number = 1) => {
     setProductSeo({
         name: product.value.name,
         description: product.value.description,
-        image: product.value.images?.[0] || '/img/logo.png',
+        image: product.value.images?.[0] || '/img/logo.webp',
         price: product.value.price
     })
 

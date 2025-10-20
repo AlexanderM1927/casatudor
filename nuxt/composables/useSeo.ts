@@ -10,7 +10,7 @@ export const useSeo = () => {
     // Set default values
     const title = options.title || config.public.storeName
     const description = options.description || config.public.description
-    const image = options.image || '/img/logo.png'
+    const image = options.image || '/img/logo.webp'
     const url = options.url || ''
 
     // Update head meta tags
@@ -43,7 +43,7 @@ export const useSeo = () => {
     const config = useRuntimeConfig()
     const title = `${product.name} - ${config.public.storeName}`
     const description = product.description || `${product.name} disponible en ${config.public.storeName}`
-    const image = product.image || '/img/logo.png'
+    const image = product.image || '/img/logo.webp'
     
     setSeoMeta({
       title,
@@ -60,7 +60,7 @@ export const useSeo = () => {
     const config = useRuntimeConfig()
     const title = `${post.title} - ${config.public.storeName}`
     const description = post.excerpt || `Lee más sobre ${post.title} en ${config.public.storeName}`
-    const image = post.featuredImage || '/img/logo.png'
+    const image = post.featuredImage || '/img/logo.webp'
     
     setSeoMeta({
       title,

@@ -14,7 +14,7 @@
           <NuxtImg
             :alt="appConfig.public.storeName"
             :title="appConfig.public.storeName"
-            src="/img/logo.png"
+            src="/img/logo.webp"
           />
         </div>
         <div class="menu-icon">
@@ -41,7 +41,7 @@
           <NuxtImg
             :alt="appConfig.public.storeName"
             :title="appConfig.public.storeName"
-            src="/img/logo.png"
+            src="/img/logo.webp"
           />
         </div>
         <ul class="menu-items">

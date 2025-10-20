@@ -23,7 +23,7 @@ export default defineNuxtConfig({
         { property: 'og:type', content: 'website' },
         { property: 'og:title', content: process.env.STORE_NAME },
         { property: 'og:description', content: process.env.DESCRIPTION },
-        { property: 'og:image', content: '/img/logo.png' },
+        { property: 'og:image', content: '/img/logo.webp' },
         { property: 'og:image:width', content: '1200' },
         { property: 'og:image:height', content: '630' },
         { property: 'og:image:type', content: 'image/png' },
@@ -31,7 +31,7 @@ export default defineNuxtConfig({
         { name: 'twitter:card', content: 'summary_large_image' },
         { name: 'twitter:title', content: process.env.STORE_NAME },
         { name: 'twitter:description', content: process.env.DESCRIPTION },
-        { name: 'twitter:image', content: '/img/logo.png' },
+        { name: 'twitter:image', content: '/img/logo.webp' },
         // WhatsApp specific
         { property: 'og:site_name', content: process.env.STORE_NAME }
       ],

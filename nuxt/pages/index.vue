@@ -29,7 +29,7 @@ const isLoading: Ref<Boolean> = ref(true)
 setSeoMeta({
     title: config.public.storeName,
     description: config.public.description,
-    image: '/img/logo.png'
+    image: '/img/logo.webp'
 })
 
 // Simple loading state management

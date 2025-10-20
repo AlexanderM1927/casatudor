@@ -49,7 +49,7 @@ const getPost = async (newPage: number = 1) => {
     setPostSeo({
         title: post.value.title,
         excerpt: post.value.summary,
-        featuredImage: post.value.image || '/img/logo.png'
+        featuredImage: post.value.image || '/img/logo.webp'
     })
 
     isLoading.value = false

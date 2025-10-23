@@ -23,9 +23,7 @@
             <div class="product-container__content">
                 <h2 class="title">{{ product.name }}</h2>
                 <b>{{ texts.description }}:</b>
-                <p>
-                    {{ product.description }}
-                </p>
+                <Markdown :source="product.description" />
                 <div class="product-container__price">
                     <p 
                         v-if="product.price_before_offer"
@@ -480,7 +478,9 @@ onUnmounted(() => {
 
 .product-container__price {
     display: flex;
-    justify-content: space-between;
+    justify-content: left;
+    font-size: 1.3rem;
+    gap: 0.5rem;
 }
 
 .product-container__price-offer {

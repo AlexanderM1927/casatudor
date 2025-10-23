@@ -673,7 +673,7 @@ export interface ApiProductProduct extends Schema.CollectionType {
     description: Attribute.RichText;
     image: Attribute.Media<'images' | 'files' | 'videos' | 'audios', true>;
     name: Attribute.String;
-    price: Attribute.Float;
+    price: Attribute.Integer;
     price_before_offer: Attribute.Integer;
     publishedAt: Attribute.DateTime;
     sizes: Attribute.Component<'variants.size', true>;

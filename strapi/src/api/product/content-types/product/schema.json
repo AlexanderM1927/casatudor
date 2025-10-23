@@ -27,7 +27,7 @@
       ]
     },
     "price": {
-      "type": "float"
+      "type": "integer"
     },
     "category": {
       "type": "relation",

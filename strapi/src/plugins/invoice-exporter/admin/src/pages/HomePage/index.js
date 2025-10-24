@@ -69,7 +69,7 @@ const HomePage = () => {
     React.createElement(
       Box,
       { paddingBottom: 4 },
-      React.createElement(Typography, { variant: 'alpha' }, 'Exportador de Invoices')
+      React.createElement(Typography, { variant: 'alpha' }, 'Exportador de Invoices y Órdenes')
     ),
     React.createElement(
       Box,
@@ -80,7 +80,7 @@ const HomePage = () => {
         React.createElement(
           Typography,
           null,
-          'Esta herramienta permite exportar todas las facturas (invoices) con sus productos relacionados. Puedes exportar en formato JSON (con toda la información detallada) o CSV (formato simplificado).'
+          'Esta herramienta permite exportar todas las facturas (invoices) con sus productos y órdenes relacionadas. Incluye información completa de envío, datos del cliente y productos. Puedes exportar en formato JSON (con toda la información detallada) o CSV (formato simplificado para Excel).'
         )
       )
     ),
@@ -103,7 +103,7 @@ const HomePage = () => {
               React.createElement(
                 Typography,
                 { variant: 'omega', textColor: 'neutral600' },
-                'Exporta todas las invoices con información completa incluyendo productos, categorías e imágenes en formato JSON.'
+                'Exporta todas las invoices con información completa: productos, categorías, imágenes, datos del cliente, dirección de envío y estado de la orden.'
               )
             )
           ),
@@ -135,7 +135,7 @@ const HomePage = () => {
               React.createElement(
                 Typography,
                 { variant: 'omega', textColor: 'neutral600' },
-                'Exporta las invoices en formato CSV para usar en Excel u otras herramientas de análisis.'
+                'Exporta las invoices y órdenes en formato CSV para usar en Excel. Incluye productos, datos del cliente y información de envío.'
               )
             )
           ),

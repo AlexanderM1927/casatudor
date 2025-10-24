@@ -3,7 +3,7 @@ const crypto = require('crypto');
 const invoicePrefix = `_INVOICE` + (process.env.NODE_ENV === 'production' ? 'PROD' : 'LOCAL');
 module.exports = {
   async init(ctx) {
-    const { cartId, email, phone, shippingAddress } = ctx.request.body || {};
+    const { cartId, email, phone, identify, shippingAddress } = ctx.request.body || {};
 
     // Create invoice if cartId is provided
     let invoice = null;
@@ -56,6 +56,7 @@ module.exports = {
             invoice: invoice.id,
             email: email,
             phone: phone,
+            identify: identify,
             country: shippingAddress.country,
             city: shippingAddress.city,
             department: shippingAddress.department,

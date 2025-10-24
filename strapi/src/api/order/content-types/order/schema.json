@@ -30,6 +30,10 @@
       "type": "string",
       "required": true
     },
+    "identify": {
+      "type": "string",
+      "required": true
+    },
     "country": {
       "type": "string",
       "required": true

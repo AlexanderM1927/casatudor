@@ -558,6 +558,7 @@ export interface ApiOrderOrder extends Schema.CollectionType {
       Attribute.Private;
     department: Attribute.String & Attribute.Required;
     email: Attribute.Email & Attribute.Required;
+    identify: Attribute.String & Attribute.Required;
     invoice: Attribute.Relation<
       'api::order.order',
       'oneToOne',

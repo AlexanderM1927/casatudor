@@ -3,6 +3,7 @@ import type { IUser } from "./User";
 
 export interface IOrder {
     id: number,
+    identify: string,
     address1: string,
     addresDetails: string,
     city: string,

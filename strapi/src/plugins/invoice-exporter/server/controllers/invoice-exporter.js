@@ -63,6 +63,7 @@ module.exports = {
               id: orders[0].id,
               email: orders[0].email,
               phone: orders[0].phone,
+              identify: orders[0].identify,
               country: orders[0].country,
               department: orders[0].department,
               city: orders[0].city,
@@ -123,7 +124,7 @@ module.exports = {
       );
 
       // Crear CSV con información de invoices y órdenes
-      let csv = 'ID Invoice,Total,Total Pagado,Estado de Pago,Fecha Creación,Productos,Email Cliente,Teléfono,Ciudad,Dirección,Agencia Envío,Guía Envío\n';
+      let csv = 'ID Invoice,Total,Total Pagado,Estado de Pago,Fecha Creación,Productos,Email Cliente,Teléfono,Identificación,Ciudad,Dirección,Agencia Envío,Guía Envío\n';
       
       invoicesWithOrders.forEach(({ invoice, order }) => {
         const productsInfo = invoice.products?.map(p => 
@@ -132,12 +133,13 @@ module.exports = {
         
         const email = order?.email || 'N/A';
         const phone = order?.phone || 'N/A';
+        const identify = order?.identify || 'N/A';
         const city = order?.city || 'N/A';
         const address = order?.address1 || 'N/A';
         const agency = order?.shipmentAgency || 'N/A';
         const guide = order?.shipmentGuide || 'N/A';
         
-        csv += `${invoice.id},${invoice.total},${invoice.totalPaid},${invoice.paymentStatus},${invoice.createdAt},"${productsInfo}","${email}","${phone}","${city}","${address}","${agency}","${guide}"\n`;
+        csv += `${invoice.id},${invoice.total},${invoice.totalPaid},${invoice.paymentStatus},${invoice.createdAt},"${productsInfo}","${email}","${phone}","${identify}","${city}","${address}","${agency}","${guide}"\n`;
       });
 
       ctx.set('Content-Type', 'text/csv');

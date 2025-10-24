@@ -38,6 +38,20 @@
                                     placeholder="+57 300 123 4567"
                                 />
                             </div>
+                            
+                            <div class="md:col-span-2">
+                                <label for="identify" class="block text-sm font-medium text-gray-700 mb-2">
+                                    Número de Identificación *
+                                </label>
+                                <input
+                                    id="identify"
+                                    v-model="formData.identify"
+                                    type="text"
+                                    required
+                                    class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                                    placeholder="Cédula, NIT, pasaporte, etc."
+                                />
+                            </div>
                         </div>
                     </div>
 
@@ -220,6 +234,7 @@ const paymentService = new PaymentService(config)
 const formData = ref({
     email: user.value?.email || '',
     phone: '',
+    identify: '',
     country: '',
     department: '',
     city: '',
@@ -264,6 +279,7 @@ const total = computed(() => {
 const isFormValid = computed(() => {
     return formData.value.email &&
            formData.value.phone &&
+           formData.value.identify &&
            formData.value.country &&
            formData.value.department &&
            formData.value.city &&
@@ -330,6 +346,7 @@ const handleSubmit = async () => {
             user: user.value.id,
             email: formData.value.email,
             phone: formData.value.phone,
+            identify: formData.value.identify,
             shippingAddress: {
                 country: getCountryById(formData.value.country),
                 department: getDepartmentById(formData.value.department),

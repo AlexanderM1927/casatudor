@@ -17,4 +17,8 @@ module.exports = ({ env }) => ({
       },
     },
   },
+  'invoice-exporter': {
+    enabled: true,
+    resolve: './src/plugins/invoice-exporter',
+  },
 });

@@ -11,7 +11,7 @@ export default class ProductService {
             sort: ['id:desc'],
             pagination: {
                 page: page,
-                pageSize: 6
+                pageSize: 4
             },
         })
         return await $fetch(this.config.public.apiBase + '/products?' + query)

@@ -7,7 +7,7 @@ module.exports = {
       icon: () => '📊',
       intlLabel: {
         id: `${pluginId}.plugin.name`,
-        defaultMessage: 'Invoice Exporter',
+        defaultMessage: 'Data Exporter',
       },
       Component: async () => {
         const component = await import('./pages/HomePage');

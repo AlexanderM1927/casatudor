@@ -111,38 +111,6 @@ const HomePage = () => {
             React.createElement(
               Box,
               { paddingBottom: 3 },
-              React.createElement(Typography, { variant: 'delta' }, 'JSON'),
-              React.createElement(
-                Box,
-                { paddingTop: 2 },
-                React.createElement(
-                  Typography,
-                  { variant: 'omega', textColor: 'neutral600' },
-                  'Exporta facturas con información completa: productos, categorías, imágenes, datos del cliente y estado de la orden.'
-                )
-              )
-            ),
-            React.createElement(
-              Button,
-              {
-                startIcon: React.createElement(Download, null),
-                onClick: () => handleExportJson('invoices'),
-                loading: loading && loadingType === 'invoices',
-                fullWidth: true
-              },
-              'Descargar JSON'
-            )
-          )
-        ),
-        React.createElement(
-          GridItem,
-          { col: 6 },
-          React.createElement(
-            Box,
-            { padding: 4, background: 'neutral0', shadow: 'filterShadow', hasRadius: true },
-            React.createElement(
-              Box,
-              { paddingBottom: 3 },
               React.createElement(Typography, { variant: 'delta' }, 'CSV'),
               React.createElement(
                 Box,
@@ -160,10 +128,42 @@ const HomePage = () => {
                 startIcon: React.createElement(Download, null),
                 onClick: () => handleExportCsv('invoices'),
                 loading: loading && loadingType === 'invoices',
+                fullWidth: true
+              },
+              'Descargar CSV'
+            )
+          )
+        ),
+        React.createElement(
+          GridItem,
+          { col: 6 },
+          React.createElement(
+            Box,
+            { padding: 4, background: 'neutral0', shadow: 'filterShadow', hasRadius: true },
+            React.createElement(
+              Box,
+              { paddingBottom: 3 },
+              React.createElement(Typography, { variant: 'delta' }, 'JSON'),
+              React.createElement(
+                Box,
+                { paddingTop: 2 },
+                React.createElement(
+                  Typography,
+                  { variant: 'omega', textColor: 'neutral600' },
+                  'Exporta facturas con información completa: productos, categorías, imágenes, datos del cliente y estado de la orden.'
+                )
+              )
+            ),
+            React.createElement(
+              Button,
+              {
+                startIcon: React.createElement(Download, null),
+                onClick: () => handleExportJson('invoices'),
+                loading: loading && loadingType === 'invoices',
                 fullWidth: true,
                 variant: 'secondary'
               },
-              'Descargar CSV'
+              'Descargar JSON'
             )
           )
         )
@@ -191,38 +191,6 @@ const HomePage = () => {
             React.createElement(
               Box,
               { paddingBottom: 3 },
-              React.createElement(Typography, { variant: 'delta' }, 'JSON'),
-              React.createElement(
-                Box,
-                { paddingTop: 2 },
-                React.createElement(
-                  Typography,
-                  { variant: 'omega', textColor: 'neutral600' },
-                  'Exporta usuarios con información completa: datos de perfil, rol, historial de órdenes y gasto total.'
-                )
-              )
-            ),
-            React.createElement(
-              Button,
-              {
-                startIcon: React.createElement(Download, null),
-                onClick: () => handleExportJson('users'),
-                loading: loading && loadingType === 'users',
-                fullWidth: true
-              },
-              'Descargar JSON'
-            )
-          )
-        ),
-        React.createElement(
-          GridItem,
-          { col: 6 },
-          React.createElement(
-            Box,
-            { padding: 4, background: 'neutral0', shadow: 'filterShadow', hasRadius: true },
-            React.createElement(
-              Box,
-              { paddingBottom: 3 },
               React.createElement(Typography, { variant: 'delta' }, 'CSV'),
               React.createElement(
                 Box,
@@ -240,10 +208,42 @@ const HomePage = () => {
                 startIcon: React.createElement(Download, null),
                 onClick: () => handleExportCsv('users'),
                 loading: loading && loadingType === 'users',
+                fullWidth: true
+              },
+              'Descargar CSV'
+            )
+          )
+        ),
+        React.createElement(
+          GridItem,
+          { col: 6 },
+          React.createElement(
+            Box,
+            { padding: 4, background: 'neutral0', shadow: 'filterShadow', hasRadius: true },
+            React.createElement(
+              Box,
+              { paddingBottom: 3 },
+              React.createElement(Typography, { variant: 'delta' }, 'JSON'),
+              React.createElement(
+                Box,
+                { paddingTop: 2 },
+                React.createElement(
+                  Typography,
+                  { variant: 'omega', textColor: 'neutral600' },
+                  'Exporta usuarios con información completa: datos de perfil, rol, historial de órdenes y gasto total.'
+                )
+              )
+            ),
+            React.createElement(
+              Button,
+              {
+                startIcon: React.createElement(Download, null),
+                onClick: () => handleExportJson('users'),
+                loading: loading && loadingType === 'users',
                 fullWidth: true,
                 variant: 'secondary'
               },
-              'Descargar CSV'
+              'Descargar JSON'
             )
           )
         )

@@ -104,7 +104,7 @@ module.exports = {
       );
 
       // Crear CSV con información de usuarios
-      let csv = 'ID,Username,Email,Proveedor,Confirmado,Bloqueado,Rol,Fecha Registro,Órdenes Totales,Gasto Total\n';
+      let csv = 'ID,Username,Email,Bloqueado,Fecha Registro,Órdenes Totales,Gasto Total\n';
       
       usersWithOrders.forEach(({ user, ordersCount, totalSpent }) => {
         const id = user.id;

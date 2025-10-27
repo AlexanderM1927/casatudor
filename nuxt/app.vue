@@ -10,7 +10,10 @@
                 <TheHeader :data="dataFooter" />
                 <!-- Page content goes here -->
                 <NuxtPage />
-                <TheWhatsAppBtn :data="dataFooter" />
+                <div class="float-btns">
+                    <TheRegisterBanner />
+                    <TheWhatsAppBtn :data="dataFooter" />
+                </div>
                 <TheFooter :data="dataFooter" />
             </div>
         </template>
@@ -62,3 +65,21 @@ useHead({
 })
 
 </script>
+<style lang="scss" scoped>
+.float-btns {
+    position: fixed;
+    bottom: .5rem;
+    display: flex;
+    justify-content: space-between;
+    z-index: 3;
+    width: 100%;
+    padding: 0.5rem;
+}
+
+
+@media only screen and (max-width: $grid-breakpoints-md) {
+    .float-btns {
+        flex-direction: column;
+    }
+}
+</style>

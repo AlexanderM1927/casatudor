@@ -4,12 +4,28 @@ module.exports = {
   // Exportar invoices con sus relaciones
   async exportInvoices(ctx) {
     try {
-      const { start, limit } = ctx.query;
+      const { start, limit, startDate, endDate } = ctx.query;
+      
+      // Construir filtros de fecha
+      const filters = {};
+      if (startDate || endDate) {
+        filters.createdAt = {};
+        if (startDate) {
+          filters.createdAt.$gte = new Date(startDate);
+        }
+        if (endDate) {
+          // Agregar 23:59:59 al endDate para incluir todo el día
+          const end = new Date(endDate);
+          end.setHours(23, 59, 59, 999);
+          filters.createdAt.$lte = end;
+        }
+      }
       
       // Obtener todas las invoices con sus relaciones
       const invoices = await strapi.entityService.findMany('api::invoice.invoice', {
         start: start || 0,
         limit: limit || 100,
+        filters,
         populate: {
           products: {
             populate: {
@@ -100,7 +116,25 @@ module.exports = {
 
   async exportInvoicesCsv(ctx) {
     try {
+      const { startDate, endDate } = ctx.query;
+      
+      // Construir filtros de fecha
+      const filters = {};
+      if (startDate || endDate) {
+        filters.createdAt = {};
+        if (startDate) {
+          filters.createdAt.$gte = new Date(startDate);
+        }
+        if (endDate) {
+          // Agregar 23:59:59 al endDate para incluir todo el día
+          const end = new Date(endDate);
+          end.setHours(23, 59, 59, 999);
+          filters.createdAt.$lte = end;
+        }
+      }
+      
       const invoices = await strapi.entityService.findMany('api::invoice.invoice', {
+        filters,
         populate: {
           products: {
             populate: {

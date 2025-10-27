@@ -4,12 +4,28 @@ module.exports = {
   // Exportar usuarios registrados
   async exportUsers(ctx) {
     try {
-      const { start, limit } = ctx.query;
+      const { start, limit, startDate, endDate } = ctx.query;
+      
+      // Construir filtros de fecha
+      const filters = {};
+      if (startDate || endDate) {
+        filters.createdAt = {};
+        if (startDate) {
+          filters.createdAt.$gte = new Date(startDate);
+        }
+        if (endDate) {
+          // Agregar 23:59:59 al endDate para incluir todo el día
+          const end = new Date(endDate);
+          end.setHours(23, 59, 59, 999);
+          filters.createdAt.$lte = end;
+        }
+      }
       
       // Obtener todos los usuarios con sus relaciones
       const users = await strapi.entityService.findMany('plugin::users-permissions.user', {
         start: start || 0,
         limit: limit || 1000,
+        filters,
         populate: {
           role: true
         }
@@ -75,7 +91,25 @@ module.exports = {
   // Exportar usuarios en formato CSV
   async exportUsersCsv(ctx) {
     try {
+      const { startDate, endDate } = ctx.query;
+      
+      // Construir filtros de fecha
+      const filters = {};
+      if (startDate || endDate) {
+        filters.createdAt = {};
+        if (startDate) {
+          filters.createdAt.$gte = new Date(startDate);
+        }
+        if (endDate) {
+          // Agregar 23:59:59 al endDate para incluir todo el día
+          const end = new Date(endDate);
+          end.setHours(23, 59, 59, 999);
+          filters.createdAt.$lte = end;
+        }
+      }
+      
       const users = await strapi.entityService.findMany('plugin::users-permissions.user', {
+        filters,
         populate: {
           role: true
         }

@@ -1,10 +1,18 @@
 const React = require('react');
-const { Box, Button, Typography, Grid, GridItem } = require('@strapi/design-system');
+const { Box, Button, Typography, Grid, GridItem, DatePicker } = require('@strapi/design-system');
 const { Download } = require('@strapi/icons');
 
 const HomePage = () => {
   const [loading, setLoading] = React.useState(false);
   const [loadingType, setLoadingType] = React.useState(null);
+  
+  // Estados para filtros de fecha de invoices
+  const [invoiceStartDate, setInvoiceStartDate] = React.useState(null);
+  const [invoiceEndDate, setInvoiceEndDate] = React.useState(null);
+  
+  // Estados para filtros de fecha de usuarios
+  const [userStartDate, setUserStartDate] = React.useState(null);
+  const [userEndDate, setUserEndDate] = React.useState(null);
 
   const showNotification = (message, type = 'success') => {
     // Usar el sistema de notificaciones nativo del navegador como fallback
@@ -15,11 +23,26 @@ const HomePage = () => {
     }
   };
 
+  const buildQueryParams = (dataType, startDate, endDate) => {
+    const params = new URLSearchParams();
+    if (startDate) {
+      params.append('startDate', startDate.toISOString());
+    }
+    if (endDate) {
+      params.append('endDate', endDate.toISOString());
+    }
+    return params.toString() ? `?${params.toString()}` : '';
+  };
+
   const handleExportJson = async (dataType) => {
     setLoading(true);
     setLoadingType(dataType);
     try {
-      const response = await fetch(`/data-exporter/export/${dataType}`);
+      const startDate = dataType === 'invoices' ? invoiceStartDate : userStartDate;
+      const endDate = dataType === 'invoices' ? invoiceEndDate : userEndDate;
+      const queryParams = buildQueryParams(dataType, startDate, endDate);
+      
+      const response = await fetch(`/data-exporter/export/${dataType}${queryParams}`);
       const data = await response.json();
       
       // Crear y descargar archivo JSON
@@ -46,7 +69,11 @@ const HomePage = () => {
     setLoading(true);
     setLoadingType(dataType);
     try {
-      const response = await fetch(`/data-exporter/export/${dataType}/csv`);
+      const startDate = dataType === 'invoices' ? invoiceStartDate : userStartDate;
+      const endDate = dataType === 'invoices' ? invoiceEndDate : userEndDate;
+      const queryParams = buildQueryParams(dataType, startDate, endDate);
+      
+      const response = await fetch(`/data-exporter/export/${dataType}/csv${queryParams}`);
       const blob = await response.blob();
       
       // Descargar archivo CSV
@@ -99,6 +126,59 @@ const HomePage = () => {
         { paddingBottom: 3 },
         React.createElement(Typography, { variant: 'beta' }, '📄 Facturas (Invoices)')
       ),
+      
+      // Filtros de fecha para Invoices
+      React.createElement(
+        Box,
+        { paddingBottom: 3 },
+        React.createElement(
+          Grid,
+          { gap: 4 },
+          React.createElement(
+            GridItem,
+            { col: 6 },
+            React.createElement(
+              Box,
+              null,
+              React.createElement(
+                Typography,
+                { variant: 'pi', fontWeight: 'bold', paddingBottom: 1 },
+                'Fecha desde'
+              ),
+              React.createElement(DatePicker, {
+                selectedDate: invoiceStartDate,
+                onChange: setInvoiceStartDate,
+                clearLabel: 'Limpiar',
+                onClear: () => setInvoiceStartDate(null),
+                selectedDateLabel: (formattedDate) => `Fecha seleccionada: ${formattedDate}`,
+                placeholder: 'Seleccionar fecha inicio'
+              })
+            )
+          ),
+          React.createElement(
+            GridItem,
+            { col: 6 },
+            React.createElement(
+              Box,
+              null,
+              React.createElement(
+                Typography,
+                { variant: 'pi', fontWeight: 'bold', paddingBottom: 1 },
+                'Fecha hasta'
+              ),
+              React.createElement(DatePicker, {
+                selectedDate: invoiceEndDate,
+                onChange: setInvoiceEndDate,
+                clearLabel: 'Limpiar',
+                onClear: () => setInvoiceEndDate(null),
+                selectedDateLabel: (formattedDate) => `Fecha seleccionada: ${formattedDate}`,
+                placeholder: 'Seleccionar fecha fin'
+              })
+            )
+          )
+        )
+      ),
+      
       React.createElement(
         Grid,
         { gap: 4 },
@@ -179,6 +259,59 @@ const HomePage = () => {
         { paddingBottom: 3 },
         React.createElement(Typography, { variant: 'beta' }, '👥 Usuarios Registrados')
       ),
+      
+      // Filtros de fecha para Usuarios
+      React.createElement(
+        Box,
+        { paddingBottom: 3 },
+        React.createElement(
+          Grid,
+          { gap: 4 },
+          React.createElement(
+            GridItem,
+            { col: 6 },
+            React.createElement(
+              Box,
+              null,
+              React.createElement(
+                Typography,
+                { variant: 'pi', fontWeight: 'bold', paddingBottom: 1 },
+                'Fecha desde'
+              ),
+              React.createElement(DatePicker, {
+                selectedDate: userStartDate,
+                onChange: setUserStartDate,
+                clearLabel: 'Limpiar',
+                onClear: () => setUserStartDate(null),
+                selectedDateLabel: (formattedDate) => `Fecha seleccionada: ${formattedDate}`,
+                placeholder: 'Seleccionar fecha inicio'
+              })
+            )
+          ),
+          React.createElement(
+            GridItem,
+            { col: 6 },
+            React.createElement(
+              Box,
+              null,
+              React.createElement(
+                Typography,
+                { variant: 'pi', fontWeight: 'bold', paddingBottom: 1 },
+                'Fecha hasta'
+              ),
+              React.createElement(DatePicker, {
+                selectedDate: userEndDate,
+                onChange: setUserEndDate,
+                clearLabel: 'Limpiar',
+                onClear: () => setUserEndDate(null),
+                selectedDateLabel: (formattedDate) => `Fecha seleccionada: ${formattedDate}`,
+                placeholder: 'Seleccionar fecha fin'
+              })
+            )
+          )
+        )
+      ),
+      
       React.createElement(
         Grid,
         { gap: 4 },

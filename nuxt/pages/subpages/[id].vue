@@ -23,6 +23,7 @@
 <script setup lang="ts">
 import SubPageService from '@/services/SubPageService';
 import ProductService from '@/services/ProductService'
+import { sortProductsByField } from '@/helpers/ProductSortHelper'
 import type { IPage } from '~/types/Page';
 import type { IPaginator } from '~/types/Paginator';
 import type { IProduct } from '~/types/Product';
@@ -73,7 +74,7 @@ const getProducts = async (newPage = 1) => {
         const { data, meta }: any = await productService.getProductsWithFilters(paginatorProducts.value.currentPage, '', {
             id: categoryId
         }, '')
-        const products = data.map(({ id, attributes }: { id: number, attributes: any }) => {
+        const mappedProducts = data.map(({ id, attributes }: { id: number, attributes: any }) => {
             const product: IProduct = {
                 ...attributes,
                 images: attributes.image.data.map((el: IImageStrapi) => {
@@ -83,6 +84,7 @@ const getProducts = async (newPage = 1) => {
             }
             return product
         })
+        const products = sortProductsByField(mappedProducts)
         subPage.value = {
             ...subPage.value,
             category: {

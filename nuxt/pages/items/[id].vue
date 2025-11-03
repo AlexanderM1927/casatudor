@@ -272,9 +272,9 @@ const getRelatedProducts = async (categoryId: number, excludeProductId: number) 
             return product
         })
 
-        // Seleccionar 4 productos aleatorios
-        const shuffled = mappedProducts.sort(() => 0.5 - Math.random())
-        relatedProducts.value = shuffled.slice(0, 4)
+        // Productos ya vienen ordenados por sort desde el backend
+        // Seleccionar los primeros 4 productos
+        relatedProducts.value = mappedProducts.slice(0, 4)
         
     } catch (error) {
         console.error('Error fetching related products:', error)

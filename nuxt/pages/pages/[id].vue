@@ -25,6 +25,7 @@
 <script setup lang="ts">
 import PageService from '@/services/PageService'
 import ProductService from '@/services/ProductService'
+import { sortProductsByField } from '@/helpers/ProductSortHelper'
 import type { IImageStrapi } from '~/types/ImageStrapi';
 import type { IPage } from '~/types/Page';
 import type { IPaginator } from '~/types/Paginator';
@@ -130,8 +131,8 @@ const getProducts = async (newPage = 1) => {
             }
         }
         
-        // Mezclar los productos aleatoriamente
-        allProducts.value = allProductsFromCategories.sort(() => Math.random() - 0.5)
+        // Ordenar productos por campo sort (null/undefined al final)
+        allProducts.value = sortProductsByField(allProductsFromCategories)
         
         isLoading.value = false
     }

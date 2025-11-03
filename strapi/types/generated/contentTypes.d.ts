@@ -678,6 +678,7 @@ export interface ApiProductProduct extends Schema.CollectionType {
     price_before_offer: Attribute.Integer;
     publishedAt: Attribute.DateTime;
     sizes: Attribute.Component<'variants.size', true>;
+    sort: Attribute.Integer;
     updatedAt: Attribute.DateTime;
     updatedBy: Attribute.Relation<
       'api::product.product',

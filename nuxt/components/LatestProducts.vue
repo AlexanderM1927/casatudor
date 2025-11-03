@@ -16,6 +16,7 @@
 <script setup lang="ts">
 import texts from '@/config/texts.json'
 import ProductService from '@/services/ProductService'
+import { sortProductsByField } from '@/helpers/ProductSortHelper'
 import type { IImageStrapi } from '~/types/ImageStrapi'
 import type { IProduct } from '~/types/Product'
 
@@ -28,7 +29,7 @@ const getProducts = async () => {
     isLoading.value = true
     try {
         const { data }: any = await productService.getHomeProducts()
-        products.value = data.map(({ id, attributes }: { id: number, attributes: any }) => {
+        const mappedProducts = data.map(({ id, attributes }: { id: number, attributes: any }) => {
             const product: IProduct = {
                 ...attributes,
                 images: attributes.image.data.map((el: IImageStrapi) => {
@@ -38,6 +39,7 @@ const getProducts = async () => {
             }
             return product
         })
+        products.value = sortProductsByField(mappedProducts)
     } catch (e) {
         console.log(e)
     } finally {

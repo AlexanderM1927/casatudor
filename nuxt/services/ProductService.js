@@ -8,7 +8,7 @@ export default class ProductService {
     async getHomeProducts(page = 1) {
         const query = qs.stringify({
             populate: '*',
-            sort: ['id:desc'],
+            sort: ['sort:asc', 'id:desc'],
             pagination: {
                 page: page,
                 pageSize: 4
@@ -19,7 +19,7 @@ export default class ProductService {
     async getProducts(page = 1) {
         const query = qs.stringify({
             populate: '*',
-            sort: ['id:desc'],
+            sort: ['sort:asc', 'id:desc'],
             pagination: {
                 page: page,
                 pageSize: 20
@@ -30,7 +30,7 @@ export default class ProductService {
     async getProductsWithFilters(page = 1, name, category, sort) {
         const queryObject = {
             populate: '*',
-            sort: ['id:desc'],
+            sort: ['sort:asc', 'id:desc'],
             pagination: {
                 page: page,
                 pageSize: 20
@@ -44,7 +44,7 @@ export default class ProductService {
             }
         }
         if (sort != '') {
-            queryObject.sort = [sort]
+            queryObject.sort = [sort, 'sort:asc', 'id:desc']
         }
         if (category) {
             queryObject.filters = {
@@ -76,6 +76,7 @@ export default class ProductService {
     async getRelatedProducts(categoryId, excludeProductId, limit = 4) {
         const query = qs.stringify({
             populate: '*',
+            sort: ['sort:asc', 'id:desc'],
             filters: {
                 category: {
                     id: {

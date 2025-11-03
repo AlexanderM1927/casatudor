@@ -115,6 +115,7 @@ import CategoryService from '@/services/CategoryService';
 import { useImageFromStrapi } from '@/composables/useImageFromStrapi'
 import { useDebounce } from '@/composables/useDebounce'
 import { useBreakpoints } from '@/composables/useBreakpoints'
+import { sortProductsByField } from '@/helpers/ProductSortHelper'
 import texts from '@/config/texts.json'
 import type { IImageStrapi } from '~/types/ImageStrapi';
 import type { IProduct } from '~/types/Product';
@@ -222,6 +223,9 @@ const filterProducts = () => {
                 return 0
             }
         })
+    } else {
+        // Aplicar ordenamiento por campo sort cuando no hay otro orden específico
+        productsFilteredToShow = sortProductsByField(productsFilteredToShow)
     }
 
     productsFiltered.value = productsFilteredToShow
@@ -231,7 +235,7 @@ const getProducts = async (newPage: number = 1) => {
     paginatorProducts.value.currentPage = newPage
     isLoading.value = true
     const { data, meta }: any = await productService.getProducts(paginatorProducts.value.currentPage)
-    products.value = data.map(({ id, attributes }: { id: number, attributes: any }) => {
+    const mappedProducts = data.map(({ id, attributes }: { id: number, attributes: any }) => {
         const product: IProduct = {
             ...attributes,
             images: attributes.image.data.map((el: IImageStrapi) => {
@@ -241,6 +245,7 @@ const getProducts = async (newPage: number = 1) => {
         }
         return product
     })
+    products.value = sortProductsByField(mappedProducts)
     paginatorProducts.value = {
         currentPage: meta.pagination.page,
         pageCount: meta.pagination.pageCount,
@@ -257,7 +262,7 @@ const getProductsByFilter = async () => {
     const nameFilter = productNameFilter.value
     const category = categoryFiltered.value
     const { data, meta }: any = await productService.getProductsWithFilters(paginatorProducts.value.currentPage, nameFilter, category, sort)
-    products.value = data.map(({ id, attributes }: { id: number, attributes: any }) => {
+    const mappedProducts = data.map(({ id, attributes }: { id: number, attributes: any }) => {
         const product: IProduct = {
             ...attributes,
             images: attributes.image.data.map((el: IImageStrapi) => {
@@ -267,6 +272,7 @@ const getProductsByFilter = async () => {
         }
         return product
     })
+    products.value = sortProductsByField(mappedProducts)
     paginatorProducts.value = {
         currentPage: meta.pagination.page,
         pageCount: meta.pagination.pageCount,

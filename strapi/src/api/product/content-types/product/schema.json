@@ -52,6 +52,9 @@
       "type": "component",
       "repeatable": true,
       "component": "variants.size"
+    },
+    "sort": {
+      "type": "integer"
     }
   }
 }

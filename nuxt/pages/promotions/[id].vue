@@ -14,6 +14,7 @@
 <script setup lang="ts">
 import PromotionService from '@/services/PromotionService'
 import { useImageFromStrapi } from '@/composables/useImageFromStrapi'
+import { sortProductsByField } from '@/helpers/ProductSortHelper'
 
 const route = useRoute()
 
@@ -42,7 +43,7 @@ const getPromotions = async (newPage: number = 1) => {
     })[0]
     const promotionsData = promotion.value
     const { data: dataProducts } = promotionsData.products
-    products.value = dataProducts.map(({ id, attributes }: { id: number, attributes: any }) => {
+    const mappedProducts = dataProducts.map(({ id, attributes }: { id: number, attributes: any }) => {
         const product: IProduct = {
             ...attributes,
             images: attributes.image.data.map((el: IImageStrapi) => {
@@ -52,6 +53,7 @@ const getPromotions = async (newPage: number = 1) => {
         }
         return product
     })
+    products.value = sortProductsByField(mappedProducts)
 
     isLoading.value = false
 }

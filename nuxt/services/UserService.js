@@ -23,4 +23,16 @@ export default class UserService {
             headers: { Authorization: `Bearer ${params.token}` }
         })
     }
+    async forgotPassword(email) {
+        return await $fetch(this.config.public.apiBase + '/auth/forgot-password', {
+            method: 'POST',
+            body: { email }
+        })
+    }
+    async resetPassword(code, password, passwordConfirmation) {
+        return await $fetch(this.config.public.apiBase + '/auth/reset-password', {
+            method: 'POST',
+            body: { code, password, passwordConfirmation }
+        })
+    }
 }

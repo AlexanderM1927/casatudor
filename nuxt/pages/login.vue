@@ -10,6 +10,9 @@
                 <label for="exampleInputPassword1" class="form-label">Clave</label>
                 <input v-model="password" type="password" class="form-control" id="exampleInputPassword1">
             </div>
+            <div class="mb-3">
+                <NuxtLink to="/forgot-password" class="forgot-password-link">¿Olvidaste tu contraseña?</NuxtLink>
+            </div>
             <button @click="handleLogin" type="submit" class="btn ct-btn-success">Login</button>
             <br>
             No tienes una cuenta? <NuxtLink to="/register">Registrarme</NuxtLink>
@@ -44,5 +47,7 @@ const handleLogin = async (e: Event) => {
 }
 </script>
 <style scoped>
-
+.forgot-password-link:hover {
+    text-decoration: underline;
+}
 </style>

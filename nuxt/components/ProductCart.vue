@@ -10,7 +10,23 @@
             <p class="text-sm text-gray-500" v-show="product.selectedVariants?.color || product.selectedVariants?.size">
                 {{ product.selectedVariants?.color }} / {{ product.selectedVariants?.size }}
             </p>
-            <p class="text-sm text-gray-500">Cantidad: {{ product.quantity }}</p>
+            <div class="flex items-center gap-2 mt-2">
+                <button 
+                    title="Disminuir cantidad" 
+                    class="btn btn-quantity"
+                    @click="decreaseQuantity"
+                >
+                    <Icon name="mdi:minus" />
+                </button>
+                <span class="text-sm font-medium">{{ product.quantity }}</span>
+                <button 
+                    title="Aumentar cantidad" 
+                    class="btn btn-quantity"
+                    @click="increaseQuantity"
+                >
+                    <Icon name="mdi:plus" />
+                </button>
+            </div>
         </div>
         <div class="text-right">
             <button title="Remover del carrito" class="btn bg-theme-primary" @click="removeFromCart(product)">
@@ -41,6 +57,18 @@ const removeFromCart = ((product: IProductCart) => {
     setTimeout(() => {
         cart.removeProducts(product)
     }, 500)
+})
+
+const increaseQuantity = (() => {
+    cart.updateProductQuantity(props.product, props.product.quantity + 1)
+})
+
+const decreaseQuantity = (() => {
+    if (props.product.quantity > 1) {
+        cart.updateProductQuantity(props.product, props.product.quantity - 1)
+    } else {
+        removeFromCart(props.product)
+    }
 })
 </script>
 
@@ -93,5 +121,23 @@ const removeFromCart = ((product: IProductCart) => {
 
 .card-item__total, .card-item__title {
     color: $themeColorText;
+}
+
+.btn-quantity {
+    padding: 0.25rem 0.5rem;
+    border-radius: 0.375rem;
+    background-color: #f3f4f6;
+    color: #1f2937;
+    font-size: 0.875rem;
+    transition: background-color 0.2s;
+    border: 1px solid #d1d5db;
+    
+    &:hover {
+        background-color: #e5e7eb;
+    }
+    
+    &:active {
+        background-color: #d1d5db;
+    }
 }
 </style>

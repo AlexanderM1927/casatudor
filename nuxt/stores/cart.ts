@@ -1,14 +1,10 @@
 import type { IProductCart } from "~/types/ProductCart"
 
 export const useCartStore = defineStore('cart', {
-    state: () => {
-        const id: number | null = null
-        const products: IProductCart[] = []
-        return {
-            id,
-            products
-        }
-    },
+    state: () => ({
+        id: null as number | null,
+        products: [] as IProductCart[]
+    }),
     actions: {
         addProducts(product: IProductCart) {
             let isOnCart = false
@@ -27,6 +23,21 @@ export const useCartStore = defineStore('cart', {
             const indexProduct =  this.products.findIndex((elProduct: IProductCart) => elProduct.id === product.id)
             this.products.splice(indexProduct, 1)
             this.syncCartWithStrapi()
+        },
+        updateProductQuantity(product: IProductCart, newQuantity: number) {
+            const productIndex = this.products.findIndex((elProduct: IProductCart) => 
+                elProduct.id === product.id &&
+                elProduct.selectedVariants?.color === product.selectedVariants?.color &&
+                elProduct.selectedVariants?.size === product.selectedVariants?.size
+            )
+            if (productIndex !== -1) {
+                if (newQuantity <= 0) {
+                    this.products.splice(productIndex, 1)
+                } else {
+                    this.products[productIndex].quantity = newQuantity
+                }
+                this.syncCartWithStrapi()
+            }
         },
         setCart(id: number, products: IProductCart[]) {
             if (this.products.length > 0) return

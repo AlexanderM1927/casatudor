@@ -159,11 +159,11 @@ module.exports = {
       );
 
       // Crear CSV con información de invoices y órdenes
-      let csv = 'ID Invoice,Total,Total Pagado,Estado de Pago,Fecha Creación,Productos,Email Cliente,Teléfono,Identificación,Ciudad,Dirección,Agencia Envío,Guía Envío\n';
+      let csv = 'ID Invoice,Total,Total Pagado,Estado de Pago,Fecha Creación,Productos,Email Cliente,Teléfono,Identificación,Ciudad,Dirección,Agencia Envío,Guía Envío,Detalles de Dirección\n';
       
       invoicesWithOrders.forEach(({ invoice, order }) => {
         const productsInfo = invoice.products?.map(p => 
-          `${p.product?.name || 'N/A'} (x${p.quantity})`
+          `${p.product?.id} -  ${p.product?.name || 'N/A'} (x${p.quantity})`
         ).join('; ') || 'Sin productos';
         
         const email = order?.email || 'N/A';
@@ -173,8 +173,9 @@ module.exports = {
         const address = order?.address1 || 'N/A';
         const agency = order?.shipmentAgency || 'N/A';
         const guide = order?.shipmentGuide || 'N/A';
-        
-        csv += `${invoice.id},${invoice.total},${invoice.totalPaid},${invoice.paymentStatus},${invoice.createdAt},"${productsInfo}","${email}","${phone}","${identify}","${city}","${address}","${agency}","${guide}"\n`;
+        const addressDetails = order?.addressDetails || 'N/A';
+
+        csv += `${invoice.id},${invoice.total},${invoice.totalPaid},${invoice.paymentStatus},${invoice.createdAt},"${productsInfo}","${email}","${phone}","${identify}","${city}","${address}","${agency}","${guide}","${addressDetails}"\n`;
       });
 
       ctx.set('Content-Type', 'text/csv');

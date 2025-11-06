@@ -202,7 +202,7 @@
                         </div>
                         <div class="flex justify-between text-sm">
                             <span>Envío:</span>
-                            <span>{{ shipping > 0 ? `$${shipping.toLocaleString()}` : 'Gratis' }}</span>
+                            <span>{{ shipping > 0 ? `$${shipping.toLocaleString()}` : 'Al recibir tu producto cancelas el envío' }}</span>
                         </div>
                         <div class="flex justify-between text-sm">
                             <span>IVA:</span>
@@ -264,7 +264,7 @@ const subtotal = computed(() => {
 const shipping = computed(() => {
     // Calculate shipping based on location or order value
     // return subtotal.value > 100000 ? 0 : 15000
-    return 15000
+    return 0
 })
 
 const tax = computed(() => {

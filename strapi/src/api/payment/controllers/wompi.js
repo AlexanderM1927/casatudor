@@ -36,7 +36,8 @@ module.exports = {
           }, 0);
         }
 
-        const shipmentCost = 15000; // Fixed shipping cost
+        //15000
+        const shipmentCost = 0; // Fixed shipping cost
         calculatedTotal = calculatedTotal + shipmentCost
         calculatedAmountInCents = Math.round(calculatedTotal * 100)
 

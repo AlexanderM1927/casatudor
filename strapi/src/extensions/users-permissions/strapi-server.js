@@ -47,7 +47,7 @@ module.exports = (plugin) => {
     });
 
     // Build reset password URL
-    const resetPasswordUrl = `${advancedSettings.email_reset_password || process.env.FRONTEND_URL}/reset-password?code=${resetPasswordToken}`;
+    const resetPasswordUrl = `${advancedSettings.email_reset_password || process.env.PUBLIC_URL}/reset-password?code=${resetPasswordToken}`;
 
     try {
       // Send email using MailManager

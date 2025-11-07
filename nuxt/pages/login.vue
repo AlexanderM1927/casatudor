@@ -28,7 +28,9 @@ const password: Ref<string> = ref('')
 const notificationType: Ref<string> = ref('')
 const notificationMessage: Ref<string> = ref('')
 const { login } = useAuth()
-
+const cart = useCartStore()
+const cartStoreComputed = storeToRefs(cart)
+const cartProducts = cartStoreComputed.getProductsCart
 
 const handleLogin = async (e: Event) => {
     e.preventDefault()
@@ -38,7 +40,12 @@ const handleLogin = async (e: Event) => {
     }
     try {
         await login(user.identifier, user.password)
-        navigateTo('/orders')
+        console.log('cartProducts', cartProducts.value)
+        if (cartProducts.value.length > 0) {
+            navigateTo('/checkout')
+        } else {
+            navigateTo('/orders')
+        }
     } catch (error: any) {
         notificationMessage.value = texts.validate_information
         notificationType.value = 'error'

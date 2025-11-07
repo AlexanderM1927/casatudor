@@ -25,7 +25,7 @@
 <script setup lang="ts">
 import PageService from '@/services/PageService'
 import ProductService from '@/services/ProductService'
-import { sortProductsByField } from '@/helpers/ProductSortHelper'
+import { sortByField } from '~/helpers/SortHelper'
 import type { IImageStrapi } from '~/types/ImageStrapi';
 import type { IPage } from '~/types/Page';
 import type { IPaginator } from '~/types/Paginator';
@@ -132,7 +132,7 @@ const getProducts = async (newPage = 1) => {
         }
         
         // Ordenar productos por campo sort (null/undefined al final)
-        allProducts.value = sortProductsByField(allProductsFromCategories)
+        allProducts.value = sortByField(allProductsFromCategories)
         
         isLoading.value = false
     }

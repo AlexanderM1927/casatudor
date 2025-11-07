@@ -14,7 +14,7 @@ export default class PageService {
             },
             populate: {
                 subpages: {
-                    fields: ['urlTitle', 'urlId']
+                    fields: ['urlTitle', 'urlId', 'sort']
                 },
                 categories: {
                     fields: ['id', 'name']
@@ -27,7 +27,7 @@ export default class PageService {
         const query = qs.stringify({
             populate: {
                 subpages: {
-                    fields: ['urlTitle', 'urlId']
+                    fields: ['urlTitle', 'urlId', 'sort']
                 },
                 categories: {
                     populate: ['image'],

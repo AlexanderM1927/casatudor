@@ -115,7 +115,7 @@ import CategoryService from '@/services/CategoryService';
 import { useImageFromStrapi } from '@/composables/useImageFromStrapi'
 import { useDebounce } from '@/composables/useDebounce'
 import { useBreakpoints } from '@/composables/useBreakpoints'
-import { sortProductsByField } from '@/helpers/ProductSortHelper'
+import { sortByField } from '~/helpers/SortHelper'
 import texts from '@/config/texts.json'
 import type { IImageStrapi } from '~/types/ImageStrapi';
 import type { IProduct } from '~/types/Product';
@@ -225,7 +225,7 @@ const filterProducts = () => {
         })
     } else {
         // Aplicar ordenamiento por campo sort cuando no hay otro orden específico
-        productsFilteredToShow = sortProductsByField(productsFilteredToShow)
+        productsFilteredToShow = sortByField(productsFilteredToShow)
     }
 
     productsFiltered.value = productsFilteredToShow
@@ -245,7 +245,7 @@ const getProducts = async (newPage: number = 1) => {
         }
         return product
     })
-    products.value = sortProductsByField(mappedProducts)
+    products.value = sortByField(mappedProducts)
     paginatorProducts.value = {
         currentPage: meta.pagination.page,
         pageCount: meta.pagination.pageCount,
@@ -272,7 +272,7 @@ const getProductsByFilter = async () => {
         }
         return product
     })
-    products.value = sortProductsByField(mappedProducts)
+    products.value = sortByField(mappedProducts)
     paginatorProducts.value = {
         currentPage: meta.pagination.page,
         pageCount: meta.pagination.pageCount,

@@ -23,7 +23,7 @@
 <script setup lang="ts">
 import SubPageService from '@/services/SubPageService';
 import ProductService from '@/services/ProductService'
-import { sortProductsByField } from '@/helpers/ProductSortHelper'
+import { sortByField } from '~/helpers/SortHelper'
 import type { IPage } from '~/types/Page';
 import type { IPaginator } from '~/types/Paginator';
 import type { IProduct } from '~/types/Product';
@@ -84,7 +84,7 @@ const getProducts = async (newPage = 1) => {
             }
             return product
         })
-        const products = sortProductsByField(mappedProducts)
+        const products = sortByField(mappedProducts)
         subPage.value = {
             ...subPage.value,
             category: {

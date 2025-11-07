@@ -1,15 +1,9 @@
-/**
- * Ordena productos por el campo 'sort'
- * Los productos con sort null o undefined quedan al final
- * @param {Array} products - Array de productos a ordenar
- * @returns {Array} - Array de productos ordenados
- */
-export function sortProductsByField(products) {
-    if (!products || !Array.isArray(products)) {
-        return products;
+export function sortByField(items) {
+    if (!items || !Array.isArray(items)) {
+        return items;
     }
 
-    return [...products].sort((a, b) => {
+    return [...items].sort((a, b) => {
         const sortA = a.sort;
         const sortB = b.sort;
 

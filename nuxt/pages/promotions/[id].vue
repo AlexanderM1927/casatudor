@@ -14,7 +14,7 @@
 <script setup lang="ts">
 import PromotionService from '@/services/PromotionService'
 import { useImageFromStrapi } from '@/composables/useImageFromStrapi'
-import { sortProductsByField } from '@/helpers/ProductSortHelper'
+import { sortByField } from '~/helpers/SortHelper'
 
 const route = useRoute()
 
@@ -53,7 +53,7 @@ const getPromotions = async (newPage: number = 1) => {
         }
         return product
     })
-    products.value = sortProductsByField(mappedProducts)
+    products.value = sortByField(mappedProducts)
 
     isLoading.value = false
 }

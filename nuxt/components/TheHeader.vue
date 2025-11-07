@@ -262,6 +262,7 @@ import { useBreakpoints } from "@/composables/useBreakpoints";
 import SocialMediaLinks from "./SocialMediaLinks.vue";
 import texts from "@/config/texts.json";
 import type { IPage } from "@/types/Page";
+import { sortByField } from "~/helpers/SortHelper";
 defineProps({
   data: {
     type: Object,
@@ -361,7 +362,7 @@ const getPages = async () => {
       id: id,
     };
     if (attributes.subpages && attributes.subpages.data.length > 0) {
-      page.subpages.data = attributes.subpages.data.map(
+      const mappedSubpages = attributes.subpages.data.map(
         ({ id, attributes }: { id: number; attributes: any }) => {
           return {
             ...attributes,
@@ -369,6 +370,10 @@ const getPages = async () => {
           };
         }
       );
+      console.log('pages.subpages.data before sort', mappedSubpages);
+      // Ordenar las subpages usando el helper
+      page.subpages.data = sortByField(mappedSubpages);
+      console.log('pages.subpages.data after sort', page.subpages.data);
     }
     return page;
   });

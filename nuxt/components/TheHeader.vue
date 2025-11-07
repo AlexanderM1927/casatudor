@@ -370,10 +370,8 @@ const getPages = async () => {
           };
         }
       );
-      console.log('pages.subpages.data before sort', mappedSubpages);
       // Ordenar las subpages usando el helper
       page.subpages.data = sortByField(mappedSubpages);
-      console.log('pages.subpages.data after sort', page.subpages.data);
     }
     return page;
   });

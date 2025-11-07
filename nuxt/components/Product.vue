@@ -2,7 +2,7 @@
     <div
         v-if="product"
         :class="`product-card ${childClass}`"
-        @click="navigateTo('/items/' + product.id)"
+        @click="navigateTo('/items/' + getSlugAndId(product.name, product.id))"
     >
         <div class="product-card__image">
             <NuxtImg
@@ -35,7 +35,7 @@
         <div class="product-card__body">
             <b 
                 class="product-card__title" 
-                @click="navigateTo('/items/' + product.id)"
+                @click="navigateTo('/items/' + getSlugAndId(product.name, product.id))"
             >{{ product.name }}</b>
             <div class="product-card__price">
                 <p 
@@ -50,7 +50,7 @@
                 <button
                     title="Ver más detalles" 
                     class="add-cart-btn btn btn-primary" 
-                    @click="navigateTo('/items/' + product.id)"
+                    @click="navigateTo('/items/' + getSlugAndId(product.name, product.id))"
                 >
                     <Icon name="material-symbols:visibility-outline" />
                 </button>
@@ -66,10 +66,12 @@ import texts from '@/config/texts.json'
 import type { PropType } from 'vue'
 import NumberHelper from '~/helpers/NumberHelper'
 import type { IProduct } from '~/types/Product'
+import { generateSlug, getSlugAndId } from '~/helpers/SlugHelper'
 
 const favoritesStore = useFavoritesStore()
 const favoritesStoreComputed = storeToRefs(favoritesStore)
 const favoritesProducts: any = favoritesStoreComputed.getProducts
+generateSlug('🌿 Camiseta Básica Valley – Algodón Peruano 100% (200 g)'); // Example usage
 
 const formatMiles = NumberHelper.miles
 

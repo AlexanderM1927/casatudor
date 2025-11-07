@@ -164,6 +164,7 @@ import ToastHelper from '~/helpers/ToastHelper'
 import type { IProduct, IColor } from '~/types/Product'
 import type { IProductCart } from '~/types/ProductCart'
 import type { IImageStrapi } from '~/types/ImageStrapi'
+import { getIdFromSlug, getSlugAndId } from '~/helpers/SlugHelper'
 
 const cart = useCartStore()
 const favoritesStore = useFavoritesStore()
@@ -196,7 +197,7 @@ const productService = new ProductService(useRuntimeConfig())
 
 const getProduct = async (newPage: number = 1) => {
     isLoading.value = true
-    const { data }: any = await productService.getSingleProduct(route.params.id)
+    const { data }: any = await productService.getSingleProduct(getIdFromSlug(route.params.id))
     product.value = data.map(({ id, attributes }: { id: number, attributes: any }) => {
         const product: IProduct = {
             ...attributes,

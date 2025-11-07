@@ -86,18 +86,21 @@ const getPage = async (newPage: number = 1) => {
     isLoading.value = false
 }
 
-const getProducts = async (newPage = 1) => {
+const getProducts = async (newPage: string | number = 1) => {
+    const pageNumber = typeof newPage === 'string' ? parseInt(newPage) : newPage
+    
     if (page.value && page.value.categories && page.value.categories.data && page.value.categories.data.length > 0) {
-        paginatorProducts.value.currentPage = newPage
+        paginatorProducts.value.currentPage = pageNumber
         isLoading.value = true
         
         let allProductsFromCategories: IProduct[] = []
+        let totalPageCount = 0
         
         // Obtener productos para cada categoría
         for (const category of page.value.categories.data) {
             try {
                 const { data, meta }: any = await productService.getProductsWithFilters(
-                    paginatorProducts.value.currentPage, 
+                    pageNumber, 
                     '', 
                     { id: category.id }, 
                     ''
@@ -117,14 +120,9 @@ const getProducts = async (newPage = 1) => {
                 // Agregar a la lista total de productos
                 allProductsFromCategories = [...allProductsFromCategories, ...categoryProducts]
                 
-                // Usar la paginación de la primera categoría
-                if (category === page.value.categories.data[0]) {
-                    paginatorProducts.value = {
-                        currentPage: meta.pagination.page,
-                        pageCount: meta.pagination.pageCount,
-                        data: allProductsFromCategories,
-                        url: ''
-                    }
+                // Tomar el mayor pageCount de todas las categorías
+                if (meta.pagination.pageCount > totalPageCount) {
+                    totalPageCount = meta.pagination.pageCount
                 }
             } catch (error) {
                 console.error(`Error fetching products for category ${category.id}:`, error)
@@ -133,6 +131,13 @@ const getProducts = async (newPage = 1) => {
         
         // Ordenar productos por campo sort (null/undefined al final)
         allProducts.value = sortByField(allProductsFromCategories)
+        
+        paginatorProducts.value = {
+            currentPage: pageNumber,
+            pageCount: totalPageCount,
+            data: allProducts.value,
+            url: ''
+        }
         
         isLoading.value = false
     }

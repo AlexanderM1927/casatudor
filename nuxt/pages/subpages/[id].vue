@@ -62,16 +62,18 @@ const getPage = async (newPage: number = 1) => {
         return subPage
     })[0]
 
-    getProducts()
+    await getProducts()
     isLoading.value = false
 }
 
-const getProducts = async (newPage = 1) => {
+const getProducts = async (newPage: string | number = 1) => {
+    const pageNumber = typeof newPage === 'string' ? parseInt(newPage) : newPage
+    
     if (subPage.value && subPage.value.category && subPage.value.category.data) {
-        paginatorProducts.value.currentPage = newPage
+        paginatorProducts.value.currentPage = pageNumber
         isLoading.value = true
         const categoryId = subPage.value.category.data.id
-        const { data, meta }: any = await productService.getProductsWithFilters(paginatorProducts.value.currentPage, '', {
+        const { data, meta }: any = await productService.getProductsWithFilters(pageNumber, '', {
             id: categoryId
         }, '')
         const mappedProducts = data.map(({ id, attributes }: { id: number, attributes: any }) => {

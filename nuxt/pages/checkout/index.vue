@@ -233,8 +233,8 @@ const paymentService = new PaymentService(config)
 // Form data
 const formData = ref({
     email: user.value?.email || '',
-    phone: '',
-    identify: '',
+    phone: user.value?.phone || '',
+    identify: user.value?.identify || '',
     country: '',
     department: '',
     city: '',

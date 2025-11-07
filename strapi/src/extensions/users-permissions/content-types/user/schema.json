@@ -73,6 +73,9 @@
     },
     "identify": {
       "type": "string"
+    },
+    "phone": {
+      "type": "string"
     }
   }
 }

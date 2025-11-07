@@ -47,6 +47,28 @@
         <div id="emailHelp" class="form-text">Ex: juanmartinez@gmail.com</div>
       </div>
       <div class="mb-3">
+        <label for="identify" class="form-label">Número de Identificación</label>
+        <input
+          v-model="identify"
+          type="text"
+          required
+          class="form-control"
+          aria-describedby="identifyHelp"
+        />
+        <div id="identifyHelp" class="form-text">Ex: 1234567890</div>
+      </div>
+      <div class="mb-3">
+        <label for="phone" class="form-label">Número de Celular</label>
+        <input
+          v-model="phone"
+          type="tel"
+          required
+          class="form-control"
+          aria-describedby="phoneHelp"
+        />
+        <div id="phoneHelp" class="form-text">Ex: +57 300 123 4567</div>
+      </div>
+      <div class="mb-3">
         <label for="exampleInputPassword1" required class="form-label">Clave</label>
         <input
           v-model="password"
@@ -73,6 +95,8 @@ const username: Ref<string> = ref("");
 const firstName: Ref<string> = ref("");
 const lastName: Ref<string> = ref("");
 const email: Ref<string> = ref("");
+const identify: Ref<string> = ref("");
+const phone: Ref<string> = ref("");
 const password: Ref<string> = ref("");
 const notificationType: Ref<string> = ref("");
 const notificationMessage: Ref<string> = ref("");
@@ -84,6 +108,8 @@ const submit = async (e: Event) => {
     firstName: firstName.value,
     lastName: lastName.value,
     email: email.value,
+    identify: identify.value,
+    phone: phone.value,
     password: password.value,
   };
   try {

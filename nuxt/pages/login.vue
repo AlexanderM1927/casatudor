@@ -40,7 +40,6 @@ const handleLogin = async (e: Event) => {
     }
     try {
         await login(user.identifier, user.password)
-        console.log('cartProducts', cartProducts.value)
         if (cartProducts.value.length > 0) {
             navigateTo('/checkout')
         } else {

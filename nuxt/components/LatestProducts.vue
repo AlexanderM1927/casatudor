@@ -16,7 +16,6 @@
 <script setup lang="ts">
 import texts from '@/config/texts.json'
 import ProductService from '@/services/ProductService'
-import { sortByField } from '~/helpers/SortHelper'
 import type { IImageStrapi } from '~/types/ImageStrapi'
 import type { IProduct } from '~/types/Product'
 
@@ -39,7 +38,7 @@ const getProducts = async () => {
             }
             return product
         })
-        products.value = sortByField(mappedProducts)
+        products.value = mappedProducts
     } catch (e) {
         console.log(e)
     } finally {

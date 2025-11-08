@@ -8,7 +8,7 @@ export default class ProductService {
     async getHomeProducts(page = 1) {
         const query = qs.stringify({
             populate: '*',
-            sort: ['sort:asc', 'id:desc'],
+            sort: ['id:desc'],
             pagination: {
                 page: page,
                 pageSize: 4

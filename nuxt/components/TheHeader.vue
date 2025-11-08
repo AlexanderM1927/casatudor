@@ -391,6 +391,14 @@ watch(
 );
 
 watch(
+  () => route.path,
+  () => {
+    // Cerrar el burger menu cuando cambie la ruta (pages y subpages)
+    closeBurger();
+  }
+);
+
+watch(
   () => currentPageWithSubpages.value,
   () => {
     // When the subpage visibility changes, update positioning

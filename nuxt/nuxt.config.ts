@@ -33,7 +33,9 @@ export default defineNuxtConfig({
         { name: 'twitter:description', content: process.env.DESCRIPTION },
         { name: 'twitter:image', content: '/img/logo.webp' },
         // WhatsApp specific
-        { property: 'og:site_name', content: process.env.STORE_NAME }
+        { property: 'og:site_name', content: process.env.STORE_NAME },
+        // Permitir que Googlebot renderice JavaScript
+        { name: 'googlebot', content: 'index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1' }
       ],
       script: [
         {
@@ -121,15 +123,41 @@ export default defineNuxtConfig({
       ]
     },
     routeRules: {
-      '/_nuxt/builds/meta/**': { 
-        headers: { 'cache-control': 'public, max-age=0' },
-        redirect: { to: '/', statusCode: 302 }
+      // Permitir acceso a recursos _nuxt para bots
+      '/_nuxt/**': { 
+        headers: { 
+          'cache-control': 'public, max-age=31536000, immutable',
+          'x-robots-tag': 'noindex'
+        }
       },
+      // Manejar metadata de builds
+      '/_nuxt/builds/meta/**': { 
+        headers: { 'cache-control': 'no-cache, no-store, must-revalidate' }
+      },
+      // Bloquear APIs de autenticación para bots
+      '/api/auth/**': { 
+        headers: { 'x-robots-tag': 'noindex, nofollow' }
+      },
+      '/api/user/**': { 
+        headers: { 'x-robots-tag': 'noindex, nofollow' }
+      },
+      '/api/cart/**': { 
+        headers: { 'x-robots-tag': 'noindex, nofollow' }
+      },
+      '/api/orders/**': { 
+        headers: { 'x-robots-tag': 'noindex, nofollow' }
+      },
+      // Pre-renderizar y cachear páginas públicas
       '/': { prerender: true },
       '/items/**': { swr: 3600 },
       '/posts/**': { swr: 3600 },
       '/pages/**': { swr: 3600 },
-      '/promotions/**': { swr: 3600 }
+      '/promotions/**': { swr: 3600 },
+      // Bloquear páginas privadas
+      '/login': { robots: false },
+      '/register': { robots: false },
+      '/checkout/**': { robots: false },
+      '/orders/**': { robots: false }
     }
   },
   generate: {

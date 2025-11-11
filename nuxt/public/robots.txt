@@ -1,40 +1,48 @@
-# To prevent search engines from seeing the site altogether, uncomment the next two lines:
-# User-Agent: *
-# Disallow: /
+# robots.txt - Configuración optimizada para SEO con Nuxt SPA
 User-agent: *
-Allow: /
 
-# Permitir páginas principales
-Allow: /items
-Allow: /posts
-Allow: /pages/
-Allow: /subpages/
-
-# Bloquear páginas de usuario y administrativas
-Disallow: /login
-Disallow: /checkout
-Disallow: /orders
-Disallow: /admin
-
-# Bloquear APIs
-Disallow: /api/
-
-# Bloquear archivos de build y temporales de Nuxt
-Disallow: /_nuxt/builds/
-Disallow: /_nuxt/.nuxt/
-
-# Bloquear archivos temporales y de sistema
-Disallow: /*.json$
-Disallow: /*?*
-
-# Remove this invalid line:
-# Content-signal: search=yes,ai-train=no
-
-# Permitir bots específicos para imágenes
-User-agent: Googlebot-Image
-Allow: /img/
+# Permitir acceso a recursos estáticos necesarios para renderizado
 Allow: /_nuxt/
+Allow: /img/
 Allow: /uploads/
+Allow: /assets/
+
+# Permitir páginas públicas
+Allow: /
+Allow: /items
+Allow: /items/*
+Allow: /posts
+Allow: /posts/*
+Allow: /pages/
+Allow: /pages/*
+Allow: /subpages/
+Allow: /subpages/*
+Allow: /promotions
+Allow: /promotions/*
+
+# Bloquear páginas de autenticación y privadas
+Disallow: /login
+Disallow: /register
+Disallow: /forgot-password
+Disallow: /reset-password
+Disallow: /checkout
+Disallow: /checkout/*
+Disallow: /orders
+Disallow: /orders/*
+Disallow: /admin
+Disallow: /admin/*
+
+# Bloquear APIs privadas pero permitir las necesarias
+Disallow: /api/auth/
+Disallow: /api/orders/
+Disallow: /api/cart/
+Disallow: /api/user/
+
+# Bloquear parámetros de búsqueda y sesión
+Disallow: /*?*sort=*
+Disallow: /*?*filter=*
+Disallow: /*?*session=*
+Disallow: /*?*token=*
 
 # Sitemap location
 Sitemap: https://mandarastore.com/sitemap.xml

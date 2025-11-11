@@ -12,6 +12,9 @@ export default defineNuxtConfig({
     }
   },
   app: {
+    buildAssetsDir: '/_nuxt/',
+    pageTransition: false,
+    layoutTransition: false,
     head: {
       charset: 'utf-8',
       viewport: 'width=device-width, initial-scale=1',
@@ -97,6 +100,9 @@ export default defineNuxtConfig({
     }
   },
   ssr: false, // Disable SSR to avoid hydration issues
+  experimental: {
+    appManifest: false // Deshabilitar manifest para evitar error 499
+  },
   nitro: {
     preset: 'node-server',
     serveStatic: true,
@@ -130,9 +136,12 @@ export default defineNuxtConfig({
           'x-robots-tag': 'noindex'
         }
       },
-      // Manejar metadata de builds
-      '/_nuxt/builds/meta/**': { 
-        headers: { 'cache-control': 'no-cache, no-store, must-revalidate' }
+      // Manejar metadata de builds - servir desde middleware
+      '/_nuxt/builds/**': { 
+        headers: { 
+          'cache-control': 'no-cache, no-store, must-revalidate',
+          'content-type': 'application/json'
+        }
       },
       // Bloquear APIs de autenticación para bots
       '/api/auth/**': { 

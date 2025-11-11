@@ -96,9 +96,44 @@ export default defineNuxtConfig({
   },
   ssr: false, // Disable SSR to avoid hydration issues
   nitro: {
+    preset: 'node-server',
+    serveStatic: true,
+    compressPublicAssets: {
+      brotli: true,
+      gzip: true
+    },
     prerender: {
-      routes: ['/'] // Pre-render critical pages
+      routes: [
+        '/',
+        '/items',
+        '/posts',
+        '/pages',
+        '/promotions'
+      ],
+      crawlLinks: true,
+      ignore: [
+        '/login',
+        '/register',
+        '/checkout/**',
+        '/orders/**',
+        '/api/**',
+        '/_nuxt/**'
+      ]
+    },
+    routeRules: {
+      '/_nuxt/builds/meta/**': { 
+        headers: { 'cache-control': 'public, max-age=0' },
+        redirect: { to: '/', statusCode: 302 }
+      },
+      '/': { prerender: true },
+      '/items/**': { swr: 3600 },
+      '/posts/**': { swr: 3600 },
+      '/pages/**': { swr: 3600 },
+      '/promotions/**': { swr: 3600 }
     }
+  },
+  generate: {
+    fallback: '404.html'
   },
   vite: {
     css: {

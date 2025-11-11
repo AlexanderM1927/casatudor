@@ -19,6 +19,10 @@ Disallow: /admin
 # Bloquear APIs
 Disallow: /api/
 
+# Bloquear archivos de build y temporales de Nuxt
+Disallow: /_nuxt/builds/
+Disallow: /_nuxt/.nuxt/
+
 # Bloquear archivos temporales y de sistema
 Disallow: /*.json$
 Disallow: /*?*

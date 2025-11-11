@@ -57,7 +57,7 @@ export default defineNuxtConfig({
       ]
     }
   },
-  devtools: { enabled: true },
+  devtools: { enabled: process.env.NODE_ENV === 'development' },
   css: [
     '@/styles/main.scss',
     "~/node_modules/bootstrap/dist/css/bootstrap.min.css"

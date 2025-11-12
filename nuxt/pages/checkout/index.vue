@@ -80,7 +80,18 @@
                     <!-- Shipping Address -->
                     <div class="bg-gray-50 p-6 rounded-lg">
                         <h2 class="text-lg font-semibold mb-4">Dirección de Envío</h2>
-                        
+                        <div class="flex">
+                        <div class="flex-shrink-0">
+                            <svg class="h-5 w-5 text-blue-500" viewBox="0 0 20 20" fill="currentColor">
+                                <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd" />
+                            </svg>
+                        </div>
+                        <div class="ml-3">
+                            <p class="text-sm text-blue-700">
+                                Para envios internacionales, compra por <a href="#" @click.prevent="purchaseByWhatsapp">WhatsApp</a>
+                            </p>
+                        </div>
+                    </div>
                         <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
                             <!-- Country -->
                             <div>
@@ -251,6 +262,8 @@ const cartStore = useCartStore()
 const { user } = useAuth()
 const config = useRuntimeConfig()
 const paymentService = new PaymentService(config)
+const { footerData } = useFooter()
+const dataFooter: any = footerData
 
 // Form data - populate with user data if logged in, otherwise empty
 const formData = ref({
@@ -301,6 +314,20 @@ const tax = computed(() => {
 
 const total = computed(() => {
     return subtotal.value + shipping.value
+})
+
+const purchaseByWhatsapp = (() => {
+    let listOfProducts = '¡Hola!,%20estoy%20interesado%20en%20comprar%20estos%20productos:%0A'
+    for (let i = 0; i < cartProducts.value.length; i++) {
+        const element = cartProducts.value[i]
+        const productName = element.name
+        const quantity = element.quantity
+        const color = element?.selectedVariants?.color
+        const size = element?.selectedVariants?.size
+        listOfProducts += `${productName} ${color ? '- Color: ' + color : ''} ${size ? '- Talla: ' + size : ''} - Cantidad: ${quantity}`
+        listOfProducts += `,%20 %0A`
+    }
+    window.open(`https://wa.me/${dataFooter?.value?.whatsappPhone}?text=${listOfProducts}`)
 })
 
 // Form validation

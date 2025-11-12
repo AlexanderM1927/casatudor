@@ -55,7 +55,7 @@ module.exports = (plugin) => {
       
       await mailer.send({
         to: user.email,
-        subject: 'Recuperación de contraseña - Casa Tudor',
+        subject: 'Recuperación de contraseña',
         template: 'reset-password',
         params: {
           user: {

@@ -292,7 +292,7 @@ const subtotal = computed(() => {
 const shipping = computed(() => {
     // Calculate shipping based on location or order value
     // return subtotal.value > 100000 ? 0 : 15000
-    return 0
+    return 15000
 })
 
 const tax = computed(() => {

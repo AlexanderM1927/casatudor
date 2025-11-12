@@ -6,6 +6,31 @@ export const useCartStore = defineStore('cart', {
         products: [] as IProductCart[]
     }),
     actions: {
+        // Load cart from localStorage for guest users
+        loadGuestCart() {
+            if (process.client) {
+                const savedCart = localStorage.getItem('guestCart')
+                if (savedCart) {
+                    try {
+                        const parsedCart = JSON.parse(savedCart)
+                        this.products = parsedCart.products || []
+                    } catch (error) {
+                        console.error('Error loading guest cart:', error)
+                    }
+                }
+            }
+        },
+        // Save cart to localStorage for guest users
+        saveGuestCart() {
+            if (process.client) {
+                const { user } = useAuth()
+                if (!user.value) {
+                    localStorage.setItem('guestCart', JSON.stringify({
+                        products: this.products
+                    }))
+                }
+            }
+        },
         addProducts(product: IProductCart) {
             let isOnCart = false
             for (let i = 0; i < this.products.length; i++) {
@@ -18,11 +43,13 @@ export const useCartStore = defineStore('cart', {
             }
             if (!isOnCart) this.products.push(product)
             this.syncCartWithStrapi()
+            this.saveGuestCart() // Save for guest users
         },
         removeProducts(product: IProductCart) {
             const indexProduct =  this.products.findIndex((elProduct: IProductCart) => elProduct.id === product.id)
             this.products.splice(indexProduct, 1)
             this.syncCartWithStrapi()
+            this.saveGuestCart() // Save for guest users
         },
         updateProductQuantity(product: IProductCart, newQuantity: number) {
             const productIndex = this.products.findIndex((elProduct: IProductCart) => 
@@ -37,6 +64,7 @@ export const useCartStore = defineStore('cart', {
                     this.products[productIndex].quantity = newQuantity
                 }
                 this.syncCartWithStrapi()
+                this.saveGuestCart() // Save for guest users
             }
         },
         setCart(id: number, products: IProductCart[]) {
@@ -47,6 +75,9 @@ export const useCartStore = defineStore('cart', {
         clearCart() {
             this.products = []
             this.id = null
+            if (process.client) {
+                localStorage.removeItem('guestCart') // Clear guest cart from localStorage
+            }
             console.log('CART CLEARED')
         },
         async syncCartWithStrapi() {

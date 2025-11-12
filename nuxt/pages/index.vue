@@ -26,11 +26,11 @@ const config = useRuntimeConfig()
 const isLoading: Ref<Boolean> = ref(true)
 
 // Configurar SEO para la página principal
-setSeoMeta({
-    title: config.public.storeName,
-    description: config.public.description,
-    image: '/img/logo.webp'
-})
+// setSeoMeta({
+//     title: config.public.storeName,
+//     description: config.public.description,
+//     image: '/img/logo.webp'
+// })
 
 // Simple loading state management
 onMounted(() => {

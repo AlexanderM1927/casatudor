@@ -18,9 +18,9 @@ import TopCategories from '@/components/TopCategories.vue'
 import LatestProducts from '@/components/LatestProducts.vue'
 import LatestPosts from '@/components/LatestPosts.vue'
 import LoadingComponent from '@/components/LoadingComponent.vue'
-import { useSeo } from '@/composables/useSeo'
+// import { useSeo } from '@/composables/useSeo'
 
-const { setSeoMeta } = useSeo()
+// const { setSeoMeta } = useSeo()
 const config = useRuntimeConfig()
 
 const isLoading: Ref<Boolean> = ref(true)

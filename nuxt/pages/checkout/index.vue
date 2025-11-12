@@ -5,6 +5,28 @@
             <div class="order-2 lg:order-1">
                 <h1 class="text-2xl font-bold mb-6">Información de Envío</h1>
                 
+                <!-- Guest Checkout Notice -->
+                <div v-if="!user" class="bg-blue-50 border-l-4 border-blue-500 p-4 mb-6">
+                    <div class="flex">
+                        <div class="flex-shrink-0">
+                            <svg class="h-5 w-5 text-blue-500" viewBox="0 0 20 20" fill="currentColor">
+                                <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd" />
+                            </svg>
+                        </div>
+                        <div class="ml-3">
+                            <p class="text-sm text-blue-700">
+                                Estás comprando como invitado. 
+                                <NuxtLink to="/login" class="font-medium underline hover:text-blue-800">
+                                    Inicia sesión
+                                </NuxtLink> o 
+                                <NuxtLink to="/register" class="font-medium underline hover:text-blue-800">
+                                    regístrate
+                                </NuxtLink> para un proceso más rápido.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+                
                 <form @submit.prevent="handleSubmit" class="space-y-6">
                     <!-- Contact Information -->
                     <div class="bg-gray-50 p-6 rounded-lg">
@@ -154,7 +176,7 @@
                         <button
                             type="submit"
                             :disabled="!isFormValid || isSubmitting"
-                            :class="`px-8 py-3 ${isFormValid && !isSubmitting ? 'bg-theme-primary' : 'bg-gray-400'} text-white font-semibold rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 disabled:bg-gray-400 disabled:cursor-not-allowed transition-colors`"
+                            :class="`px-8 py-3 ${isFormValid && !isSubmitting ? 'bg-theme-primary' : 'bg-gray-400'} text-white font-semibold rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 disabled:bg-gray-400 disabled:cursor-not-allowed transition-colors sm:w-auto w-full`"
                         >
                             {{ isSubmitting ? 'Procesando...' : 'Continuar al Pago' }}
                         </button>
@@ -223,14 +245,14 @@
 import PaymentService from '~/services/PaymentService'
 import texts from '~/config/texts.json'
 import ToastHelper from '~/helpers/ToastHelper'
-definePageMeta({ middleware: 'auth', requiresAuth: true })
+// Removed auth requirement to allow guest checkout
 
 const cartStore = useCartStore()
 const { user } = useAuth()
 const config = useRuntimeConfig()
 const paymentService = new PaymentService(config)
 
-// Form data
+// Form data - populate with user data if logged in, otherwise empty
 const formData = ref({
     email: user.value?.email || '',
     phone: user.value?.phone || '',
@@ -242,10 +264,16 @@ const formData = ref({
     addressDetails: ''
 })
 
+// Location data types
+interface Location {
+    id: number | string
+    name: string
+}
+
 // Location data
-const countries = ref([])
-const departments = ref([])
-const cities = ref([])
+const countries = ref<Location[]>([])
+const departments = ref<Location[]>([])
+const cities = ref<Location[]>([])
 
 // Loading states
 const isSubmitting = ref(false)
@@ -342,8 +370,36 @@ const handleSubmit = async () => {
     isSubmitting.value = true
     
     try {
+        let finalCartId = cartId.value
+        
+        // If user is a guest and no cartId exists, create a temporary cart in backend
+        if (!user.value?.id && !finalCartId) {
+            try {
+                const guestCartData = cartProducts.value.map(product => ({
+                    product: product.id,
+                    quantity: product.quantity,
+                    selectedVariants: {
+                        color: product.selectedVariants?.color,
+                        size: product.selectedVariants?.size
+                    }
+                }))
+                
+                const guestCart: any = await $fetch('/api/cart/guest', {
+                    method: 'POST',
+                    body: { products: guestCartData }
+                })
+                
+                finalCartId = guestCart?.data?.id
+            } catch (error) {
+                console.error('Error creating guest cart:', error)
+                ToastHelper.openToast('Error al crear el carrito. Por favor intenta de nuevo.', 'error')
+                return
+            }
+        }
+        
         const orderData = {
-            user: user.value.id,
+            // Only include user ID if user is logged in
+            ...(user.value?.id && { user: user.value.id }),
             email: formData.value.email,
             phone: formData.value.phone,
             identify: formData.value.identify,
@@ -354,14 +410,16 @@ const handleSubmit = async () => {
                 address1: formData.value.address1,
                 addressDetails: formData.value.addressDetails
             },
-            cartId: cartId.value
+            cartId: finalCartId,
+            // Mark as guest order if no user is logged in
+            isGuestOrder: !user.value?.id
         }
         
         await processPayment(orderData)
         
     } catch (error) {
         console.error('Error creating order:', error)
-        // Show error message to user
+        ToastHelper.openToast('Error al procesar la orden. Por favor intenta de nuevo.', 'error')
     } finally {
         isSubmitting.value = false
     }

@@ -59,6 +59,10 @@
     },
     "shipmentGuide": {
       "type": "string"
+    },
+    "isGuestOrder": {
+      "type": "boolean",
+      "default": false
     }
   }
 }

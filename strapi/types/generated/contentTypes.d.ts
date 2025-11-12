@@ -564,6 +564,7 @@ export interface ApiOrderOrder extends Schema.CollectionType {
       'oneToOne',
       'api::invoice.invoice'
     >;
+    isGuestOrder: Attribute.Boolean & Attribute.DefaultTo<false>;
     phone: Attribute.String & Attribute.Required;
     shipmentAgency: Attribute.String;
     shipmentGuide: Attribute.String;

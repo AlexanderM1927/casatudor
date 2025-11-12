@@ -34,7 +34,7 @@ module.exports = {
         const user = order.users_permissions_user;
         
         // Use order email as fallback if no user email
-        const recipientEmail = user?.email || order.email;
+        const recipientEmail = order.email;
         
         if (!recipientEmail) {
           console.log('No email found for order:', order.id);

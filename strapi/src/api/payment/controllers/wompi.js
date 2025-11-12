@@ -3,16 +3,18 @@ const crypto = require('crypto');
 const invoicePrefix = `_INVOICE` + (process.env.NODE_ENV === 'production' ? 'PROD' : 'LOCAL');
 module.exports = {
   async init(ctx) {
-    const { cartId, email, phone, identify, shippingAddress } = ctx.request.body || {};
+    const { cartId, email, phone, identify, shippingAddress, user, isGuestOrder } = ctx.request.body || {};
 
     // Create invoice if cartId is provided
     let invoice = null;
     let calculatedAmountInCents = 0
     const currency = 'COP'
+    let cart = null;
+
     if (cartId) {
       try {
         // Get cart with products to calculate total
-        const cart = await strapi.entityService.findOne('api::cart.cart', cartId, {
+        cart = await strapi.entityService.findOne('api::cart.cart', cartId, {
           populate: {
             products: {
               populate: ['product']
@@ -26,6 +28,17 @@ module.exports = {
         if (!cart) {
           ctx.throw(404, 'Cart no encontrado');
         }
+      } catch (error) {
+        ctx.throw(500, 'Error al obtener el carrito: ' + error.message);
+      }
+    } else if (isGuestOrder) {
+      // For guest orders without a cart ID, we still need cart data from frontend
+      // This should be sent in the request body
+      ctx.throw(400, 'Se requiere cartId para procesar el pago');
+    }
+
+    if (cart) {
+      try {
 
         let calculatedTotal = 0;
         if (cart.products && cart.products.length > 0) {
@@ -51,24 +64,38 @@ module.exports = {
           }
         });
 
+        // Determine user ID - from cart, from request, or null for guest orders
+        const userId = cart.users_permissions_user?.id || user || null;
+
+        const orderData = {
+          invoice: invoice.id,
+          email: email,
+          phone: phone,
+          identify: identify,
+          country: shippingAddress.country,
+          city: shippingAddress.city,
+          department: shippingAddress.department,
+          address1: shippingAddress.address1,
+          addressDetails: shippingAddress.addressDetails,
+          isGuestOrder: isGuestOrder || !userId // Mark as guest order if no user
+        };
+
+        // Only add user if exists (for registered users)
+        if (userId) {
+          orderData.users_permissions_user = userId;
+        }
+
         const order = await strapi.entityService.create('api::order.order', {
-          data: {
-            users_permissions_user: cart.users_permissions_user.id,
-            invoice: invoice.id,
-            email: email,
-            phone: phone,
-            identify: identify,
-            country: shippingAddress.country,
-            city: shippingAddress.city,
-            department: shippingAddress.department,
-            address1: shippingAddress.address1,
-            addressDetails: shippingAddress.addressDetails
-          }
+          data: orderData
         });
+
+        console.log('Order created:', order.id, 'Guest order:', isGuestOrder);
 
       } catch (error) {
         ctx.throw(500, 'Error al crear la factura: ' + error.message);
       }
+    } else {
+      ctx.throw(400, 'No se proporcionó información del carrito');
     }
 
     const integritySecret = process.env.WOMPI_INTEGRITY_SECRET;
@@ -84,7 +111,7 @@ module.exports = {
       amountInCents: calculatedAmountInCents,
       reference: invoiceId,
       signature: { integrity },
-      redirectUrl: process.env.PAYMENT_REDIRECT_URL,
+      redirectUrl: isGuestOrder ? process.env.PUBLIC_URL : process.env.PAYMENT_REDIRECT_URL,
       env: process.env.WOMPI_ENV
     };
   },

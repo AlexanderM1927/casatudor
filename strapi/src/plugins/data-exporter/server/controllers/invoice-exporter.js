@@ -159,7 +159,7 @@ module.exports = {
       );
 
       // Crear CSV con información de invoices y órdenes
-      let csv = 'ID Invoice,Total,Total Pagado,Estado de Pago,Fecha Creación,Productos,Email Cliente,Teléfono,Identificación,Ciudad,Dirección,Agencia Envío,Guía Envío,Detalles de Dirección\n';
+      let csv = 'ID Invoice,Total,Total Pagado,Estado de Pago,Fecha Creación,Productos,Email Cliente,Teléfono,Identificación,Ciudad,Dirección,Detalles de Dirección,Agencia Envío,Guía Envío\n';
       
       invoicesWithOrders.forEach(({ invoice, order }) => {
         const productsInfo = invoice.products?.map(p => 
@@ -175,7 +175,7 @@ module.exports = {
         const guide = order?.shipmentGuide || 'N/A';
         const addressDetails = order?.addressDetails || 'N/A';
 
-        csv += `${invoice.id},${invoice.total},${invoice.totalPaid},${invoice.paymentStatus},${invoice.createdAt},"${productsInfo}","${email}","${phone}","${identify}","${city}","${address}","${agency}","${guide}","${addressDetails}"\n`;
+        csv += `${invoice.id},${invoice.total},${invoice.totalPaid},${invoice.paymentStatus},${invoice.createdAt},"${productsInfo}","${email}","${phone}","${identify}","${city}","${address}","${addressDetails}","${agency}","${guide}"\n`;
       });
 
       ctx.set('Content-Type', 'text/csv');

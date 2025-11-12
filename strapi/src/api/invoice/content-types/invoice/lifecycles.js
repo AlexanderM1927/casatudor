@@ -34,22 +34,22 @@ module.exports = {
           return;
         }
 
-        const user = order.users_permissions_user;
-        
-        if (!user || !user.email) {
-          console.log('No user or email found for order:', order.id);
+        if (!order.email) {
+          console.log('No email found for order:', order.id);
           return;
         }
 
+        const user = order.users_permissions_user;
+
         const mailer = new MailManager({ templatesDir: 'emails/templates' });
         await mailer.send({
-          to: user.email,
+          to: order.email,
           subject: `Tu pedido #${order.id} ha sido confirmado`,
           template: 'order',
           params: {
             order: order,
             invoice: order.invoice,
-            user: { name: user.firstName },
+            user: { name: user?.firstName || order.email },
           }
         });
         

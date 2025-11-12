@@ -2,10 +2,10 @@
     <div class="first-container">
         <h2 class="title">{{ subPage.title }}</h2>
         <Markdown :source="subPage.content" />
-        <template v-if="!isLoading && subPage.category && subPage.category.data">
+        <template v-if="!isLoading && categoryData && categoryData.products">
             <div class="row">
                 <Product 
-                    v-for="(product, index) in subPage.category.data.products"
+                    v-for="(product, index) in categoryData.products"
                     :product="product"
                     :childClass="`col-md-3 col-xs-12`"
                     :key="index"
@@ -38,8 +38,12 @@ const subPage: Ref<IPage> = ref({
     content: '',
     urlId: '',
     urlTitle: '',
-    subpages: {}
+    subpages: {},
+    isHeaderLink: false
 })
+
+// Datos de categoría separados ya que no están en el tipo IPage
+const categoryData: Ref<any> = ref(null)
 
 const appConfig = useRuntimeConfig()
 const subPageService = new SubPageService(appConfig)
@@ -54,25 +58,41 @@ const paginatorProducts: Ref<IPaginator> = ref({
 const getPage = async (newPage: number = 1) => {
     isLoading.value = true
     const { data }: any = await subPageService.getSinglePageByUrlId(route.params.id)
-    subPage.value = data.map(({ id, attributes }: { id: number, attributes: any }) => {
-        const subPage: IPage = {
-            ...attributes,
-            id: id
+    const pageData = data.map(({ id, attributes }: { id: number, attributes: any }) => {
+        return {
+            page: {
+                id: id,
+                title: attributes.title,
+                content: attributes.content,
+                urlId: attributes.urlId,
+                urlTitle: attributes.urlTitle,
+                subpages: attributes.subpages || {},
+                isHeaderLink: attributes.isHeaderLink || false
+            },
+            category: attributes.category?.data || null
         }
-        return subPage
     })[0]
-
-    await getProducts()
+    
+    subPage.value = pageData.page
+    
+    if (pageData.category) {
+        categoryData.value = {
+            id: pageData.category.id,
+            products: []
+        }
+        await getProducts()
+    }
+    
     isLoading.value = false
 }
 
 const getProducts = async (newPage: string | number = 1) => {
     const pageNumber = typeof newPage === 'string' ? parseInt(newPage) : newPage
     
-    if (subPage.value && subPage.value.category && subPage.value.category.data) {
+    if (categoryData.value) {
         paginatorProducts.value.currentPage = pageNumber
         isLoading.value = true
-        const categoryId = subPage.value.category.data.id
+        const categoryId = categoryData.value.id
         const { data, meta }: any = await productService.getProductsWithFilters(pageNumber, '', {
             id: categoryId
         }, '')
@@ -87,14 +107,9 @@ const getProducts = async (newPage: string | number = 1) => {
             return product
         })
         const products = sortByField(mappedProducts)
-        subPage.value = {
-            ...subPage.value,
-            category: {
-                data: {
-                    id: categoryId,
-                    products: products
-                }
-            }
+        categoryData.value = {
+            id: categoryId,
+            products: products
         }
         paginatorProducts.value = {
             currentPage: meta.pagination.page,
@@ -106,7 +121,11 @@ const getProducts = async (newPage: string | number = 1) => {
     }
 }
 
-onMounted(() => {
-    getPage()
+// Usar useAsyncData para que funcione tanto en SSR como en cliente
+await useAsyncData(`subpage-${route.params.id}`, async () => {
+    await getPage()
+    return subPage.value
+}, {
+    watch: [() => route.params.id]
 })
 </script>

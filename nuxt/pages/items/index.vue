@@ -121,7 +121,9 @@ import type { IImageStrapi } from '~/types/ImageStrapi';
 import type { IProduct } from '~/types/Product';
 import type { IPaginator } from '~/types/Paginator';
 import type { ICategory } from '~/types/Category';
+import { useSeo } from '@/composables/useSeo'
 
+const { setPageSeo } = useSeo()
 const { type } = useBreakpoints()
 
 const appConfig = useRuntimeConfig()
@@ -141,6 +143,10 @@ const productNameFilter: Ref<string> = ref('')
 const orderBy: Ref<string> = ref('')
 const showFilters: Ref<Boolean> = ref(false)
 const { debounce } = useDebounce()
+
+setPageSeo({
+    title: texts.pages.store
+})
 
 const paginatorProducts: Ref<IPaginator> = ref({
     currentPage: 1,

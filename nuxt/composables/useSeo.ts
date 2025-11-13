@@ -69,9 +69,21 @@ export const useSeo = () => {
     })
   }
 
+  const setPageSeo = (page: {
+    title: string
+  }) => {
+    const config = useRuntimeConfig()
+    const title = `${page.title} - ${config.public.storeName}`
+    
+    setSeoMeta({
+      title
+    })
+  }
+
   return {
     setSeoMeta,
     setProductSeo,
-    setPostSeo
+    setPostSeo,
+    setPageSeo
   }
 }

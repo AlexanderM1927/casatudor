@@ -49,8 +49,9 @@ module.exports = {
           }, 0);
         }
 
-        //15000
-        const shipmentCost = 15000; // Fixed shipping cost
+        // Calculate shipping cost based on city
+        const cityName = shippingAddress.city?.toLowerCase() || '';
+        const shipmentCost = cityName === 'cali' ? 8000 : 15000;
         calculatedTotal = calculatedTotal + shipmentCost
         calculatedAmountInCents = Math.round(calculatedTotal * 100)
 

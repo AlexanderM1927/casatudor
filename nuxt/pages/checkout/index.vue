@@ -81,17 +81,17 @@
                     <div class="bg-gray-50 p-6 rounded-lg">
                         <h2 class="text-lg font-semibold mb-4">Dirección de Envío</h2>
                         <div class="flex">
-                        <div class="flex-shrink-0">
-                            <svg class="h-5 w-5 text-blue-500" viewBox="0 0 20 20" fill="currentColor">
-                                <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd" />
-                            </svg>
+                            <div class="flex-shrink-0">
+                                <svg class="h-5 w-5 text-blue-500" viewBox="0 0 20 20" fill="currentColor">
+                                    <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd" />
+                                </svg>
+                            </div>
+                            <div class="ml-3">
+                                <p class="text-sm text-blue-700">
+                                    Para envios internacionales, compra por <a href="#" @click.prevent="purchaseByWhatsapp">WhatsApp</a>
+                                </p>
+                            </div>
                         </div>
-                        <div class="ml-3">
-                            <p class="text-sm text-blue-700">
-                                Para envios internacionales, compra por <a href="#" @click.prevent="purchaseByWhatsapp">WhatsApp</a>
-                            </p>
-                        </div>
-                    </div>
                         <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
                             <!-- Country -->
                             <div>
@@ -303,9 +303,10 @@ const subtotal = computed(() => {
 })
 
 const shipping = computed(() => {
-    // Calculate shipping based on location or order value
-    // return subtotal.value > 100000 ? 0 : 15000
-    return 15000
+    // Calculate shipping based on location
+    const cityName = getCityById(formData.value.city)
+    // 8000 for Cali, 15000 for other cities
+    return cityName?.toLowerCase() === 'cali' ? 8000 : 15000
 })
 
 const tax = computed(() => {

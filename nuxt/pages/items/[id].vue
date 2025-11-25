@@ -1,8 +1,24 @@
 <template>
-    <div class="first-container product-page bg-white">
+    <!-- Estado de carga -->
+    <div v-if="isLoading" class="first-container product-page bg-white">
+        <div class="product-container">
+            <div class="product-container__image">
+                <div class="loading-placeholder" style="height: 30rem; background: #f0f0f0;"></div>
+            </div>
+            <div class="product-container__content">
+                <div class="loading-placeholder" style="height: 2rem; width: 60%; background: #f0f0f0; margin-bottom: 1rem;"></div>
+                <div class="loading-placeholder" style="height: 1rem; width: 100%; background: #f0f0f0; margin-bottom: 0.5rem;"></div>
+                <div class="loading-placeholder" style="height: 1rem; width: 80%; background: #f0f0f0;"></div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Contenido del producto -->
+    <div v-else-if="product" class="first-container product-page bg-white">
         <div class="product-container">
             <div class="product-container__image">
                 <NuxtImg
+                    v-if="product.images && product.images.length > 0"
                     :title="product.name"
                     :src="currentMainImage || product.images[0]"
                     :alt="product.name"
@@ -10,7 +26,7 @@
                     @mouseenter="stopImageRotation"
                     @mouseleave="startImageRotation"
                 />
-                <div class="slider-product" v-show="product.images.length > 1">
+                <div class="slider-product" v-show="product.images && product.images.length > 1">
                     <div
                         v-for="image in product.images"
                         class="slider-product__item"
@@ -22,8 +38,10 @@
             </div>
             <div class="product-container__content">
                 <h2 class="title">{{ product.name }}</h2>
-                <b>{{ texts.description }}:</b>
-                <Markdown :source="product.description" />
+                <template v-if="product.description">
+                    <b>{{ texts.description }}:</b>
+                    <Markdown :source="product.description" />
+                </template>
                 <div class="product-container__price">
                     <p 
                         v-if="product.price_before_offer"
@@ -177,75 +195,80 @@ const formatMiles = NumberHelper.miles
 
 const route = useRoute()
 
-const isLoading: Ref<Boolean> = ref(true)
 const currentMainImage: Ref<string> = ref('')
 const selectedQuantity: Ref<number> = ref(1)
 const dataFooter: any = footerData
 const currentImageIndex: Ref<number> = ref(0)
 const imageInterval: Ref<NodeJS.Timeout | null> = ref(null)
 
-const product: Ref<IProduct> = ref({
-    id: 1,
-    name: '',
-    images: [''],
-    price: 0
-})
-
 const relatedProducts: Ref<IProduct[]> = ref([])
 const productService = new ProductService(useRuntimeConfig())
 
+// Función para mapear los datos del producto
+const mapProductData = (data: any): IProduct => {
+    const { id, attributes } = data
+    return {
+        ...attributes,
+        images: attributes.image.data.map((el: IImageStrapi) => {
+            return useImageFromStrapi(el?.attributes?.url)
+        }),
+        colors: attributes.colors?.map((color: any) => ({
+            id: color.id,
+            name: color.name,
+            hexadecimal: color.hexadecimal,
+            image: color.image?.data ? useImageFromStrapi(color.image.data.attributes.url) : null
+        })) || [],
+        sizes: attributes.sizes?.map((size: any) => ({
+            id: size.id,
+            name: size.name
+        })) || [],
+        category: attributes.category?.data ? {
+            id: attributes.category.data.id,
+            ...attributes.category.data.attributes
+        } : null,
+        id: id
+    }
+}
 
-const getProduct = async (newPage: number = 1) => {
-    isLoading.value = true
-    const { data }: any = await productService.getSingleProduct(getIdFromSlug(route.params.id))
-    product.value = data.map(({ id, attributes }: { id: number, attributes: any }) => {
-        const product: IProduct = {
-            ...attributes,
-            images: attributes.image.data.map((el: IImageStrapi) => {
-                return useImageFromStrapi(el?.attributes?.url)
-            }),
-            colors: attributes.colors?.map((color: any) => ({
-                id: color.id,
-                name: color.name,
-                hexadecimal: color.hexadecimal,
-                image: color.image?.data ? useImageFromStrapi(color.image.data.attributes.url) : null
-            })) || [],
-            sizes: attributes.sizes?.map((size: any) => ({
-                id: size.id,
-                name: size.name
-            })) || [],
-            category: attributes.category?.data ? {
-                id: attributes.category.data.id,
-                ...attributes.category.data.attributes
-            } : null,
-            id: id
+// Usar useAsyncData para cargar los datos en el servidor (SSR)
+const { data: product, pending: isLoading } = await useAsyncData(
+    `product-${route.params.id}`,
+    async () => {
+        const { data }: any = await productService.getSingleProduct(getIdFromSlug(route.params.id))
+        if (data && data.length > 0) {
+            return mapProductData(data[0])
         }
-        return product
-    })[0]
+        return {
+            id: 0,
+            name: '',
+            images: [],
+            price: 0
+        } as IProduct
+    },
+    {
+        watch: [() => route.params.id]
+    }
+)
 
-    // Establecer la primera imagen como imagen principal cuando se carga el producto
-    if (product.value.images && product.value.images.length > 0) {
+// Configurar SEO para el producto (se ejecuta después de obtener los datos)
+watchEffect(() => {
+    if (product.value && product.value.name) {
+        setProductSeo({
+            name: product.value.name,
+            description: product.value.description,
+            image: product.value.images?.[0] || '/img/logo.webp',
+            price: product.value.price
+        })
+    }
+})
+
+// Establecer la imagen principal inicial
+watchEffect(() => {
+    if (product.value?.images && product.value.images.length > 0 && !currentMainImage.value) {
         currentMainImage.value = product.value.images[0]
         currentImageIndex.value = 0
-        // Iniciar rotación automática si hay más de una imagen
-        startImageRotation()
     }
-
-    // Configurar SEO para el producto
-    setProductSeo({
-        name: product.value.name,
-        description: product.value.description,
-        image: product.value.images?.[0] || '/img/logo.webp',
-        price: product.value.price
-    })
-
-    // Obtener productos relacionados si el producto tiene categoría
-    if (product.value.category) {
-        await getRelatedProducts(product.value.category.id, product.value.id)
-    }
-
-    isLoading.value = false
-}
+})
 
 const getRelatedProducts = async (categoryId: number, excludeProductId: number) => {
     try {
@@ -411,12 +434,23 @@ const onColorVariantChange = (color: IColor) => {
     }, 3000)
 }
 
+// Cargar productos relacionados cuando el producto esté disponible
+watch(() => product.value?.category, async (newCategory) => {
+    if (newCategory && product.value) {
+        await getRelatedProducts(newCategory.id, product.value.id)
+    }
+}, { immediate: true })
+
 onMounted(() => {
-    getProduct()
     const favoritesLS = localStorage.getItem('favorites')
     const favorites: [IProduct] = favoritesLS ? JSON.parse(favoritesLS) : []
     favoritesStore.set(favorites)
     fetchFooter()
+    
+    // Iniciar rotación de imágenes solo en el cliente
+    if (product.value?.images && product.value.images.length > 1) {
+        startImageRotation()
+    }
 })
 
 onUnmounted(() => {

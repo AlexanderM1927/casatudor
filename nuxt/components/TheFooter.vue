@@ -34,6 +34,15 @@
                     :title="texts.payment_gateways"
                 ></NuxtImg>
             </div>
+            <div>
+                <b>{{ texts.pay_with_addi }}:</b>
+                <NuxtImg
+                    :alt="texts.addi"
+                    src="/img/addilogo.webp"
+                    :title="texts.addi"
+                    class="addi-logo"
+                ></NuxtImg>
+            </div>
         </div>
     </div>
 </template>
@@ -73,14 +82,41 @@ const appConfig = useRuntimeConfig();
     justify-content: center;
 }
 
+.footer__gateways div {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
 .company-name img{
     height: 7rem;
+    width: auto;
+}
+
+.addi-logo {
+    height: 3rem;
     width: auto;
 }
 
 @media only screen and (max-width: $grid-breakpoints-sm) {
     .footer__content {
         flex-direction: column;
+    }
+    .footer__gateways {
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        gap: 1rem;
+    }
+    .footer__gateways div {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+    }
+    .addi-logo {
+        height: 2rem;
+        width: 6rem;
     }
 }
 

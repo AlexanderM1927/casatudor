@@ -58,5 +58,7 @@
     "links": "Servicio al cliente",
     "contact": "Contacto",
     "pay_with": "Paga seguro con",
-    "payment_gateways": "Metodos de pago"
+    "payment_gateways": "Metodos de pago",
+    "addi": "Addi",
+    "pay_with_addi": "Aceptamos pagos con Addi, contactanos por whatsapp"
 }

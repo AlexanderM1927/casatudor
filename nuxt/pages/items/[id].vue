@@ -297,12 +297,12 @@ const getRelatedProducts = async (categoryId: number, excludeProductId: number) 
                     name: color.name,
                     hexadecimal: color.hexadecimal,
                     image: color.image?.data ? useImageFromStrapi(color.image.data.attributes.url) : null,
-                    quantity: color.quantity ?? 0
+                    quantity: color.quantity ?? null
                 })) || [],
                 sizes: attributes.sizes?.map((size: any) => ({
                     id: size.id,
                     name: size.name,
-                    quantity: size.quantity ?? 0
+                    quantity: size.quantity ?? null
                 })) || [],
                 id: id
             }

@@ -51,6 +51,9 @@
                     </p>
                     <p>${{ formatMiles(product.price) }}</p>
                 </div>
+                <div v-if="isCurrentVariantOutOfStock" class="product-container__out-of-stock">
+                    <strong>{{ texts.out_of_stock }}</strong>
+                </div>
                 <div class="product-container__variants">
                     <div v-show="product.colors && product.colors.length > 0">
                         <b>{{ texts.variant_color }}:</b>
@@ -140,6 +143,8 @@
                         title="Agregar al carrito" 
                         class="add-cart-btn btn btn-success" 
                         @click="purchaseByWhatsapp(product)"
+                        :disabled="isCurrentVariantOutOfStock"
+                        :class="{ 'btn-disabled': isCurrentVariantOutOfStock }"
                     >
                         <Icon name="mdi:whatsapp" />
                         {{ texts.buy_on_whatsapp }}
@@ -148,6 +153,8 @@
                         title="Agregar al carrito" 
                         class="add-cart-btn btn btn-primary" 
                         @click="addToCart(product)"
+                        :disabled="isCurrentVariantOutOfStock"
+                        :class="{ 'btn-disabled': isCurrentVariantOutOfStock }"
                     >
                         <Icon name="material-symbols:add-shopping-cart" />
                         {{ texts.add_to_cart }}
@@ -200,6 +207,8 @@ const selectedQuantity: Ref<number> = ref(1)
 const dataFooter: any = footerData
 const currentImageIndex: Ref<number> = ref(0)
 const imageInterval: Ref<NodeJS.Timeout | null> = ref(null)
+const selectedColorId: Ref<number | null> = ref(null)
+const selectedSizeId: Ref<number | null> = ref(null)
 
 const relatedProducts: Ref<IProduct[]> = ref([])
 const productService = new ProductService(useRuntimeConfig())
@@ -216,11 +225,13 @@ const mapProductData = (data: any): IProduct => {
             id: color.id,
             name: color.name,
             hexadecimal: color.hexadecimal,
-            image: color.image?.data ? useImageFromStrapi(color.image.data.attributes.url) : null
+            image: color.image?.data ? useImageFromStrapi(color.image.data.attributes.url) : null,
+            quantity: color.quantity ?? null
         })) || [],
         sizes: attributes.sizes?.map((size: any) => ({
             id: size.id,
-            name: size.name
+            name: size.name,
+            quantity: size.quantity ?? null
         })) || [],
         category: attributes.category?.data ? {
             id: attributes.category.data.id,
@@ -285,11 +296,13 @@ const getRelatedProducts = async (categoryId: number, excludeProductId: number) 
                     id: color.id,
                     name: color.name,
                     hexadecimal: color.hexadecimal,
-                    image: color.image?.data ? useImageFromStrapi(color.image.data.attributes.url) : null
+                    image: color.image?.data ? useImageFromStrapi(color.image.data.attributes.url) : null,
+                    quantity: color.quantity ?? 0
                 })) || [],
                 sizes: attributes.sizes?.map((size: any) => ({
                     id: size.id,
-                    name: size.name
+                    name: size.name,
+                    quantity: size.quantity ?? 0
                 })) || [],
                 id: id
             }
@@ -307,6 +320,12 @@ const getRelatedProducts = async (categoryId: number, excludeProductId: number) 
 }
 
 const addToCart = ((product: IProduct) => {
+    // Verificar si la variante seleccionada tiene stock
+    if (isCurrentVariantOutOfStock.value) {
+        ToastHelper.openToast('Esta variante no tiene unidades disponibles', 'error')
+        return
+    }
+    
     ToastHelper.openToast(texts.item_added, 'success')
     const colorSelected = (document.querySelector('input[name="colors"]:checked') as HTMLInputElement)?.value
     const sizeSelected = (document.getElementById('variant-size') as HTMLInputElement)?.value
@@ -367,6 +386,45 @@ const isProductOnFavorites = computed(() => {
     }
 })
 
+const selectedColorQuantity = computed(() => {
+    if (!product.value?.colors || product.value.colors.length === 0) return null
+    
+    if (selectedColorId.value === null && product.value.colors.length > 0) {
+        // Si no hay color seleccionado, usar el primero
+        return product.value.colors[0].quantity ?? null
+    }
+    
+    const selectedColor = product.value.colors.find(color => color.id === selectedColorId.value)
+    return selectedColor?.quantity ?? null
+})
+
+const selectedSizeQuantity = computed(() => {
+    if (!product.value?.sizes || product.value.sizes.length === 0) return null
+    
+    if (selectedSizeId.value === null && product.value.sizes.length > 0) {
+        // Si no hay talla seleccionada, usar la primera
+        return product.value.sizes[0].quantity ?? null
+    }
+    
+    const selectedSize = product.value.sizes.find(size => size.id === selectedSizeId.value)
+    return selectedSize?.quantity ?? null
+})
+
+const isCurrentVariantOutOfStock = computed(() => {
+    // Si tiene colores, revisar el color seleccionado
+    console.log('selectedColorQuantity', selectedColorQuantity.value)
+    if (selectedColorQuantity.value === 0) {
+        return true
+    }
+    
+    // Si tiene tallas, revisar la talla seleccionada
+    if (selectedSizeQuantity.value === 0) {
+        return true
+    }
+    
+    return false
+})
+
 const addToFavorites = ((product: IProduct) => {
     const favoritesLS = localStorage.getItem('favorites')
     const favorites = favoritesLS ? JSON.parse(favoritesLS) : []
@@ -411,6 +469,9 @@ const stopImageRotation = () => {
 }
 
 const onColorVariantChange = (color: IColor) => {
+    // Actualizar el ID del color seleccionado
+    selectedColorId.value = color.id
+    
     // Detener la rotación automática cuando se selecciona un color
     stopImageRotation()
     
@@ -450,6 +511,28 @@ onMounted(() => {
     // Iniciar rotación de imágenes solo en el cliente
     if (product.value?.images && product.value.images.length > 1) {
         startImageRotation()
+    }
+    
+    // Inicializar el color seleccionado con el primero si existe
+    if (product.value?.colors && product.value.colors.length > 0) {
+        selectedColorId.value = product.value.colors[0].id
+    }
+    
+    // Inicializar la talla seleccionada con la primera si existe
+    if (product.value?.sizes && product.value.sizes.length > 0) {
+        selectedSizeId.value = product.value.sizes[0].id
+    }
+    
+    // Agregar listener al select de tallas
+    const sizeSelect = document.getElementById('variant-size') as HTMLSelectElement
+    if (sizeSelect) {
+        sizeSelect.addEventListener('change', (event) => {
+            const selectedSizeName = (event.target as HTMLSelectElement).value
+            const size = product.value?.sizes?.find(s => s.name === selectedSizeName)
+            if (size) {
+                selectedSizeId.value = size.id
+            }
+        })
     }
 })
 
@@ -650,5 +733,24 @@ onUnmounted(() => {
         font-size: 1.5rem;
         margin-bottom: 1.5rem;
     }
+}
+
+.product-container__out-of-stock {
+    background: rgba(255, 0, 0, 0.9);
+    color: white;
+    padding: 0.75rem 1.5rem;
+    border-radius: 0.5rem;
+    margin: 1rem 0;
+    text-align: center;
+    font-size: 1.2rem;
+}
+
+.btn-disabled {
+    opacity: 0.6;
+    cursor: not-allowed !important;
+}
+
+.btn-disabled:hover {
+    opacity: 0.6 !important;
 }
 </style>

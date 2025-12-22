@@ -13,6 +13,9 @@
                 :fetchpriority="isFirstProduct ? 'high' : 'auto'"
                 format="webp"
             />
+            <div v-if="isOutOfStock" class="product-card__out-of-stock">
+                <strong>{{ texts.out_of_stock }}</strong>
+            </div>
             <div class="product-card__image-btn">
                 <button 
                     v-if="!isProductOnFavorites" 
@@ -98,6 +101,24 @@ const isProductOnFavorites = computed(() => {
     } else {
         return false
     }
+})
+
+const isOutOfStock = computed(() => {
+    const product = props.product
+    
+    // Si el producto tiene colores, revisar si todos tienen quantity === 0
+    if (product.colors && product.colors.length > 0) {
+        const allColorsOutOfStock = product.colors.every(color => color.quantity === 0)
+        if (allColorsOutOfStock) return true
+    }
+    
+    // Si el producto tiene tallas, revisar si todos tienen quantity === 0
+    if (product.sizes && product.sizes.length > 0) {
+        const allSizesOutOfStock = product.sizes.every(size => size.quantity === 0)
+        if (allSizesOutOfStock) return true
+    }
+    
+    return false
 })
 
 const addToFavorites = ((product: IProduct) => {
@@ -196,5 +217,19 @@ onMounted(() => {
     align-items: center;
     padding: 0.5rem;
     border-radius: 0rem 0rem 0.5rem 0.5rem;
+}
+
+.product-card__out-of-stock {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: rgba(255, 0, 0, 0.9);
+    color: white;
+    padding: 0.5rem 1rem;
+    border-radius: 0.25rem;
+    font-size: 1.2rem;
+    z-index: 2;
+    pointer-events: none;
 }
 </style>

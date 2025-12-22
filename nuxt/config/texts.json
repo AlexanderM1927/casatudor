@@ -60,5 +60,6 @@
     "pay_with": "Paga seguro con",
     "payment_gateways": "Metodos de pago",
     "addi": "Addi",
-    "pay_with_addi": "Aceptamos pagos con Addi, contactanos por whatsapp"
+    "pay_with_addi": "Aceptamos pagos con Addi, contactanos por whatsapp",
+    "out_of_stock": "Agotado"
 }

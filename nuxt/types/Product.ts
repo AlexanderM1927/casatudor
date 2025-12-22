@@ -4,12 +4,14 @@ export interface IColor {
     id: number,
     name: string,
     hexadecimal: string,
-    image?: string
+    image?: string,
+    quantity?: number
 }
 
 export interface ISize {
     id: number,
-    name: string
+    name: string,
+    quantity?: number
 }
 
 export interface IProduct {

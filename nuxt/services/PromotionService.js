@@ -21,7 +21,11 @@ export default class PromotionService {
     }
     async getSinglePromotion(id) {
         const query = qs.stringify({
-            populate: 'products.image',
+            populate: [
+                'products.image',
+                'products.sizes',
+                'products.colors',
+            ],
             filters: {
                 id: id,
                 isEnabled: true

@@ -16,6 +16,9 @@
             <div v-if="isOutOfStock" class="product-card__out-of-stock">
                 <strong>{{ texts.out_of_stock }}</strong>
             </div>
+            <div v-if="product.is_new" class="product-card__new-badge">
+                <strong>Nuevo!</strong>
+            </div>
             <div class="product-card__image-btn">
                 <button 
                     v-if="!isProductOnFavorites" 
@@ -231,5 +234,24 @@ onMounted(() => {
     font-size: 1.2rem;
     z-index: 2;
     pointer-events: none;
+}
+
+.product-card__new-badge {
+    position: absolute;
+    top: 0.5rem;
+    left: 0.5rem;
+    background: #FF8243;
+    color: white;
+    padding: 0.5rem 0.75rem;
+    border-radius: 50%;
+    font-size: 0.75rem;
+    z-index: 1;
+    pointer-events: none;
+    width: 3.5rem;
+    height: 3.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
 }
 </style>

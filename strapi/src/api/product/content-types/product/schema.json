@@ -55,6 +55,9 @@
     },
     "sort": {
       "type": "integer"
+    },
+    "is_new": {
+      "type": "boolean"
     }
   }
 }

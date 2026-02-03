@@ -674,6 +674,7 @@ export interface ApiProductProduct extends Schema.CollectionType {
       Attribute.Private;
     description: Attribute.RichText;
     image: Attribute.Media<'images' | 'files' | 'videos' | 'audios', true>;
+    is_new: Attribute.Boolean;
     name: Attribute.String;
     price: Attribute.Integer;
     price_before_offer: Attribute.Integer;

@@ -57,7 +57,19 @@
                             type="text"
                             v-model="priceFilterMax"
                         > 
-                    </div> 
+                    </div>
+                    <h4 v-if="availableColors.length > 0">{{ texts.filter.filter_by_color }}:</h4>
+                    <div class="store__filters-colors" v-if="availableColors.length > 0">
+                        <div
+                            v-for="color in availableColors"
+                            :key="color.hexadecimal"
+                            class="store__filters-color"
+                            :class="{ 'color-selected': colorFiltered?.hexadecimal === color.hexadecimal }"
+                            :style="`background: ${color.hexadecimal};`"
+                            :title="color.name"
+                            @click="filterByColor(color)"
+                        ></div>
+                    </div>
                     <br>
                     <button class="btn btn-danger" @click="setDefaultProducts">{{ texts.filter.remove_filters }}</button>
                 </div>
@@ -118,7 +130,7 @@ import { useBreakpoints } from '@/composables/useBreakpoints'
 import { sortByField } from '~/helpers/SortHelper'
 import texts from '@/config/texts.json'
 import type { IImageStrapi } from '~/types/ImageStrapi';
-import type { IProduct } from '~/types/Product';
+import type { IProduct, IColor } from '~/types/Product';
 import type { IPaginator } from '~/types/Paginator';
 import type { ICategory } from '~/types/Category';
 import { useSeo } from '@/composables/useSeo'
@@ -135,10 +147,12 @@ const isLoading: Ref<Boolean> = ref(true);
 
 const products: Ref<IProduct[]> = ref([])
 const categories: Ref<ICategory[]> = ref([])
+const availableColors: Ref<IColor[]> = ref([])
 const priceFilterMin: Ref<string> = ref('')
 const priceFilterMax: Ref<string> = ref('')
 const productsFiltered: Ref<IProduct[]|null> = ref(null)
 const categoryFiltered: Ref<ICategory|null> = ref(null)
+const colorFiltered: Ref<IColor|null> = ref(null)
 const productNameFilter: Ref<string> = ref('')
 const orderBy: Ref<string> = ref('')
 const showFilters: Ref<Boolean> = ref(false)
@@ -216,6 +230,13 @@ const filterProducts = () => {
     if (nameFilter && nameFilter != '') {
         productsFilteredToShow = productsFilteredToShow.filter((product: IProduct) => {
             return product.name.toLowerCase().includes(nameFilter.toLowerCase())
+        })
+    }
+
+    const selectedColor = colorFiltered.value
+    if (selectedColor && selectedColor.hexadecimal) {
+        productsFilteredToShow = productsFilteredToShow.filter((product: IProduct) => {
+            return product.colors?.some(c => c.hexadecimal === selectedColor.hexadecimal)
         })
     }
 
@@ -323,9 +344,28 @@ const filterByCategory = (category: ICategory) => {
     getProductsByFilter()
 }
 
+const filterByColor = (color: IColor) => {
+    if (colorFiltered.value?.hexadecimal === color.hexadecimal) {
+        colorFiltered.value = null
+    } else {
+        colorFiltered.value = color
+    }
+    filterProducts()
+}
+
+const getAvailableColors = async () => {
+    try {
+        const colors: IColor[] = await $fetch('/api/colors')
+        availableColors.value = colors
+    } catch (error) {
+        console.error('Error fetching colors:', error)
+    }
+}
+
 const setDefaultProducts = () => {
     orderBy.value = ''
     categoryFiltered.value = null
+    colorFiltered.value = null
     priceFilterMax.value = ''
     priceFilterMin.value = ''
     productsFiltered.value = null
@@ -365,6 +405,7 @@ const checkBreakpointsForFilters = (() => {
 onMounted(() => {
     checkBreakpointsForFilters()
     getCategories()
+    getAvailableColors()
     getProducts()
     setSearchByQueryParams()
 })
@@ -421,6 +462,33 @@ onMounted(() => {
 
 .category-selected {
     opacity: 1;
+}
+
+.store__filters-colors {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin-bottom: 1rem;
+}
+
+.store__filters-color {
+    width: 2rem;
+    height: 2rem;
+    border-radius: 50%;
+    cursor: pointer;
+    border: 2px solid rgba(255, 255, 255, 0.3);
+    transition: transform 0.2s, border-color 0.2s;
+}
+
+.store__filters-color:hover {
+    transform: scale(1.15);
+    border-color: white;
+}
+
+.store__filters-color.color-selected {
+    border: 3px solid white;
+    transform: scale(1.2);
+    box-shadow: 0 0 0 2px rgba(0, 0, 0, 0.3);
 }
 
 .close-btn {

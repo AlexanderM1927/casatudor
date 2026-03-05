@@ -31,7 +31,8 @@
         "remove_filters": "Quitar filtros",
         "searcher_placeholder": "Nombre del producto...",
         "from_lowest_to_highest": "De menor a mayor precio",
-        "from_highest_to_lowest": "De mayor a menor precio"
+        "from_highest_to_lowest": "De mayor a menor precio",
+        "filter_by_color": "Filtrar por color"
     },
     "cart": {
         "title": "Mi carrito",

@@ -224,16 +224,21 @@ onMounted(() => {
 
 .product-card__out-of-stock {
     position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
+    top: 0.5rem;
+    right: 0.5rem;
     background: rgba(255, 0, 0, 0.9);
     color: white;
-    padding: 0.5rem 1rem;
-    border-radius: 0.25rem;
-    font-size: 1.2rem;
-    z-index: 2;
+    padding: 0.5rem 0.75rem;
+    border-radius: 50%;
+    font-size: 0.75rem;
+    z-index: 1;
     pointer-events: none;
+    width: 3.5rem;
+    height: 3.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
 }
 
 .product-card__new-badge {

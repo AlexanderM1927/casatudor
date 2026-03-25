@@ -108,7 +108,7 @@
             </div>
             <div class="row">
                 <Paginator 
-                    @getAction="getProducts"
+                    @getAction="handlePagination"
                     :data="paginatorProducts"
                 ></Paginator>
             </div>
@@ -288,7 +288,8 @@ const getProductsByFilter = async () => {
     const sort = orderBy.value
     const nameFilter = productNameFilter.value
     const category = categoryFiltered.value
-    const { data, meta }: any = await productService.getProductsWithFilters(paginatorProducts.value.currentPage, nameFilter, category, sort)
+    const color = colorFiltered.value
+    const { data, meta }: any = await productService.getProductsWithFilters(paginatorProducts.value.currentPage, nameFilter, category, sort, color?.hexadecimal)
     const mappedProducts = data.map(({ id, attributes }: { id: number, attributes: any }) => {
         const product: IProduct = {
             ...attributes,
@@ -350,7 +351,8 @@ const filterByColor = (color: IColor) => {
     } else {
         colorFiltered.value = color
     }
-    filterProducts()
+    paginatorProducts.value.currentPage = 1
+    getProductsByFilter()
 }
 
 const getAvailableColors = async () => {
@@ -360,6 +362,17 @@ const getAvailableColors = async () => {
     } catch (error) {
         console.error('Error fetching colors:', error)
     }
+}
+
+const handlePagination = async (newPage: number = 1) => {
+    paginatorProducts.value.currentPage = newPage
+    const hasFilters = productNameFilter.value !== '' || categoryFiltered.value !== null || colorFiltered.value !== null || orderBy.value !== ''
+    if (hasFilters) {
+        await getProductsByFilter()
+    } else {
+        await getProducts(newPage)
+    }
+    filterProducts()
 }
 
 const setDefaultProducts = () => {

@@ -27,31 +27,35 @@ export default class ProductService {
         })
         return await $fetch(this.config.public.apiBase + '/products?' + query)
     }
-    async getProductsWithFilters(page = 1, name, category, sort) {
+    async getProductsWithFilters(page = 1, name, category, sort, colorHex) {
         const queryObject = {
             populate: '*',
             sort: ['sort:asc', 'id:desc'],
             pagination: {
                 page: page,
                 pageSize: 20
-            }
+            },
+            filters: {}
         }
         if (name != '') {
-            queryObject.filters = {
-                name: {
-                    $containsi: name
-                }
+            queryObject.filters.name = {
+                $containsi: name
             }
         }
         if (sort != '') {
             queryObject.sort = [sort, 'sort:asc', 'id:desc']
         }
         if (category) {
-            queryObject.filters = {
-                category: {
-                    id: {
-                        $eq: category.id
-                    }
+            queryObject.filters.category = {
+                id: {
+                    $eq: category.id
+                }
+            }
+        }
+        if (colorHex) {
+            queryObject.filters.colors = {
+                hexadecimal: {
+                    $eq: colorHex
                 }
             }
         }

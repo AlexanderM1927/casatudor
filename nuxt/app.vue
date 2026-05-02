@@ -5,6 +5,7 @@
         </div>
         
         <template v-if="!isLoading">
+            <TheBannerModal :data="dataBanner" />
             <ThePromotion :data="dataPromotions"></ThePromotion>
             <div class="main-page">
                 <TheHeader :data="dataFooter" />
@@ -28,13 +29,18 @@
 </template>
 <script setup lang="ts">
 import ThePromotion from '@/components/ThePromotion.vue'
+import TheBannerModal from '@/components/TheBannerModal.vue'
 import PromotionService from '@/services/PromotionService'
+import BannerService from '@/services/BannerService'
+import type { IPopupBanner } from '~/types/Banner'
 
 const appConfig = useRuntimeConfig()
 const { footerData, fetchFooter } = useFooter()
 const promotionService = new PromotionService(appConfig)
+const bannerService = new BannerService(appConfig)
 const dataFooter = footerData
 const dataPromotions = ref({})
+const dataBanner = ref<Partial<IPopupBanner>>({})
 const isLoading: Ref<Boolean> = ref(true)
 
 const getPromotions = async () => {
@@ -52,9 +58,26 @@ const getPromotions = async () => {
     }
 }
 
+const getBanner = async () => {
+    try {
+        const { data }: any = await bannerService.getBanner()
+        if (data) {
+            const { attributes } = data
+            dataBanner.value = {
+                active: attributes.active,
+                link: attributes.link,
+                image: attributes.image?.data?.attributes?.url
+            }
+        }
+    } catch (error) {
+        console.error('Error fetching banner data:', error)
+    }
+}
+
 onMounted(async () => {
     await fetchFooter()
     await getPromotions()
+    await getBanner()
     isLoading.value = false
 })
 useHead({

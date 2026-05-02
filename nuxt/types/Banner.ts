@@ -3,3 +3,9 @@ export interface IBanner {
   imageForMobile?: string
   urlForRedirect?: string
 }
+
+export interface IPopupBanner {
+    active: boolean,
+    image: string,
+    link: string
+}

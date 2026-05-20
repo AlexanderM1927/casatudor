@@ -11,7 +11,12 @@
                 :title="product.name"
                 :loading="isFirstProduct ? 'eager' : 'lazy'"
                 :fetchpriority="isFirstProduct ? 'high' : 'auto'"
+                width="500"
+                height="700"
+                sizes="xs:50vw sm:50vw md:33vw lg:25vw"
                 format="webp"
+                quality="75"
+                decoding="async"
             />
             <div v-if="isOutOfStock" class="product-card__out-of-stock">
                 <strong>{{ texts.out_of_stock }}</strong>

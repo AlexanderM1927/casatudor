@@ -5,6 +5,12 @@
             :src="post.image"
             class="card-img-top post-img" 
             :alt="post.title"
+            width="500"
+            height="700"
+            sizes="xs:50vw sm:50vw md:33vw lg:25vw"
+            format="webp"
+            quality="75"
+            decoding="async"
         />
         <div class="card-body">
             <b class="card-title">{{ post.title }}</b>

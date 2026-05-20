@@ -11,10 +11,18 @@
                 rel="noopener noreferrer"
                 class="banner-modal__link"
             >
-                <img
+                <NuxtImg
                     :src="imageUrl"
+                    :title="data.link ? 'Click to navigate' : ''"
                     alt="Banner"
                     class="banner-modal__image"
+                    width="500"
+                    height="700"
+                    sizes="xs:50vw sm:50vw md:33vw lg:25vw"
+                    fetchpriority="high"
+                    format="webp"
+                    quality="75"
+                    decoding="async"
                 />
             </a>
         </div>

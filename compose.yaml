@@ -24,6 +24,9 @@ services:
     build: 
       dockerfile: Dockerfile
       context: ./nuxt
+    environment:
+      - NUXT_PORT=9094
+      - HOST=0.0.0.0
     volumes:
       - ./nuxt:/usr/src/nuxt-app
       - ./nuxt/package.json:/usr/src/nuxt-app/package.json

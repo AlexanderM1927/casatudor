@@ -2,7 +2,7 @@ import type { IProductCart } from "~/types/ProductCart"
 
 export const useCartStore = defineStore('cart', {
     state: () => ({
-        id: null as number | null,
+        id: null as string | null,
         products: [] as IProductCart[]
     }),
     actions: {
@@ -67,7 +67,7 @@ export const useCartStore = defineStore('cart', {
                 this.saveGuestCart() // Save for guest users
             }
         },
-        setCart(id: number, products: IProductCart[]) {
+        setCart(id: string, products: IProductCart[]) {
             if (this.products.length > 0) return
             this.id = id
             this.products = products
@@ -88,6 +88,7 @@ export const useCartStore = defineStore('cart', {
                 const cartData = {
                     data: {
                         users_permissions_user: user.value.id,
+                        publishedAt: new Date(),
                         products: this.products.map((product: IProductCart) => ({
                             product: product.id,
                             quantity: product.quantity,
@@ -114,7 +115,7 @@ export const useCartStore = defineStore('cart', {
                             ...cartData
                         }
                     })
-                    this.id = req?.data?.id || null
+                    this.id = req?.data?.documentId || null
                 }
             } catch (error) {
                 console.error('Failed to sync cart with Strapi:', error)
@@ -129,7 +130,7 @@ export const useCartStore = defineStore('cart', {
             const cartProducts = useCart?.products || []
         
             const productCarts: IProductCart[] = mapAPICartProductsToIProductCarts(cartProducts)
-            this.setCart(useCart.id, productCarts)
+            this.setCart(useCart.documentId, productCarts)
         }
     },
     getters: {

@@ -15,6 +15,7 @@ export default defineEventHandler(async (event) => {
 
         return cart
     } catch (error: any) {
+        throw createError({ statusCode: error?.response?.status || 500, statusMessage: error?.message || 'Error al crear el carrito' })
     }
 
 })

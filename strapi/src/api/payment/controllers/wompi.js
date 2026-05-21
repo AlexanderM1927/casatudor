@@ -24,6 +24,12 @@ module.exports = {
           }
         });
 
+        console.log('[wompi] cart fetched:', JSON.stringify({
+          id: cart?.id,
+          productsCount: cart?.products?.length,
+          products: cart?.products,
+        }, null, 2));
+
         if (!cart) {
           ctx.throw(404, 'Cart no encontrado');
         }
@@ -54,25 +60,32 @@ module.exports = {
         calculatedTotal = calculatedTotal + shipmentCost
         calculatedAmountInCents = Math.round(calculatedTotal * 100)
 
-        invoice = await strapi.db.query('api::invoice.invoice').create({
+        const mappedProducts = cart.products.map(item => ({
+          product: item.product?.documentId,
+          quantity: item.quantity,
+          selectedVariants: item.selectedVariants,
+        }));
+        console.log('[wompi] mappedProducts for invoice:', JSON.stringify(mappedProducts, null, 2));
+        console.log('[wompi] calculatedTotal:', calculatedTotal, 'amountInCents:', calculatedAmountInCents);
+
+        invoice = await strapi.documents('api::invoice.invoice').create({
           data: {
-            products: cart.products.map(item => ({
-              product: item.product?.id,
-              quantity: item.quantity,
-              selectedVariants: item.selectedVariants,
-            })),
-            total: (calculatedTotal),
+            products: mappedProducts,
+            total: calculatedTotal,
             totalPaid: 0,
             paymentStatus: 'pending',
-            publishedAt: new Date(),
-          }
+          },
+          status: 'published',
         });
 
-        // Determine user ID - from cart, from request, or null for guest orders
+        console.log('[wompi] invoice created:', JSON.stringify({ id: invoice?.id, documentId: invoice?.documentId }));
+
+        // Determine user - from cart, from request, or null for guest orders
         const userId = cart.users_permissions_user?.id || user || null;
+        const userDocumentId = cart.users_permissions_user?.documentId || null;
 
         const orderData = {
-          invoice: invoice.id,
+          invoice: invoice.documentId,
           email: email,
           phone: phone,
           identify: identify,
@@ -81,22 +94,19 @@ module.exports = {
           department: shippingAddress.department,
           address1: shippingAddress.address1,
           addressDetails: shippingAddress.addressDetails,
-          isGuestOrder: isGuestOrder || !userId // Mark as guest order if no user
+          isGuestOrder: isGuestOrder || !userId,
         };
 
         // Only add user if exists (for registered users)
-        if (userId) {
-          orderData.users_permissions_user = userId;
+        if (userDocumentId) {
+          orderData.users_permissions_user = userDocumentId;
         }
 
-        const order = await strapi.db.query('api::order.order').create({
-          data: {
-            ...orderData,
-            publishedAt: new Date(),
-          }
+        const order = await strapi.documents('api::order.order').create({
+          data: orderData,
         });
 
-        console.log('Order created:', order.id, 'Guest order:', isGuestOrder);
+        console.log('[wompi] order created:', order.id, 'documentId:', order.documentId, 'Guest:', isGuestOrder);
 
       } catch (error) {
         ctx.throw(500, 'Error al crear la factura: ' + error.message);

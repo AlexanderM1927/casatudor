@@ -5,32 +5,35 @@ export default class UserService {
     constructor (config) {
         this.config = config
     }
+    get apiBase() {
+        return this.config.apiBaseServer || this.config.public.apiBase
+    }
     async login(params) {
-        return await $fetch(this.config.public.apiBase + '/auth/local/', {
+        return await $fetch(this.apiBase + '/auth/local', {
             method: 'POST',
             body: params
         })
     }
     async createUser(params) {
-        return await $fetch(this.config.public.apiBase + '/auth/local/register', {
+        return await $fetch(this.apiBase + '/auth/local/register', {
             method: 'POST',
             body: params
         })
     }
     async me(params) {
-        return await $fetch(this.config.public.apiBase + '/users/me', {
+        return await $fetch(this.apiBase + '/users/me', {
             method: 'GET',
             headers: { Authorization: `Bearer ${params.token}` }
         })
     }
     async forgotPassword(email) {
-        return await $fetch(this.config.public.apiBase + '/auth/forgot-password', {
+        return await $fetch(this.apiBase + '/auth/forgot-password', {
             method: 'POST',
             body: { email }
         })
     }
     async resetPassword(code, password, passwordConfirmation) {
-        return await $fetch(this.config.public.apiBase + '/auth/reset-password', {
+        return await $fetch(this.apiBase + '/auth/reset-password', {
             method: 'POST',
             body: { code, password, passwordConfirmation }
         })

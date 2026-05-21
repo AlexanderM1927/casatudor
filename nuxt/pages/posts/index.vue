@@ -34,11 +34,10 @@ const paginator: Ref<IPaginator> = ref({
 const getPosts = async (newPage: number = 1) => {
     isLoading.value = true
     const { data, meta }: any = await postService.getPosts(newPage)
-    posts.value = data.map(({ id, attributes }: { id: number, attributes: any }) => {
+    posts.value = data.map((item: any) => {
         const post: IPost = {
-            ...attributes,
-            image: useImageFromStrapi(attributes?.image?.data?.attributes?.url),
-            id: id
+            ...item,
+            image: useImageFromStrapi(item?.image?.url),
         }
         return post
     })

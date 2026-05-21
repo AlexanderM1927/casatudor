@@ -356,22 +356,18 @@ const pageService = new PageService(appConfig);
 const getPages = async () => {
   isLoading.value = true;
   const { data }: any = await pageService.getPages();
-  pages.value = data.map(({ id, attributes }: { id: number; attributes: any }) => {
+  pages.value = data.map((item: any) => {
     const page: IPage = {
-      ...attributes,
-      id: id,
+      ...item,
     };
-    if (attributes.subpages && attributes.subpages.data.length > 0) {
-      const mappedSubpages = attributes.subpages.data.map(
-        ({ id, attributes }: { id: number; attributes: any }) => {
-          return {
-            ...attributes,
-            id: id,
-          };
-        }
-      );
+    // Strapi v5: subpages is a flat array, no .data wrapper
+    const subpagesArray = Array.isArray(item.subpages) ? item.subpages : (item.subpages?.data || [])
+    if (subpagesArray.length > 0) {
+      const mappedSubpages = subpagesArray.map((sub: any) => ({
+          ...sub,
+      }));
       // Ordenar las subpages usando el helper
-      page.subpages.data = sortByField(mappedSubpages);
+      page.subpages = { data: sortByField(mappedSubpages) };
     }
     return page;
   });

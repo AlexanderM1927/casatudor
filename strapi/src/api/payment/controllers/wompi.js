@@ -14,14 +14,13 @@ module.exports = {
     if (cartId) {
       try {
         // Get cart with products to calculate total
-        cart = await strapi.entityService.findOne('api::cart.cart', cartId, {
+        cart = await strapi.db.query('api::cart.cart').findOne({
+          where: { id: cartId },
           populate: {
             products: {
-              populate: ['product']
+              populate: { product: true }
             },
-            users_permissions_user: {
-              populate: ['*']
-            }
+            users_permissions_user: true
           }
         });
 
@@ -55,7 +54,7 @@ module.exports = {
         calculatedTotal = calculatedTotal + shipmentCost
         calculatedAmountInCents = Math.round(calculatedTotal * 100)
 
-        invoice = await strapi.entityService.create('api::invoice.invoice', {
+        invoice = await strapi.db.query('api::invoice.invoice').create({
           data: {
             products: cart.products,
             total: (calculatedTotal),
@@ -86,8 +85,11 @@ module.exports = {
           orderData.users_permissions_user = userId;
         }
 
-        const order = await strapi.entityService.create('api::order.order', {
-          data: orderData
+        const order = await strapi.db.query('api::order.order').create({
+          data: {
+            ...orderData,
+            publishedAt: new Date(),
+          }
         });
 
         console.log('Order created:', order.id, 'Guest order:', isGuestOrder);
@@ -152,20 +154,19 @@ module.exports = {
       // If payment is approved, update the invoice
       if (status === 'APPROVED') {
         // Find invoice by payment reference
-        const invoices = await strapi.entityService.findMany('api::invoice.invoice', {
-          filters: {
+        const invoices = await strapi.db.query('api::invoice.invoice').findMany({
+          where: {
             id: reference.replace(invoicePrefix, '')
           },
-          populate: {
-            cart: true
-          }
+          populate: { cart: true }
         });
 
         const invoice = invoices[0];
 
         if (invoice) {
           // Update invoice with payment information
-          await strapi.entityService.update('api::invoice.invoice', invoice.id, {
+          await strapi.db.query('api::invoice.invoice').update({
+            where: { id: invoice.id },
             data: {
               totalPaid: amountInCents / 100,
               paymentStatus: 'approved',
@@ -178,15 +179,16 @@ module.exports = {
         }
       } else if (status === 'DECLINED') {
         // Update invoice status to declined
-        const invoices = await strapi.entityService.findMany('api::invoice.invoice', {
-          filters: {
+        const invoices = await strapi.db.query('api::invoice.invoice').findMany({
+          where: {
             id: reference.replace(invoicePrefix, '')
           }
         });
 
         const invoice = invoices[0];
         if (invoice) {
-          await strapi.entityService.update('api::invoice.invoice', invoice.id, {
+          await strapi.db.query('api::invoice.invoice').update({
+            where: { id: invoice.id },
             data: {
               paymentStatus: 'declined',
             }

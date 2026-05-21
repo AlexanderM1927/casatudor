@@ -1,9 +1,10 @@
-import type { IImageStrapi } from '~/types/ImageStrapi'
 import type { IOrder } from '~/types/Order'
 import type { APICartProduct } from './cartMapper'
 
+// Strapi v5: flat structure, no data/attributes wrapper on relations
 interface APIOrder {
     id: number,
+    documentId?: string,
     address1: string,
     addresDetails: string,
     city: string,
@@ -15,28 +16,20 @@ interface APIOrder {
     shipmentGuide: string,
     createdAt: string,
     invoice: {
-        data: {
-            id: number,
-            attributes: {
-                total?: number
-                totalPaid?: number,
-                paymentStatus?: string,
-                products: APICartProduct[]
-            }
-        }
+        id: number,
+        total?: number,
+        totalPaid?: number,
+        paymentStatus?: string,
+        products: APICartProduct[]
     },
     users_permissions_user: {
-        data: {
-            id: number,
-            attributes: {
-                username: string,
-                firstName: string,
-                lastName: string,
-                identify?: string,
-                email: string,
-                logged: boolean
-            }
-        }
+        id: number,
+        username: string,
+        firstName: string,
+        lastName: string,
+        identify?: string,
+        email: string,
+        logged: boolean
     }
 }
 
@@ -54,24 +47,31 @@ export const mapAPIOrderToIOrder = (order: APIOrder): IOrder => {
         shipmentGuide: order?.shipmentGuide,
         createdAt: order?.createdAt,
         invoice: {
-            id: order.invoice?.data?.id,
-            ...order.invoice?.data?.attributes,
-            products: order.invoice?.data?.attributes?.products?.map((product: APICartProduct) => ({
-                id: product.product?.data?.id,
-                name: product.product?.data?.attributes?.name,
-                images: product.product?.data?.attributes?.image?.data?.map((el: IImageStrapi) => {
-                    return useImageFromStrapi(el?.attributes?.url)
-                }) || [],
-                price: product.product?.data?.attributes?.price,
-                description: product.product?.data?.attributes?.description,
-                price_before_offer: product.product?.data?.attributes?.price_before_offer,
+            id: order.invoice?.id,
+            total: order.invoice?.total,
+            totalPaid: order.invoice?.totalPaid,
+            paymentStatus: order.invoice?.paymentStatus,
+            products: order.invoice?.products?.map((product: APICartProduct) => ({
+                id: product.product?.id,
+                name: product.product?.name,
+                images: (product.product?.image || []).map((el) => {
+                    return useImageFromStrapi(el?.url)
+                }),
+                price: product.product?.price,
+                description: product.product?.description,
+                price_before_offer: product.product?.price_before_offer,
                 quantity: product.quantity,
                 selectedVariants: product.selectedVariants,
             })) || [],
         },
         user: {
-            id: order.users_permissions_user?.data?.id,
-            ...order.users_permissions_user?.data?.attributes
+            id: order.users_permissions_user?.id,
+            username: order.users_permissions_user?.username,
+            firstName: order.users_permissions_user?.firstName,
+            lastName: order.users_permissions_user?.lastName,
+            identify: order.users_permissions_user?.identify,
+            email: order.users_permissions_user?.email,
+            logged: order.users_permissions_user?.logged
         }
     }
 }

@@ -4,28 +4,24 @@ import PDFDocument from 'pdfkit'
 
 interface StrapiProduct {
     id: number
-    attributes: {
+    documentId?: string
+    name: string
+    description?: string
+    price: number
+    price_before_offer?: number
+    image?: Array<{ url: string }>
+    colors?: Array<{
+        id: number
         name: string
-        description?: string
-        price: number
-        price_before_offer?: number
-        image?: {
-            data: Array<{ attributes: { url: string } }>
-        }
-        colors?: Array<{
-            id: number
-            name: string
-            hexadecimal: string
-        }>
-        sizes?: Array<{
-            id: number
-            name: string
-        }>
-        category?: {
-            data?: {
-                attributes: { name: string }
-            }
-        }
+        hexadecimal: string
+    }>
+    sizes?: Array<{
+        id: number
+        name: string
+    }>
+    category?: {
+        id: number
+        name: string
     }
 }
 
@@ -46,6 +42,7 @@ async function fetchImageBuffer(url: string): Promise<Buffer | null> {
 
 export default defineEventHandler(async (event) => {
     const config = useRuntimeConfig()
+    const strapiBase = (config as any).apiBaseServer || config.public.apiBase
 
     // Fetch all products from Strapi with pagination
     const allProducts: StrapiProduct[] = []
@@ -58,7 +55,7 @@ export default defineEventHandler(async (event) => {
             sort: ['sort:asc', 'id:desc'],
             pagination: { page, pageSize },
         })
-        const response: any = await $fetch(config.public.apiBase + '/products?' + query)
+        const response: any = await $fetch(strapiBase + '/products?' + query)
         if (response.data && response.data.length > 0) {
             allProducts.push(...response.data)
         }
@@ -76,9 +73,9 @@ export default defineEventHandler(async (event) => {
     const imageBuffers = new Map<number, Buffer>()
     await Promise.all(
         allProducts.map(async (product) => {
-            const images = product.attributes.image?.data
+            const images = product.image
             if (images && images.length > 0) {
-                const imageUrl = config.public.strapiAssets + images[0].attributes.url
+                const imageUrl = config.public.strapiAssets + images[0].url
                 const buffer = await fetchImageBuffer(imageUrl)
                 if (buffer) {
                     imageBuffers.set(product.id, buffer)
@@ -144,7 +141,7 @@ export default defineEventHandler(async (event) => {
     for (const product of allProducts) {
         doc.addPage({ size: 'A4', margin: MARGIN })
 
-        const attrs = product.attributes
+        const attrs = product
         let yPos = MARGIN
 
         // Header line
@@ -152,7 +149,7 @@ export default defineEventHandler(async (event) => {
         yPos += 15
 
         // Category badge
-        const categoryName = attrs.category?.data?.attributes?.name
+        const categoryName = attrs.category?.name
         if (categoryName) {
             doc.fillColor(PRIMARY_COLOR)
                 .fontSize(9)
@@ -226,7 +223,7 @@ export default defineEventHandler(async (event) => {
             yPos = doc.y + 4
 
             // Strip markdown syntax for plain text display
-            const plainDescription = attrs.description
+            const plainDescription = (attrs.description as string)
                 .replace(/[#*_~`>]/g, '')
                 .replace(/\[([^\]]+)\]\([^)]+\)/g, '$1')
                 .replace(/\n{3,}/g, '\n\n')

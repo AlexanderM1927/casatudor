@@ -26,7 +26,6 @@
 import PageService from '@/services/PageService'
 import ProductService from '@/services/ProductService'
 import { sortByField } from '~/helpers/SortHelper'
-import type { IImageStrapi } from '~/types/ImageStrapi';
 import type { IPage } from '~/types/Page';
 import type { IPaginator } from '~/types/Paginator';
 import type { IProduct } from '~/types/Product';
@@ -62,18 +61,17 @@ const allProducts: Ref<IProduct[]> = ref([])
 const getPage = async (newPage: number = 1) => {
     isLoading.value = true
     const { data }: any = await pageService.getSinglePageByUrlId(route.params.id)
-    page.value = data.map(({ id, attributes }: { id: number, attributes: any }) => {
+    page.value = data.map((item: any) => {
         const pageData: IPage = {
-            ...attributes,
-            id: id
+            ...item,
         }
         
-        // Mapear las categorías si existen
-        if (attributes.categories && attributes.categories.data) {
+        // Strapi v5: categories is a flat array, no .data wrapper
+        if (item.categories && Array.isArray(item.categories)) {
             pageData.categories = {
-                data: attributes.categories.data.map(({ id, attributes: catAttributes }: { id: number, attributes: any }) => ({
-                    id,
-                    name: catAttributes.name,
+                data: item.categories.map((cat: any) => ({
+                    id: cat.id,
+                    name: cat.name,
                     products: []
                 }))
             }
@@ -106,13 +104,12 @@ const getProducts = async (newPage: string | number = 1) => {
                     ''
                 )
                 
-                const categoryProducts = data.map(({ id, attributes }: { id: number, attributes: any }) => {
+                const categoryProducts = data.map((item: any) => {
                     const product: IProduct = {
-                        ...attributes,
-                        images: attributes.image.data.map((el: IImageStrapi) => {
-                            return useImageFromStrapi(el?.attributes?.url)
+                        ...item,
+                        images: (item.image || []).map((el: any) => {
+                            return useImageFromStrapi(el?.url)
                         }),
-                        id: id
                     }
                     return product
                 })

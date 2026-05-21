@@ -17,7 +17,8 @@ export const useFooter = () => {
             const { data }: any = await footerService.getFooter()
             
             if (data) {
-                footerData.value = data.attributes
+                // Strapi v5: singleton fields are flat on data, no .attributes wrapper
+                footerData.value = data
             }
             return footerData.value
         } catch (error) {

@@ -125,7 +125,8 @@ export const useCartStore = defineStore('cart', {
             if (!useCart || this.products.length > 0) {
                 return this.syncCartWithStrapi()
             }
-            const cartProducts = useCart?.attributes?.products || []
+            // Strapi v5: products is directly on useCart, no .attributes wrapper
+            const cartProducts = useCart?.products || []
         
             const productCarts: IProductCart[] = mapAPICartProductsToIProductCarts(cartProducts)
             this.setCart(useCart.id, productCarts)

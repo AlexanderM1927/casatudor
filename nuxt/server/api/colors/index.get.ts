@@ -3,6 +3,7 @@ import qs from 'qs'
 
 export default defineEventHandler(async () => {
     const config = useRuntimeConfig()
+    const strapiBase = (config as any).apiBaseServer || config.public.apiBase
 
     const colorsMap = new Map<string, { name: string, hexadecimal: string }>()
 
@@ -19,12 +20,13 @@ export default defineEventHandler(async () => {
             }
         })
 
-        const response: any = await $fetch(config.public.apiBase + '/products?' + query)
+        const response: any = await $fetch(strapiBase + '/products?' + query)
 
         pageCount = response.meta?.pagination?.pageCount || 1
 
         for (const product of response.data) {
-            const colors = product.attributes?.colors || []
+            // Strapi v5: colors is directly on the product, no .attributes wrapper
+            const colors = product.colors || []
             for (const color of colors) {
                 if (color.hexadecimal && !colorsMap.has(color.hexadecimal)) {
                     colorsMap.set(color.hexadecimal, {

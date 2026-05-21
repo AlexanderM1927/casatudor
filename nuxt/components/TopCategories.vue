@@ -34,17 +34,18 @@ const getTopCategories = async () => {
     const topCategory = dataFromRequest[0];
     if (!topCategory) return;
     
-    const { category: categoryComponents } = topCategory.attributes;
+    // Strapi v5: fields are flat on the object, no .attributes wrapper
+    const { category: categoryComponents } = topCategory;
     if (!categoryComponents) return;
     
     categories.value = categoryComponents.map((component: any) => {
       const topCategory: ITopCategory = {
         id: component.id,
         category: {
-          id: component.category.data.id,
-          name: component.category.data.attributes.name
+          id: component.category.id,
+          name: component.category.name
         },
-        image: useImageFromStrapi(component.image.data[0].attributes.url),
+        image: useImageFromStrapi(component.image[0].url),
         urlForRedirect: component.urlForRedirect
       };
       return topCategory;

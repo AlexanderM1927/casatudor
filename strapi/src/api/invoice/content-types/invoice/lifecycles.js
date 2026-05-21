@@ -11,17 +11,13 @@ module.exports = {
       
       try {
         // Buscar la orden relacionada con esta factura
-        const orders = await strapi.entityService.findMany('api::order.order', {
-          filters: {
-            invoice: result.id
-          },
+        const orders = await strapi.db.query('api::order.order').findMany({
+          where: { invoice: result.id },
           populate: {
             users_permissions_user: true,
             invoice: {
               populate: {
-                products: {
-                  populate: ['product']
-                }
+                products: { populate: { product: true } }
               }
             }
           }

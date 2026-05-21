@@ -34,22 +34,21 @@ const promotionService = new PromotionService(useRuntimeConfig())
 const getPromotions = async (newPage: number = 1) => {
     isLoading.value = true
     const { data }: any = await promotionService.getSinglePromotion(route.params.id)
-    promotion.value = data.map(({ id, attributes }: { id: number, attributes: any }) => {
+    promotion.value = data.map((item: any) => {
         const promotion: IPromotion = {
-            ...attributes,
-            id
+            ...item,
         }
         return promotion
     })[0]
     const promotionsData = promotion.value
-    const { data: dataProducts } = promotionsData.products
-    const mappedProducts = dataProducts.map(({ id, attributes }: { id: number, attributes: any }) => {
+    // Strapi v5: products is a flat array, no .data wrapper
+    const dataProducts = Array.isArray(promotionsData.products) ? promotionsData.products : (promotionsData.products?.data || [])
+    const mappedProducts = dataProducts.map((item: any) => {
         const product: IProduct = {
-            ...attributes,
-            images: attributes.image.data.map((el: IImageStrapi) => {
-                return useImageFromStrapi(el?.attributes?.url)
+            ...item,
+            images: (item.image || []).map((el: any) => {
+                return useImageFromStrapi(el?.url)
             }),
-            id: id
         }
         return product
     })

@@ -129,7 +129,6 @@ import { useDebounce } from '@/composables/useDebounce'
 import { useBreakpoints } from '@/composables/useBreakpoints'
 import { sortByField } from '~/helpers/SortHelper'
 import texts from '@/config/texts.json'
-import type { IImageStrapi } from '~/types/ImageStrapi';
 import type { IProduct, IColor } from '~/types/Product';
 import type { IPaginator } from '~/types/Paginator';
 import type { ICategory } from '~/types/Category';
@@ -223,7 +222,7 @@ const filterProducts = () => {
 
     if (category && category.id) {
         productsFilteredToShow = productsFilteredToShow.filter((product: IProduct) => {
-            return product.category?.data?.id === parseInt(category.id)
+            return product.category?.id === parseInt(category.id)
         })
     }
 
@@ -262,13 +261,12 @@ const getProducts = async (newPage: number = 1) => {
     paginatorProducts.value.currentPage = newPage
     isLoading.value = true
     const { data, meta }: any = await productService.getProducts(paginatorProducts.value.currentPage)
-    const mappedProducts = data.map(({ id, attributes }: { id: number, attributes: any }) => {
+    const mappedProducts = data.map((item: any) => {
         const product: IProduct = {
-            ...attributes,
-            images: attributes.image.data.map((el: IImageStrapi) => {
-                return useImageFromStrapi(el?.attributes?.url)
+            ...item,
+            images: (item.image || []).map((el: any) => {
+                return useImageFromStrapi(el?.url)
             }),
-            id: id
         }
         return product
     })
@@ -290,13 +288,12 @@ const getProductsByFilter = async () => {
     const category = categoryFiltered.value
     const color = colorFiltered.value
     const { data, meta }: any = await productService.getProductsWithFilters(paginatorProducts.value.currentPage, nameFilter, category, sort, color?.hexadecimal)
-    const mappedProducts = data.map(({ id, attributes }: { id: number, attributes: any }) => {
+    const mappedProducts = data.map((item: any) => {
         const product: IProduct = {
-            ...attributes,
-            images: attributes.image.data.map((el: IImageStrapi) => {
-                return useImageFromStrapi(el?.attributes?.url)
+            ...item,
+            images: (item.image || []).map((el: any) => {
+                return useImageFromStrapi(el?.url)
             }),
-            id: id
         }
         return product
     })
@@ -314,10 +311,9 @@ const getProductsByFilter = async () => {
 const getCategories = async (newPage: number = 1) => {
     isLoading.value = true
     const { data, meta }: any = await categoryService.getCategories(newPage)
-    const categoriesToShow = data.map(({ id, attributes }: { id: number, attributes: any }) => {
+    const categoriesToShow = data.map((item: any) => {
         const category: ICategory = {
-            ...attributes,
-            id: id
+            ...item,
         }
         return category
     })

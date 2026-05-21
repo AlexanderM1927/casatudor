@@ -5,15 +5,18 @@ export default class CartService {
     constructor (config) {
         this.config = config
     }
+    get apiBase() {
+        return this.config.apiBaseServer || this.config.public.apiBase
+    }
     async createCart(params) {
-        return await $fetch(this.config.public.apiBase + '/carts', {
+        return await $fetch(this.apiBase + '/carts', {
             headers: { Authorization: `Bearer ${params.token}` },
             method: 'POST',
             body: params
         })
     }
     async updateCart(id, params) {
-        return await $fetch(this.config.public.apiBase + '/carts/' + id, {
+        return await $fetch(this.apiBase + '/carts/' + id, {
             headers: { Authorization: `Bearer ${params.token}` },
             method: 'PUT',
             body: params
@@ -33,7 +36,7 @@ export default class CartService {
                 users_permissions_user: params.userId
             }
         })
-        return await $fetch(this.config.public.apiBase + '/carts?' + query, {
+        return await $fetch(this.apiBase + '/carts?' + query, {
             headers: { Authorization: `Bearer ${params.token}` },
             method: 'GET',
         })

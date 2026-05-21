@@ -13,14 +13,13 @@ module.exports = {
       
       try {
         // Find the complete order with user and invoice information
-        const order = await strapi.entityService.findOne('api::order.order', result.id, {
+        const order = await strapi.db.query('api::order.order').findOne({
+          where: { id: result.id },
           populate: {
             users_permissions_user: true,
             invoice: {
               populate: {
-                products: {
-                  populate: ['product']
-                }
+                products: { populate: { product: true } }
               }
             }
           }

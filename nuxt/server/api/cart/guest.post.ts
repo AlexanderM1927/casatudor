@@ -9,8 +9,9 @@ export default defineEventHandler(async (event) => {
     }
 
     try {
+        const strapiBase = config.apiBaseServer || config.public.apiBase
         // Create a temporary guest cart in Strapi
-        const cart = await $fetch(`${config.public.apiBase}/carts`, {
+        const cart = await $fetch(`${strapiBase}/carts`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',

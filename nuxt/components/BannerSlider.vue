@@ -103,13 +103,11 @@ const interval = 5000
 const getContent = async () => {
     try {
         const { data }: any = await contentService.getContent()
-        const { attributes } = data
-        
-        // Map banner data from the new structure
-        if (attributes.banner && attributes.banner.length > 0) {
-            banners.value = attributes.banner.map((banner: any) => ({
-                imageForDesktop: banner.imageForDesktop.data.attributes.url,
-                imageForMobile: banner.imageForMobile?.data?.attributes?.url,
+        // Strapi v5: singleton fields are flat on data, no .attributes wrapper
+        if (data.banner && data.banner.length > 0) {
+            banners.value = data.banner.map((banner: any) => ({
+                imageForDesktop: banner.imageForDesktop.url,
+                imageForMobile: banner.imageForMobile?.url,
                 urlForRedirect: banner.urlForRedirect
             }))
         }

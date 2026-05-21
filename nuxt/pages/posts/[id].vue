@@ -36,11 +36,10 @@ const postService = new PostService(useRuntimeConfig())
 const getPost = async (newPage: number = 1) => {
     isLoading.value = true
     const { data }: any = await postService.getSinglePost(route.params.id)
-    post.value = data.map(({ id, attributes }: { id: number, attributes: any }) => {
+    post.value = data.map((item: any) => {
         const post: IPost = {
-            ...attributes,
-            image: useImageFromStrapi(attributes?.image?.data?.attributes?.url),
-            id: id
+            ...item,
+            image: useImageFromStrapi(item?.image?.url),
         }
         return post
     })[0]

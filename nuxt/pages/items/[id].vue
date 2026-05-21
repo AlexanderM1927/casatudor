@@ -187,8 +187,6 @@ import { useImageFromStrapi } from '@/composables/useImageFromStrapi'
 import { useSeo } from '@/composables/useSeo'
 import ToastHelper from '~/helpers/ToastHelper'
 import type { IProduct, IColor } from '~/types/Product'
-import type { IProductCart } from '~/types/ProductCart'
-import type { IImageStrapi } from '~/types/ImageStrapi'
 import { getIdFromSlug, getSlugAndId } from '~/helpers/SlugHelper'
 
 const cart = useCartStore()
@@ -215,29 +213,29 @@ const productService = new ProductService(useRuntimeConfig())
 
 // Función para mapear los datos del producto
 const mapProductData = (data: any): IProduct => {
-    const { id, attributes } = data
     return {
-        ...attributes,
-        images: attributes.image.data.map((el: IImageStrapi) => {
-            return useImageFromStrapi(el?.attributes?.url)
+        ...data,
+        // Strapi v5: image is a flat array, no .data[].attributes wrapper
+        images: (data.image || []).map((el: any) => {
+            return useImageFromStrapi(el?.url)
         }),
-        colors: attributes.colors?.map((color: any) => ({
+        colors: data.colors?.map((color: any) => ({
             id: color.id,
             name: color.name,
             hexadecimal: color.hexadecimal,
-            image: color.image?.data ? useImageFromStrapi(color.image.data.attributes.url) : null,
+            image: color.image ? useImageFromStrapi(color.image.url) : null,
             quantity: color.quantity ?? null
         })) || [],
-        sizes: attributes.sizes?.map((size: any) => ({
+        sizes: data.sizes?.map((size: any) => ({
             id: size.id,
             name: size.name,
             quantity: size.quantity ?? null
         })) || [],
-        category: attributes.category?.data ? {
-            id: attributes.category.data.id,
-            ...attributes.category.data.attributes
+        // Strapi v5: category is flat, no .data.attributes wrapper
+        category: data.category ? {
+            id: data.category.id,
+            name: data.category.name
         } : null,
-        id: id
     }
 }
 
@@ -286,25 +284,25 @@ const getRelatedProducts = async (categoryId: number, excludeProductId: number) 
         const { data }: any = await productService.getRelatedProducts(categoryId, excludeProductId, 4)
         
         // Mapear los productos relacionados
-        let mappedProducts = data.map(({ id, attributes }: { id: number, attributes: any }) => {
+        let mappedProducts = data.map((item: any) => {
             const product: IProduct = {
-                ...attributes,
-                images: attributes.image.data.map((el: IImageStrapi) => {
-                    return useImageFromStrapi(el?.attributes?.url)
+                ...item,
+                // Strapi v5: image is a flat array
+                images: (item.image || []).map((el: any) => {
+                    return useImageFromStrapi(el?.url)
                 }),
-                colors: attributes.colors?.map((color: any) => ({
+                colors: item.colors?.map((color: any) => ({
                     id: color.id,
                     name: color.name,
                     hexadecimal: color.hexadecimal,
-                    image: color.image?.data ? useImageFromStrapi(color.image.data.attributes.url) : null,
+                    image: color.image ? useImageFromStrapi(color.image.url) : null,
                     quantity: color.quantity ?? null
                 })) || [],
-                sizes: attributes.sizes?.map((size: any) => ({
+                sizes: item.sizes?.map((size: any) => ({
                     id: size.id,
                     name: size.name,
                     quantity: size.quantity ?? null
                 })) || [],
-                id: id
             }
             return product
         })

@@ -22,10 +22,10 @@ module.exports = {
       }
       
       // Obtener todas las invoices con sus relaciones
-      const invoices = await strapi.entityService.findMany('api::invoice.invoice', {
-        start: start || 0,
+      const invoices = await strapi.db.query('api::invoice.invoice').findMany({
+        offset: start || 0,
         limit: limit || 100,
-        filters,
+        where: filters,
         populate: {
           products: {
             populate: {
@@ -41,16 +41,12 @@ module.exports = {
       const invoicesWithOrders = await Promise.all(
         invoices.map(async (invoice) => {
           // Buscar la orden que tiene esta invoice
-          const orders = await strapi.entityService.findMany('api::order.order', {
-            filters: {
-              invoice: {
-                id: invoice.id
-              }
+          const orders = await strapi.db.query('api::order.order').findMany({
+            where: {
+              invoice: { id: invoice.id }
             },
             populate: {
-              users_permissions_user: {
-                fields: ['id', 'username', 'email']
-              }
+              users_permissions_user: true
             }
           });
 
@@ -133,13 +129,11 @@ module.exports = {
         }
       }
       
-      const invoices = await strapi.entityService.findMany('api::invoice.invoice', {
-        filters,
+      const invoices = await strapi.db.query('api::invoice.invoice').findMany({
+        where: filters,
         populate: {
           products: {
-            populate: {
-              product: true
-            }
+            populate: { product: true }
           }
         }
       });
@@ -147,12 +141,8 @@ module.exports = {
       // Para cada invoice, buscar su orden relacionada
       const invoicesWithOrders = await Promise.all(
         invoices.map(async (invoice) => {
-          const orders = await strapi.entityService.findMany('api::order.order', {
-            filters: {
-              invoice: {
-                id: invoice.id
-              }
-            }
+          const orders = await strapi.db.query('api::order.order').findMany({
+            where: { invoice: { id: invoice.id } }
           });
           return { invoice, order: orders[0] || null };
         })

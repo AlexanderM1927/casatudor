@@ -47,10 +47,9 @@ const getPromotions = async () => {
     try {
         const { data }: any = await promotionService.getPromotions()
         if (data && data[0]) {
-            const { attributes } = data[0]
+            // Strapi v5: fields are flat, no .attributes wrapper
             dataPromotions.value = {
-                ...attributes,
-                id: data[0].id
+                ...data[0],
             }
         }
     } catch (error) {
@@ -62,11 +61,11 @@ const getBanner = async () => {
     try {
         const { data }: any = await bannerService.getBanner()
         if (data) {
-            const { attributes } = data
+            // Strapi v5: fields are flat, no .attributes wrapper
             dataBanner.value = {
-                active: attributes.active,
-                link: attributes.link,
-                image: attributes.image?.data?.attributes?.url
+                active: data.active,
+                link: data.link,
+                image: data.image?.url
             }
         }
     } catch (error) {

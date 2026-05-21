@@ -5,6 +5,9 @@ export default class OrderService {
     constructor (config) {
         this.config = config
     }
+    get apiBase() {
+        return this.config.apiBaseServer || this.config.public.apiBase
+    }
     async getUserOrders(params) {
         const query = qs.stringify({
             populate: [
@@ -20,7 +23,7 @@ export default class OrderService {
                 users_permissions_user: params.userId
             }
         })
-        return await $fetch(this.config.public.apiBase + '/orders?' + query, {
+        return await $fetch(this.apiBase + '/orders?' + query, {
             headers: { Authorization: `Bearer ${params.token}` },
             method: 'GET',
         })

@@ -3,6 +3,7 @@ export default defineNuxtConfig({
   compatibilityDate: '2025-09-19',
   runtimeConfig: {
     jwtCookie: process.env.NUXT_JWT_COOKIE || 'auth_token',
+    apiBaseServer: process.env.API_BASE_SERVER || process.env.API_BASE,
     public: {
       strapiAssets: process.env.STRAPI_ASSETS,
       apiBase: process.env.API_BASE,

@@ -36,10 +36,10 @@ export default defineEventHandler(async (event) => {
       
       products.forEach(product => {
         dynamicPages.push({
-          url: `/items/${product.attributes.slug || product.id}`,
+          url: `/items/${product.slug || product.id}`,
           priority: '0.7',
           changefreq: 'weekly',
-          lastmod: product.attributes.updatedAt?.split('T')[0] || currentDate
+          lastmod: product.updatedAt?.split('T')[0] || currentDate
         })
       })
       
@@ -49,10 +49,10 @@ export default defineEventHandler(async (event) => {
       
       posts.forEach(post => {
         dynamicPages.push({
-          url: `/posts/${post.attributes.slug || post.id}`,
+          url: `/posts/${post.slug || post.id}`,
           priority: '0.6',
           changefreq: 'weekly',
-          lastmod: post.attributes.updatedAt?.split('T')[0] || currentDate
+          lastmod: post.updatedAt?.split('T')[0] || currentDate
         })
       })
       
@@ -62,10 +62,10 @@ export default defineEventHandler(async (event) => {
       
       pages.forEach(page => {
         dynamicPages.push({
-          url: `/pages/${page.attributes.slug || page.id}`,
+          url: `/pages/${page.slug || page.id}`,
           priority: '0.5',
           changefreq: 'monthly',
-          lastmod: page.attributes.updatedAt?.split('T')[0] || currentDate
+          lastmod: page.updatedAt?.split('T')[0] || currentDate
         })
       })
       

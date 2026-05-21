@@ -16,7 +16,6 @@
 <script setup lang="ts">
 import texts from '@/config/texts.json'
 import ProductService from '@/services/ProductService'
-import type { IImageStrapi } from '~/types/ImageStrapi'
 import type { IProduct } from '~/types/Product'
 
 const appConfig = useRuntimeConfig()
@@ -28,13 +27,12 @@ const getProducts = async () => {
     isLoading.value = true
     try {
         const { data }: any = await productService.getHomeProducts()
-        const mappedProducts = data.map(({ id, attributes }: { id: number, attributes: any }) => {
+        const mappedProducts = data.map((item: any) => {
             const product: IProduct = {
-                ...attributes,
-                images: attributes.image.data.map((el: IImageStrapi) => {
-                    return useImageFromStrapi(el?.attributes?.url)
+                ...item,
+                images: (item.image || []).map((el: any) => {
+                    return useImageFromStrapi(el?.url)
                 }),
-                id: id
             }
             return product
         })

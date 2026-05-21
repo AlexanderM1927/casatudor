@@ -1,23 +1,80 @@
 const { MailManager } = require('../../utils/MailManager');
 const utils = require('@strapi/utils');
 const crypto = require('crypto');
-const { sanitize } = utils;
 const { ApplicationError, ValidationError } = utils.errors;
 
 const getService = (name) => {
   return strapi.plugin('users-permissions').service(name);
 };
 
-const sanitizeUser = (user, ctx) => {
-  const { auth } = ctx.state;
-  const userSchema = strapi.getModel('plugin::users-permissions.user');
-
-  return sanitize.contentAPI.output(user, userSchema, { auth });
+const sanitizeUser = (user) => {
+  const { password, resetPasswordToken, confirmationToken, ...safeUser } = user;
+  return safeUser;
 };
 
 module.exports = (plugin) => {
-  // Override forgot password endpoint
-  plugin.controllers.auth.forgotPassword = async (ctx) => {
+  // In Strapi v5, controllers can be factory functions — wrap them properly
+  const originalAuthController = plugin.controllers.auth;
+
+  plugin.controllers.auth = ({ strapi: strapiInstance }) => {
+    // Get the base controller (handle both factory function and plain object)
+    const base = typeof originalAuthController === 'function'
+      ? originalAuthController({ strapi: strapiInstance })
+      : originalAuthController;
+
+    return {
+      ...base,
+
+      // Override register endpoint to allow custom fields
+      register: async (ctx) => {
+        const { username, email, password, firstName, lastName, identify, phone } = ctx.request.body;
+
+        if (!email) throw new ValidationError('Email es requerido');
+        if (!username) throw new ValidationError('Username es requerido');
+        if (!password) throw new ValidationError('Contraseña es requerida');
+
+        const pluginStore = await strapi.store({ type: 'plugin', name: 'users-permissions' });
+        const settings = await pluginStore.get({ key: 'advanced' });
+
+        if (settings.unique_email) {
+          const existing = await strapi.db.query('plugin::users-permissions.user').findOne({
+            where: { email: email.toLowerCase() }
+          });
+          if (existing) throw new ApplicationError('Email ya está en uso');
+        }
+
+        const role = await strapi.db.query('plugin::users-permissions.role').findOne({
+          where: { type: settings.default_role }
+        });
+
+        const user = await getService('user').add({
+          username,
+          email: email.toLowerCase(),
+          password,
+          firstName,
+          lastName,
+          identify,
+          phone,
+          provider: 'local',
+          role: role ? role.id : null,
+          confirmed: !settings.email_confirmation,
+        });
+
+        const sanitizedUser = await sanitizeUser(user);
+
+        if (settings.email_confirmation) {
+          await getService('user').sendConfirmationEmail(sanitizedUser);
+          return ctx.send({ user: sanitizedUser });
+        }
+
+        ctx.send({
+          jwt: getService('jwt').issue({ id: user.id }),
+          user: sanitizedUser,
+        });
+      },
+
+      // Override forgot password endpoint
+      forgotPassword: async (ctx) => {
     const { email } = ctx.request.body;
 
     if (!email) {
@@ -73,10 +130,10 @@ module.exports = (plugin) => {
     }
 
     ctx.send({ ok: true });
-  };
+      },
 
-  // Override reset password endpoint
-  plugin.controllers.auth.resetPassword = async (ctx) => {
+      // Override reset password endpoint
+      resetPassword: async (ctx) => {
     const { code, password, passwordConfirmation } = ctx.request.body;
 
     if (!code) {
@@ -110,12 +167,14 @@ module.exports = (plugin) => {
     });
 
     // Return sanitized user with JWT
-    const sanitizedUser = await sanitizeUser(user, ctx);
+    const sanitizedUser = await sanitizeUser(user);
 
     ctx.send({
       jwt: getService('jwt').issue({ id: user.id }),
       user: sanitizedUser,
     });
+      },
+    };
   };
 
   return plugin;

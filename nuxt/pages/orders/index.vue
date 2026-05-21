@@ -131,10 +131,7 @@ const getOrders = async (newPage: number = 1) => {
         isLoading.value = true
         const ordersData = await useGetUserOrders(newPage)
         
-        const ordersMapped: IOrder[] = mapAPIOrderToIOrders(ordersData.map((order: any) => ({
-            id: order.id,
-            ...order.attributes
-        })))
+        const ordersMapped: IOrder[] = mapAPIOrderToIOrders(ordersData)
         
         orders.value = ordersMapped
     } catch (error) {

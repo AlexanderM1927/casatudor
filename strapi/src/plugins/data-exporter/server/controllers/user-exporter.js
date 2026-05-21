@@ -22,27 +22,21 @@ module.exports = {
       }
       
       // Obtener todos los usuarios con sus relaciones
-      const users = await strapi.entityService.findMany('plugin::users-permissions.user', {
-        start: start || 0,
+      const users = await strapi.db.query('plugin::users-permissions.user').findMany({
+        offset: start || 0,
         limit: limit || 1000,
-        filters,
-        populate: {
-          role: true
-        }
+        where: filters,
+        populate: { role: true }
       });
 
       // Buscar las órdenes de cada usuario
       const usersWithOrders = await Promise.all(
         users.map(async (user) => {
-          const orders = await strapi.entityService.findMany('api::order.order', {
-            filters: {
-              users_permissions_user: {
-                id: user.id
-              }
+          const orders = await strapi.db.query('api::order.order').findMany({
+            where: {
+              users_permissions_user: { id: user.id }
             },
-            populate: {
-              invoice: true
-            }
+            populate: { invoice: true }
           });
 
           return {
@@ -108,25 +102,17 @@ module.exports = {
         }
       }
       
-      const users = await strapi.entityService.findMany('plugin::users-permissions.user', {
-        filters,
-        populate: {
-          role: true
-        }
+      const users = await strapi.db.query('plugin::users-permissions.user').findMany({
+        where: filters,
+        populate: { role: true }
       });
 
       // Buscar las órdenes de cada usuario
       const usersWithOrders = await Promise.all(
         users.map(async (user) => {
-          const orders = await strapi.entityService.findMany('api::order.order', {
-            filters: {
-              users_permissions_user: {
-                id: user.id
-              }
-            },
-            populate: {
-              invoice: true
-            }
+          const orders = await strapi.db.query('api::order.order').findMany({
+            where: { users_permissions_user: { id: user.id } },
+            populate: { invoice: true }
           });
 
           const totalSpent = orders.reduce((sum, order) => {

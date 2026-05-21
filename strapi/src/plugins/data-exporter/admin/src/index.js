@@ -1,6 +1,6 @@
-const pluginId = require('./pluginId');
+import pluginId from './pluginId.js';
 
-module.exports = {
+const plugin = {
   register(app) {
     app.addMenuLink({
       to: `/plugins/${pluginId}`,
@@ -10,7 +10,7 @@ module.exports = {
         defaultMessage: 'Data Exporter',
       },
       Component: async () => {
-        const component = await import('./pages/HomePage');
+        const { default: component } = await import('./pages/HomePage');
         return component;
       },
       permissions: [], // Sin permisos = accesible para todos los admins
@@ -23,3 +23,5 @@ module.exports = {
   },
   bootstrap() {},
 };
+
+export default plugin;

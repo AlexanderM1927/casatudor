@@ -1,7 +1,9 @@
 const path = require('path');
 
 module.exports = ({ env }) => {
-  const client = env('DATABASE_CLIENT', 'sqlite');
+  // Strapi v5 only accepts 'mysql' as dialect (uses mysql2 package internally)
+  const rawClient = env('DATABASE_CLIENT', 'sqlite');
+  const client = rawClient === 'mysql2' ? 'mysql' : rawClient;
 
   const connections = {
     mysql: {

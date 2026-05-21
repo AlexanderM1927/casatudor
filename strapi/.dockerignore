@@ -1,2 +1,6 @@
 # Node dependencies
 node_modules
+
+# Build output (regenerated inside container)
+build
+.cache

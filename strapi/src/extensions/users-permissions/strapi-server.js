@@ -28,7 +28,7 @@ module.exports = (plugin) => {
     const advancedSettings = await pluginStore.get({ key: 'advanced' });
 
     // Find the user by email
-    const user = await strapi.query('plugin::users-permissions.user').findOne({ 
+    const user = await strapi.db.query('plugin::users-permissions.user').findOne({ 
       where: { email: email.toLowerCase() } 
     });
 
@@ -41,7 +41,7 @@ module.exports = (plugin) => {
     const resetPasswordToken = crypto.randomBytes(32).toString('hex');
     
     // Save the token in the user
-    await strapi.query('plugin::users-permissions.user').update({
+    await strapi.db.query('plugin::users-permissions.user').update({
       where: { id: user.id },
       data: { resetPasswordToken },
     });
@@ -95,7 +95,7 @@ module.exports = (plugin) => {
       throw new ValidationError('Las contraseñas no coinciden');
     }
 
-    const user = await strapi.query('plugin::users-permissions.user').findOne({ 
+    const user = await strapi.db.query('plugin::users-permissions.user').findOne({ 
       where: { resetPasswordToken: code } 
     });
 

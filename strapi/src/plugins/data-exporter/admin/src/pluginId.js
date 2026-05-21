@@ -1,1 +1,1 @@
-module.exports = 'data-exporter';
+export default 'data-exporter';

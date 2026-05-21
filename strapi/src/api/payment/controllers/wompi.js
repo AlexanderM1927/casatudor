@@ -11,11 +11,13 @@ module.exports = {
     const currency = 'COP'
     let cart = null;
 
+    console.log('[wompi] body:', JSON.stringify({ cartId, cartIdType: typeof cartId, user, isGuestOrder, email }));
+
     if (cartId) {
       try {
         // Get cart with products to calculate total
         cart = await strapi.db.query('api::cart.cart').findOne({
-          where: { id: cartId },
+          where: isNaN(Number(cartId)) ? { documentId: cartId } : { id: Number(cartId) },
           populate: {
             products: {
               populate: { product: true }
@@ -23,6 +25,8 @@ module.exports = {
             users_permissions_user: true
           }
         });
+
+        console.log('[wompi] cart result:', cart ? `found id=${cart.id} products=${cart.products?.length}` : 'null');
 
         if (!cart) {
           ctx.throw(404, 'Cart no encontrado');
@@ -54,19 +58,23 @@ module.exports = {
         calculatedTotal = calculatedTotal + shipmentCost
         calculatedAmountInCents = Math.round(calculatedTotal * 100)
 
-        invoice = await strapi.db.query('api::invoice.invoice').create({
+        const invoiceProducts = cart.products.map(item => ({
+          product: item.product?.documentId,
+          quantity: item.quantity,
+          selectedVariants: item.selectedVariants,
+        }));
+
+        invoice = await strapi.documents('api::invoice.invoice').create({
           data: {
-            products: cart.products.map(item => ({
-              product: item.product?.id,
-              quantity: item.quantity,
-              selectedVariants: item.selectedVariants,
-            })),
+            products: invoiceProducts,
             total: (calculatedTotal),
             totalPaid: 0,
             paymentStatus: 'pending',
-            publishedAt: new Date(),
-          }
+          },
+          status: 'published',
         });
+
+        console.log('[wompi] invoice created id:', invoice?.id, 'type:', typeof invoice?.id);
 
         // Determine user ID - from cart, from request, or null for guest orders
         const userId = cart.users_permissions_user?.id || user || null;
@@ -89,6 +97,7 @@ module.exports = {
           orderData.users_permissions_user = userId;
         }
 
+        console.log('[wompi] orderData:', JSON.stringify(orderData));
         const order = await strapi.db.query('api::order.order').create({
           data: orderData
         });

@@ -32,7 +32,6 @@
                     :alt="`Banner ${index + 1}`"
                     :title="banner.urlForRedirect ? 'Click to navigate' : ''"
                     class="hero-background"
-                    sizes="100vw"
                     :fetchpriority="index === 0 ? 'high' : 'auto'"
                     format="webp"
                     quality="80"

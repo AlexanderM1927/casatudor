@@ -29,16 +29,13 @@
                 <NuxtImg
                     v-else
                     :src="useImageFromStrapi(banner.imageForMobile || banner.imageForDesktop)"
-                    :alt="`Hero ${index + 1}`"
+                    :alt="`Banner ${index + 1}`"
                     :title="banner.urlForRedirect ? 'Click to navigate' : ''"
                     class="hero-background"
-                    width="768"
-                    height="960"
                     sizes="100vw"
                     :fetchpriority="index === 0 ? 'high' : 'auto'"
                     format="webp"
                     quality="80"
-                    densities="1x"
                     :preload="index === 0"
                     :loading="index === 0 ? 'eager' : 'lazy'"
                 />

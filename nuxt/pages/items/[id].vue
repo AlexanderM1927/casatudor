@@ -25,6 +25,13 @@
                     id="main-image"
                     @mouseenter="stopImageRotation"
                     @mouseleave="startImageRotation"
+                    width="500"
+                    height="700"
+                    sizes="xs:100vw sm:80vw md:40vw lg:30vw"
+                    format="webp"
+                    quality="80"
+                    decoding="async"
+                    loading="eager"
                 />
                 <div class="slider-product" v-show="product.images && product.images.length > 1">
                     <div
@@ -32,7 +39,7 @@
                         class="slider-product__item"
                         @click="changeMainImage(image)"
                     >
-                        <NuxtImg :src="image" :alt="image" />
+                        <NuxtImg :src="image" :alt="image" width="100" height="100" format="webp" quality="75" decoding="async" />
                     </div>
                 </div>
             </div>
@@ -556,9 +563,13 @@ onUnmounted(() => {
     justify-content: center;
 }
 
-.product-container__image img {
-    width: auto;
-    height: 30rem;
+.product-container__image #main-image {
+    width: 100%;
+    max-width: 500px;
+    height: auto;
+    max-height: 40rem;
+    object-fit: contain;
+    object-position: center top;
 }
 
 .product-container__content {
@@ -700,6 +711,8 @@ onUnmounted(() => {
 .slider-product__item img {
     width: 5rem;
     height: 5rem;
+    object-fit: cover;
+    object-position: center top;
 }
 
 .related-products-section {

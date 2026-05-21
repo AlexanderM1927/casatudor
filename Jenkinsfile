@@ -36,7 +36,6 @@ pipeline {
                       ln -s "$PERSIST_UPLOADS" ./public/uploads
                       ls -ld ./public/uploads
                     '''
-                    sh 'rm -rf node_modules package-lock.json'
                     sh 'npm install'
                     sh 'NODE_ENV=production npm run build'
                 }

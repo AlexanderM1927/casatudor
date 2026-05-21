@@ -56,7 +56,11 @@ module.exports = {
 
         invoice = await strapi.db.query('api::invoice.invoice').create({
           data: {
-            products: cart.products,
+            products: cart.products.map(item => ({
+              product: item.product?.id,
+              quantity: item.quantity,
+              selectedVariants: item.selectedVariants,
+            })),
             total: (calculatedTotal),
             totalPaid: 0,
             paymentStatus: 'pending',

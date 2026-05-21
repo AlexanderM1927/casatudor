@@ -36,7 +36,7 @@ pipeline {
                       ln -s "$PERSIST_UPLOADS" ./public/uploads
                       ls -ld ./public/uploads
                     '''
-                    sh 'npm install'
+                    sh 'npm ci'
                     sh 'NODE_ENV=production npm run build'
                 }
             }
@@ -61,7 +61,7 @@ pipeline {
                     sh 'cp "\$ENV_FILE" ./nuxt/.env'
                 }
                 dir('./nuxt') {
-                    sh 'npm install'
+                    sh 'npm ci'
                     sh 'npm run build'
                 }
             }

@@ -7,7 +7,7 @@ ARG NODE_ENV=development
 ENV NODE_ENV=${NODE_ENV}
 
 WORKDIR /opt/
-COPY package.json ./
+COPY package.json package-lock.json ./
 RUN npm install
 RUN npm install -g npm@11.15.0
 RUN npm install -g node-gyp

@@ -74,35 +74,38 @@ module.exports = {
           status: 'published',
         });
 
-        console.log('[wompi] invoice created id:', invoice?.id, 'type:', typeof invoice?.id);
+        console.log('[wompi] invoice created id:', invoice?.id, 'documentId:', invoice?.documentId);
 
-        // Determine user ID - from cart, from request, or null for guest orders
-        const userId = cart.users_permissions_user?.id || user || null;
+        // Determine user - prefer from cart, fallback to request body integer id
+        let userDocumentId = cart.users_permissions_user?.documentId || null;
+        if (!userDocumentId && user) {
+          const userEntry = await strapi.db.query('plugin::users-permissions.user').findOne({
+            where: { id: user }
+          });
+          userDocumentId = userEntry?.documentId || null;
+        }
 
         const orderData = {
-          invoice: invoice.id,
-          email: email,
-          phone: phone,
-          identify: identify,
+          invoice: invoice.documentId,
+          email,
+          phone,
+          identify,
           country: shippingAddress.country,
           city: shippingAddress.city,
           department: shippingAddress.department,
           address1: shippingAddress.address1,
           addressDetails: shippingAddress.addressDetails,
-          isGuestOrder: isGuestOrder || !userId // Mark as guest order if no user
+          isGuestOrder: isGuestOrder || !userDocumentId,
         };
 
-        // Only add user if exists (for registered users)
-        if (userId) {
-          orderData.users_permissions_user = userId;
+        if (userDocumentId) {
+          orderData.users_permissions_user = userDocumentId;
         }
 
         console.log('[wompi] orderData:', JSON.stringify(orderData));
-        const order = await strapi.db.query('api::order.order').create({
-          data: orderData
-        });
+        const order = await strapi.documents('api::order.order').create({ data: orderData });
 
-        console.log('Order created:', order.id, 'Guest order:', isGuestOrder);
+        console.log('Order created:', order.documentId, 'Guest order:', isGuestOrder);
 
       } catch (error) {
         ctx.throw(500, 'Error al crear la factura: ' + error.message);

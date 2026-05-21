@@ -130,85 +130,76 @@ module.exports = {
   },
 
   async webhook(ctx) {
-    try {
-      const { signature, data, timestamp } = ctx.request.body || {};
-      const headerChecksum = (ctx.request.headers['x-event-checksum'] || '').toString();
-      
-      if (!data || !data.transaction) {
-        ctx.throw(400, 'Invalid webhook data');
-      }
+    const { signature, data, timestamp } = ctx.request.body || {};
+    const headerChecksum = (ctx.request.headers['x-event-checksum'] || '').toString();
 
-      const props = signature?.properties || [];
-      const valueFromPath = (obj, path) =>
-        path.split('.').reduce((acc, k) => (acc ? acc[k] : undefined), obj);
-
-      const concatenatedProps = props.map(p => valueFromPath(data, p)).join('');
-
-      // 2) Agregar timestamp y tu secreto de eventos
-      const toHash = `${concatenatedProps}${timestamp}${process.env.WOMPI_EVENTS_SECRET}`;
-
-      const computed = crypto.createHash('sha256').update(toHash).digest('hex').toUpperCase();
-
-      const provided = (signature?.checksum || headerChecksum || '').toUpperCase();
-      if (!provided || computed !== provided) {
-        ctx.throw(401, 'Invalid Wompi checksum');
-      }
-
-      const transaction = data.transaction;
-      const reference = transaction.reference;
-      const status = transaction.status;
-      const amountInCents = transaction.amount_in_cents;
-
-      console.log('Webhook received:', { reference, status, amountInCents });
-
-      // If payment is approved, update the invoice
-      if (status === 'APPROVED') {
-        // Find invoice by payment reference
-        const invoices = await strapi.db.query('api::invoice.invoice').findMany({
-          where: {
-            id: reference.replace(invoicePrefix, '')
-          }
-        });
-
-        const invoice = invoices[0];
-
-        if (invoice) {
-          // Update invoice with payment information
-          await strapi.db.query('api::invoice.invoice').update({
-            where: { id: invoice.id },
-            data: {
-              totalPaid: amountInCents / 100,
-              paymentStatus: 'approved',
-            }
-          });
-
-          console.log('Invoice updated with payment:', invoice.id);
-        } else {
-          console.log('No invoice found for reference:', reference);
-        }
-      } else if (status === 'DECLINED') {
-        // Update invoice status to declined
-        const invoices = await strapi.db.query('api::invoice.invoice').findMany({
-          where: {
-            id: reference.replace(invoicePrefix, '')
-          }
-        });
-
-        const invoice = invoices[0];
-        if (invoice) {
-          await strapi.db.query('api::invoice.invoice').update({
-            where: { id: invoice.id },
-            data: {
-              paymentStatus: 'declined',
-            }
-          });
-        }
-      }
-
-      ctx.body = { received: true };
-    } catch (error) {
-      console.error('Webhook error:', error);
-      ctx.throw(500, 'Error processing webhook: ' + error.message);
+    if (!data || !data.transaction) {
+      ctx.throw(400, 'Invalid webhook data');
     }
+
+    const props = signature?.properties || [];
+    const valueFromPath = (obj, path) =>
+      path.split('.').reduce((acc, k) => (acc ? acc[k] : undefined), obj);
+
+    const concatenatedProps = props.map(p => valueFromPath(data, p)).join('');
+    const toHash = `${concatenatedProps}${timestamp}${process.env.WOMPI_EVENTS_SECRET}`;
+
+    const computed = crypto.createHash('sha256').update(toHash).digest('hex').toUpperCase();
+    const provided = (signature?.checksum || headerChecksum || '').toUpperCase();
+
+    console.log('[wompi webhook] checksum computed:', computed, 'provided:', provided);
+
+    if (!provided || computed !== provided) {
+      ctx.throw(401, 'Invalid Wompi checksum');
+    }
+
+    const transaction = data.transaction;
+    const reference = transaction.reference;
+    const status = transaction.status;
+    const amountInCents = transaction.amount_in_cents;
+
+    console.log('[wompi webhook] received:', { reference, status, amountInCents, invoicePrefix });
+
+    const invoiceNumericId = parseInt(reference.replace(invoicePrefix, ''), 10);
+    console.log('[wompi webhook] invoiceNumericId:', invoiceNumericId);
+
+    if (status === 'APPROVED' || status === 'DECLINED' || status === 'ERROR') {
+      try {
+        // Find the entry (draft or published) by integer id to get the documentId
+        const entries = await strapi.db.query('api::invoice.invoice').findMany({
+          where: { id: invoiceNumericId }
+        });
+
+        console.log('[wompi webhook] entries found:', entries.length, entries.map(e => ({ id: e.id, documentId: e.documentId, publishedAt: e.publishedAt })));
+
+        const entry = entries[0];
+
+        if (!entry) {
+          console.log('[wompi webhook] no invoice found for id:', invoiceNumericId, 'reference:', reference);
+          ctx.body = { received: true };
+          return;
+        }
+
+        // Use documents API to update the published version
+        const updateData = status === 'APPROVED'
+          ? { totalPaid: amountInCents / 100, paymentStatus: 'approved' }
+          : status === 'DECLINED'
+            ? { paymentStatus: 'declined' }
+            : { paymentStatus: 'error' };
+
+        await strapi.documents('api::invoice.invoice').update({
+          documentId: entry.documentId,
+          data: updateData,
+          status: 'published',
+        });
+
+        console.log('[wompi webhook] invoice updated:', entry.documentId, updateData);
+      } catch (error) {
+        console.error('[wompi webhook] error updating invoice:', error);
+        ctx.throw(500, 'Error updating invoice: ' + error.message);
+      }
+    }
+
+    ctx.body = { received: true };
   },
 };

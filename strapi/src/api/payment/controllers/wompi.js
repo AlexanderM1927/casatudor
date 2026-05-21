@@ -163,16 +163,13 @@ module.exports = {
       const status = transaction.status;
       const amountInCents = transaction.amount_in_cents;
 
-      console.log('Webhook received:', { reference, status, amountInCents });
-
       // If payment is approved, update the invoice
       if (status === 'APPROVED') {
         // Find invoice by payment reference
         const invoices = await strapi.db.query('api::invoice.invoice').findMany({
           where: {
             id: reference.replace(invoicePrefix, '')
-          },
-          populate: { cart: true }
+          }
         });
 
         const invoice = invoices[0];
@@ -186,10 +183,6 @@ module.exports = {
               paymentStatus: 'approved',
             }
           });
-
-          console.log('Invoice updated with payment:', invoice.id);
-        } else {
-          console.log('No invoice found for reference:', reference);
         }
       } else if (status === 'DECLINED') {
         // Update invoice status to declined

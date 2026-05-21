@@ -24,12 +24,6 @@ module.exports = {
           }
         });
 
-        console.log('[wompi] cart fetched:', JSON.stringify({
-          id: cart?.id,
-          productsCount: cart?.products?.length,
-          products: cart?.products,
-        }, null, 2));
-
         if (!cart) {
           ctx.throw(404, 'Cart no encontrado');
         }
@@ -60,32 +54,25 @@ module.exports = {
         calculatedTotal = calculatedTotal + shipmentCost
         calculatedAmountInCents = Math.round(calculatedTotal * 100)
 
-        const mappedProducts = cart.products.map(item => ({
-          product: item.product?.documentId,
-          quantity: item.quantity,
-          selectedVariants: item.selectedVariants,
-        }));
-        console.log('[wompi] mappedProducts for invoice:', JSON.stringify(mappedProducts, null, 2));
-        console.log('[wompi] calculatedTotal:', calculatedTotal, 'amountInCents:', calculatedAmountInCents);
-
-        invoice = await strapi.documents('api::invoice.invoice').create({
+        invoice = await strapi.db.query('api::invoice.invoice').create({
           data: {
-            products: mappedProducts,
-            total: calculatedTotal,
+            products: cart.products.map(item => ({
+              product: item.product?.id,
+              quantity: item.quantity,
+              selectedVariants: item.selectedVariants,
+            })),
+            total: (calculatedTotal),
             totalPaid: 0,
             paymentStatus: 'pending',
-          },
-          status: 'published',
+            publishedAt: new Date(),
+          }
         });
 
-        console.log('[wompi] invoice created:', JSON.stringify({ id: invoice?.id, documentId: invoice?.documentId }));
-
-        // Determine user - from cart, from request, or null for guest orders
+        // Determine user ID - from cart, from request, or null for guest orders
         const userId = cart.users_permissions_user?.id || user || null;
-        const userDocumentId = cart.users_permissions_user?.documentId || null;
 
         const orderData = {
-          invoice: invoice.documentId,
+          invoice: invoice.id,
           email: email,
           phone: phone,
           identify: identify,
@@ -94,19 +81,19 @@ module.exports = {
           department: shippingAddress.department,
           address1: shippingAddress.address1,
           addressDetails: shippingAddress.addressDetails,
-          isGuestOrder: isGuestOrder || !userId,
+          isGuestOrder: isGuestOrder || !userId // Mark as guest order if no user
         };
 
         // Only add user if exists (for registered users)
-        if (userDocumentId) {
-          orderData.users_permissions_user = userDocumentId;
+        if (userId) {
+          orderData.users_permissions_user = userId;
         }
 
-        const order = await strapi.documents('api::order.order').create({
-          data: orderData,
+        const order = await strapi.db.query('api::order.order').create({
+          data: orderData
         });
 
-        console.log('[wompi] order created:', order.id, 'documentId:', order.documentId, 'Guest:', isGuestOrder);
+        console.log('Order created:', order.id, 'Guest order:', isGuestOrder);
 
       } catch (error) {
         ctx.throw(500, 'Error al crear la factura: ' + error.message);
@@ -163,6 +150,8 @@ module.exports = {
       const status = transaction.status;
       const amountInCents = transaction.amount_in_cents;
 
+      console.log('Webhook received:', { reference, status, amountInCents });
+
       // If payment is approved, update the invoice
       if (status === 'APPROVED') {
         // Find invoice by payment reference
@@ -183,6 +172,10 @@ module.exports = {
               paymentStatus: 'approved',
             }
           });
+
+          console.log('Invoice updated with payment:', invoice.id);
+        } else {
+          console.log('No invoice found for reference:', reference);
         }
       } else if (status === 'DECLINED') {
         // Update invoice status to declined

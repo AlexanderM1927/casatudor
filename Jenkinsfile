@@ -1,90 +1,179 @@
 pipeline {
     agent any
+
     options {
         disableConcurrentBuilds()
+        buildDiscarder(logRotator(numToKeepStr: '10'))
     }
+
+    environment {
+        NODE_OPTIONS = "--max-old-space-size=768"
+        JENKINS_NODE_COOKIE = "dontKillMeCasatudor"
+        STRAPI_APP_DIR = "/var/www/apps/casatudor/strapi"
+        NUXT_APP_DIR = "/var/www/apps/casatudor/nuxt"
+        PERSIST_UPLOADS = "/var/www/uploads/casatudor"
+    }
+
     stages {
         stage('Backend prepare and build') {
             tools {
                 nodejs 'node-20.19.5'
             }
+
             steps {
                 withCredentials([file(credentialsId: 'envcasatudor', variable: 'ENV_FILE')]) {
                     sh 'rm -f ./strapi/.env'
-                    sh 'cp "\$ENV_FILE" ./strapi/.env'
+                    sh 'cp "$ENV_FILE" ./strapi/.env'
                 }
+
                 dir('./strapi') {
                     sh '''
-                      set -e
+                    set -e
 
-                      # --- Persistent uploads path outside Jenkins ---
-                      PERSIST_UPLOADS="/var/www/uploads/casatudor"
+                    echo "[strapi] Preparing persistent uploads..."
 
-                      # 1) Ensure the external uploads folder exists (adjust sudo if not needed)
-                      mkdir -p "$PERSIST_UPLOADS"
-                      chown -R "$(whoami)":"$(whoami)" "$PERSIST_UPLOADS"
-                      chmod -R 755 "$PERSIST_UPLOADS"
+                    mkdir -p "$PERSIST_UPLOADS"
+                    chown -R "$(whoami)":"$(whoami)" "$PERSIST_UPLOADS"
+                    chmod -R 755 "$PERSIST_UPLOADS"
 
-                      # 2) (one-time) migrate any existing local uploads if they were a real folder
-                      if [ -d "./public/uploads" ] && [ ! -L "./public/uploads" ] && [ -n "$(ls -A ./public/uploads 2>/dev/null)" ]; then
-                        echo "[strapi] Migrating existing ./public/uploads -> $PERSIST_UPLOADS (first run only)..."
-                        cp -rn ./public/uploads/* "$PERSIST_UPLOADS"/ 2>/dev/null || true
-                      fi
+                    if [ -d "./public/uploads" ] && [ ! -L "./public/uploads" ] && [ -n "$(ls -A ./public/uploads 2>/dev/null)" ]; then
+                      echo "[strapi] Migrating existing local uploads to $PERSIST_UPLOADS..."
+                      cp -rn ./public/uploads/* "$PERSIST_UPLOADS"/ 2>/dev/null || true
+                    fi
 
-                      # 3) Replace ./public/uploads with a symlink to the persistent folder
-                      rm -rf ./public/uploads
-                      ln -s "$PERSIST_UPLOADS" ./public/uploads
-                      ls -ld ./public/uploads
+                    rm -rf ./public/uploads
+                    ln -sfn "$PERSIST_UPLOADS" ./public/uploads
+                    ls -ld ./public/uploads
+
+                    echo "[strapi] Installing dependencies..."
+                    npm ci
+
+                    echo "[strapi] Building..."
+                    NODE_ENV=production npm run build
                     '''
-                    sh 'npm ci'
-                    sh 'NODE_ENV=production npm run build'
                 }
             }
         }
+
         stage('Deploy strapi') {
             tools {
                 nodejs 'node-20.19.5'
             }
+
             steps {
                 dir('./strapi') {
-                    sh 'export JENKINS_NODE_COOKIE=dontKillMeCasatudor; NODE_ENV=production pm2 start'
+                    sh '''
+                    set -e
+
+                    echo "[strapi] Deploying to $STRAPI_APP_DIR..."
+
+                    mkdir -p "$STRAPI_APP_DIR"
+
+                    rsync -az --delete \
+                      --exclude node_modules \
+                      --exclude .cache \
+                      --exclude .tmp \
+                      --exclude public/uploads \
+                      ./ "$STRAPI_APP_DIR/"
+
+                    cd "$STRAPI_APP_DIR"
+
+                    echo "[strapi] Installing production dependencies..."
+                    npm ci --omit=dev
+
+                    echo "[strapi] Linking persistent uploads..."
+                    rm -rf public/uploads
+                    ln -sfn "$PERSIST_UPLOADS" public/uploads
+                    ls -ld public/uploads
+
+                    echo "[strapi] Restarting with PM2..."
+                    NODE_ENV=production pm2 startOrReload ecosystem.config.js --only CasaTudorStrapi --update-env
+
+                    pm2 save
+                    '''
                 }
             }
         }
+
         stage('Frontend prepare and build') {
             tools {
                 nodejs 'node-20.19.5'
             }
+
             steps {
                 withCredentials([file(credentialsId: 'envcasatudor-front', variable: 'ENV_FILE')]) {
                     sh 'rm -f ./nuxt/.env'
-                    sh 'cp "\$ENV_FILE" ./nuxt/.env'
+                    sh 'cp "$ENV_FILE" ./nuxt/.env'
                 }
+
                 dir('./nuxt') {
-                    sh 'npm ci'
-                    sh 'npm run build'
+                    sh '''
+                    set -e
+
+                    echo "[nuxt] Installing dependencies..."
+                    npm ci
+
+                    echo "[nuxt] Building..."
+                    npm run build
+                    '''
                 }
             }
         }
+
         stage('Deploy nuxt') {
             tools {
                 nodejs 'node-20.19.5'
             }
+
             steps {
                 dir('./nuxt') {
-                    sh 'export JENKINS_NODE_COOKIE=dontKillMeCasatudor; pm2 start ecosystem.config.cjs'
+                    sh '''
+                    set -e
+
+                    echo "[nuxt] Deploying to $NUXT_APP_DIR..."
+
+                    mkdir -p "$NUXT_APP_DIR"
+
+                    rsync -az --delete \
+                      .output package.json package-lock.json ecosystem.config.cjs \
+                      "$NUXT_APP_DIR/"
+
+                    cd "$NUXT_APP_DIR"
+
+                    echo "[nuxt] Installing production dependencies..."
+                    npm ci --omit=dev
+
+                    echo "[nuxt] Restarting with PM2..."
+                    NODE_ENV=production pm2 startOrReload ecosystem.config.cjs --only CasaTudorNuxt --update-env
+
+                    pm2 save
+                    '''
                 }
             }
         }
+
         stage('Verify Deployment') {
             tools {
                 nodejs 'node-20.19.5'
             }
+
             steps {
-                script {
-                    sh 'pm2 list | grep CasaTudorNuxt'
-                    sh 'pm2 list | grep CasaTudorStrapi'
-                }
+                sh '''
+                set -e
+
+                echo "[verify] PM2 list..."
+                pm2 list
+
+                echo "[verify] Checking Nuxt..."
+                pm2 list | grep CasaTudorNuxt
+
+                echo "[verify] Checking Strapi..."
+                pm2 list | grep CasaTudorStrapi
+
+                echo "[verify] Local HTTP checks..."
+                curl -I --max-time 10 http://127.0.0.1:3000 || true
+                curl -I --max-time 10 http://127.0.0.1:1337/admin || true
+                '''
             }
         }
     }

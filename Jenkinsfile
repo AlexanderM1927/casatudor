@@ -70,16 +70,16 @@ pipeline {
                     mkdir -p "$STRAPI_APP_DIR"
 
                     rsync -az --delete \
-                      --exclude node_modules \
-                      --exclude .cache \
-                      --exclude .tmp \
-                      --exclude public/uploads \
-                      ./ "$STRAPI_APP_DIR/"
+                    --exclude node_modules \
+                    --exclude .cache \
+                    --exclude .tmp \
+                    --exclude public/uploads \
+                    ./ "$STRAPI_APP_DIR/"
+
+                    echo "[strapi] Syncing production dependencies..."
+                    rsync -az --delete ./node_modules "$STRAPI_APP_DIR/"
 
                     cd "$STRAPI_APP_DIR"
-
-                    echo "[strapi] Installing production dependencies..."
-                    npm ci --omit=dev
 
                     echo "[strapi] Linking persistent uploads..."
                     rm -rf public/uploads
@@ -135,13 +135,10 @@ pipeline {
                     mkdir -p "$NUXT_APP_DIR"
 
                     rsync -az --delete \
-                      .output package.json package-lock.json ecosystem.config.cjs \
-                      "$NUXT_APP_DIR/"
+                    .output package.json package-lock.json ecosystem.config.cjs node_modules \
+                    "$NUXT_APP_DIR/"
 
                     cd "$NUXT_APP_DIR"
-
-                    echo "[nuxt] Installing production dependencies..."
-                    npm ci --omit=dev
 
                     echo "[nuxt] Restarting with PM2..."
                     NODE_ENV=production pm2 startOrReload ecosystem.config.cjs --only CasaTudorNuxt --update-env

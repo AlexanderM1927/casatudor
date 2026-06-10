@@ -1,75 +1,75 @@
-# Nuxt 3 Minimal Starter
+# Frontend Nuxt
 
-Look at the [Nuxt 3 documentation](https://nuxt.com/docs/getting-started/introduction) to learn more.
+Aplicacion web de Casa Tudor construida con Nuxt 3, Vue 3, Pinia, Tailwind, Bootstrap y Vitest.
 
-## Setup
+## Responsabilidades
 
-Make sure to install the dependencies:
+- Catalogo, paginas, subpaginas, posts y promociones.
+- Carrito, favoritos, checkout y ordenes del usuario.
+- Autenticacion desde rutas server-side hacia Strapi.
+- Generacion de `robots.txt`, `sitemap.xml` y metadatos SEO.
+- Integracion con servicios HTTP ubicados en `services/`.
 
-```bash
-# npm
-npm install
+## Variables de entorno
 
-# pnpm
-pnpm install
+Crear `nuxt/.env` a partir de `nuxt/.env.example`.
 
-# yarn
-yarn install
+Variables principales:
 
-# bun
-bun install
-```
+- `STRAPI_ASSETS`: URL base para archivos servidos por Strapi.
+- `API_BASE`: URL base de la API de Strapi.
+- `STORE_NAME`: nombre publico de la tienda.
+- `HEADER`: texto de encabezado/configuracion de contenido.
+- `DESCRIPTION`: descripcion publica para SEO/contenido.
 
-## Development Server
+## Desarrollo
 
-Start the development server on `http://localhost:3000`:
-
-```bash
-# npm
-npm run dev
-
-# pnpm
-pnpm run dev
-
-# yarn
-yarn dev
-
-# bun
-bun run dev
-```
-
-## Production
-
-Build the application for production:
+Levantar el entorno completo desde la raiz del proyecto:
 
 ```bash
-# npm
-npm run build
-
-# pnpm
-pnpm run build
-
-# yarn
-yarn build
-
-# bun
-bun run build
+docker compose up -d --build
 ```
 
-Locally preview production build:
+La aplicacion queda disponible en:
+
+```text
+http://localhost:9094
+```
+
+## Comandos
+
+Ejecutar siempre dentro del contenedor `frontend`:
 
 ```bash
-# npm
-npm run preview
-
-# pnpm
-pnpm run preview
-
-# yarn
-yarn preview
-
-# bun
-bun run preview
+docker compose exec frontend npm run dev
+docker compose exec frontend npm run build
+docker compose exec frontend npm run generate
+docker compose exec frontend npm run preview
+docker compose exec frontend npm run test
 ```
 
-Check out the [deployment documentation](https://nuxt.com/docs/getting-started/deployment) for more information.
+Para instalar dependencias:
+
+```bash
+docker compose exec frontend npm install nombre-del-paquete
+```
+
+## Estructura relevante
+
+- `pages/`: rutas de Nuxt.
+- `components/`: componentes reutilizables.
+- `server/api/`: endpoints server-side de Nuxt.
+- `server/routes/`: rutas especiales como sitemap y robots.
+- `services/`: clientes para consumir la API.
+- `stores/`: stores Pinia.
+- `composables/`: logica reutilizable de Vue/Nuxt.
+- `types/`: tipos TypeScript compartidos.
+- `tests/`: pruebas con Vitest.
+
+## Pruebas
+
+```bash
+docker compose exec frontend npm run test
+```
+
+La configuracion esta en `vitest.config.ts`.

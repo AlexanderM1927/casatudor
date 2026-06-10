@@ -1,57 +1,74 @@
-# 🚀 Getting started with Strapi
+# Backend Strapi
 
-Strapi comes with a full featured [Command Line Interface](https://docs.strapi.io/dev-docs/cli) (CLI) which lets you scaffold and manage your project in seconds.
+Aplicacion Strapi 5 que actua como CMS y API para Casa Tudor.
 
-### `develop`
+## Responsabilidades
 
-Start your Strapi application with autoReload enabled. [Learn more](https://docs.strapi.io/dev-docs/cli#strapi-develop)
+- Administracion de productos, categorias, banners, promociones, posts, paginas y subpaginas.
+- Gestion de usuarios y permisos mediante la extension `users-permissions`.
+- Carritos, ordenes, facturas y logica de pagos.
+- Emails transaccionales ubicados en `emails/templates/`.
+- Plugin local `data-exporter` para exportacion de datos.
 
-```
-npm run develop
-# or
-yarn develop
-```
+## Variables de entorno
 
-### `start`
+Crear `strapi/.env` a partir de `strapi/.env.example`.
 
-Start your Strapi application with autoReload disabled. [Learn more](https://docs.strapi.io/dev-docs/cli#strapi-start)
+El servicio `backend` lee este archivo desde `compose.yaml` y lo monta dentro de `/opt/app/.env`.
 
-```
-npm run start
-# or
-yarn start
-```
+## Desarrollo
 
-### `build`
+Levantar el entorno completo desde la raiz:
 
-Build your admin panel. [Learn more](https://docs.strapi.io/dev-docs/cli#strapi-build)
-
-```
-npm run build
-# or
-yarn build
+```bash
+docker compose up -d --build
 ```
 
-## ⚙️ Deployment
+Strapi queda disponible en:
 
-Strapi gives you many possible deployment options for your project including [Strapi Cloud](https://cloud.strapi.io). Browse the [deployment section of the documentation](https://docs.strapi.io/dev-docs/deployment) to find the best solution for your use case.
+```text
+http://localhost:1337
+```
 
-## 📚 Learn more
+La base de datos MySQL queda disponible para los contenedores como servicio `db` y desde el host en `localhost:3306`.
 
-- [Resource center](https://strapi.io/resource-center) - Strapi resource center.
-- [Strapi documentation](https://docs.strapi.io) - Official Strapi documentation.
-- [Strapi tutorials](https://strapi.io/tutorials) - List of tutorials made by the core team and the community.
-- [Strapi blog](https://strapi.io/blog) - Official Strapi blog containing articles made by the Strapi team and the community.
-- [Changelog](https://strapi.io/changelog) - Find out about the Strapi product updates, new features and general improvements.
+## Comandos
 
-Feel free to check out the [Strapi GitHub repository](https://github.com/strapi/strapi). Your feedback and contributions are welcome!
+Ejecutar siempre dentro del contenedor `backend`:
 
-## ✨ Community
+```bash
+docker compose exec backend npm run develop
+docker compose exec backend npm run build
+docker compose exec backend npm run start
+docker compose exec backend npm run strapi
+```
 
-- [Discord](https://discord.strapi.io) - Come chat with the Strapi community including the core team.
-- [Forum](https://forum.strapi.io/) - Place to discuss, ask questions and find answers, show your Strapi project and get feedback or just talk with other Community members.
-- [Awesome Strapi](https://github.com/strapi/awesome-strapi) - A curated list of awesome things related to Strapi.
+Para instalar dependencias:
 
----
+```bash
+docker compose exec backend npm install nombre-del-paquete
+```
 
-<sub>🤫 Psst! [Strapi is hiring](https://strapi.io/careers).</sub>
+## Estructura relevante
+
+- `src/api/`: APIs, content-types, controladores, rutas y servicios.
+- `src/components/`: componentes reutilizables de contenido.
+- `src/extensions/users-permissions/`: personalizaciones de usuarios y permisos.
+- `src/plugins/data-exporter/`: plugin local de exportacion.
+- `config/`: configuracion de Strapi, base de datos, middlewares y plugins.
+- `emails/templates/`: plantillas HTML para correos.
+- `public/uploads/`: archivos subidos por Strapi.
+
+## Datos y persistencia
+
+- MySQL persiste en el volumen Docker `db_data`.
+- Los uploads se montan desde `strapi/public/uploads`.
+- La configuracion y el codigo fuente se montan desde el workspace para facilitar desarrollo local.
+
+## Build
+
+Para reconstruir el panel de administracion:
+
+```bash
+docker compose exec backend npm run build
+```

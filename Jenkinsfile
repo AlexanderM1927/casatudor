@@ -67,11 +67,6 @@ pipeline {
 
                     cd "$STRAPI_APP_DIR"
 
-                    if [ -d public/uploads ] && [ ! -L public/uploads ] && [ -n "$(ls -A public/uploads 2>/dev/null)" ] && [ -z "$(ls -A "$PERSIST_UPLOADS" 2>/dev/null)" ]; then
-                      echo "[strapi] Migrating legacy deployed uploads to $PERSIST_UPLOADS..."
-                      cp -rn public/uploads/. "$PERSIST_UPLOADS"/
-                    fi
-
                     echo "[strapi] Linking persistent uploads..."
                     rm -rf public/uploads
                     ln -sfn "$PERSIST_UPLOADS" public/uploads

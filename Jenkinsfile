@@ -30,21 +30,6 @@ pipeline {
                     sh '''
                     set -e
 
-                    echo "[strapi] Preparing persistent uploads..."
-
-                    mkdir -p "$PERSIST_UPLOADS"
-                    chown -R "$(whoami)":"$(whoami)" "$PERSIST_UPLOADS"
-                    chmod -R 755 "$PERSIST_UPLOADS"
-
-                    if [ -d "./public/uploads" ] && [ ! -L "./public/uploads" ] && [ -n "$(ls -A ./public/uploads 2>/dev/null)" ]; then
-                      echo "[strapi] Migrating existing local uploads to $PERSIST_UPLOADS..."
-                      cp -rn ./public/uploads/* "$PERSIST_UPLOADS"/ 2>/dev/null || true
-                    fi
-
-                    rm -rf ./public/uploads
-                    ln -sfn "$PERSIST_UPLOADS" ./public/uploads
-                    ls -ld ./public/uploads
-
                     echo "[strapi] Installing dependencies..."
                     npm ci
 
@@ -68,6 +53,7 @@ pipeline {
                     echo "[strapi] Deploying to $STRAPI_APP_DIR..."
 
                     mkdir -p "$STRAPI_APP_DIR"
+                    mkdir -p "$PERSIST_UPLOADS"
 
                     rsync -az --delete \
                     --exclude node_modules \
@@ -80,6 +66,11 @@ pipeline {
                     rsync -az --delete ./node_modules "$STRAPI_APP_DIR/"
 
                     cd "$STRAPI_APP_DIR"
+
+                    if [ -d public/uploads ] && [ ! -L public/uploads ] && [ -n "$(ls -A public/uploads 2>/dev/null)" ] && [ -z "$(ls -A "$PERSIST_UPLOADS" 2>/dev/null)" ]; then
+                      echo "[strapi] Migrating legacy deployed uploads to $PERSIST_UPLOADS..."
+                      cp -rn public/uploads/. "$PERSIST_UPLOADS"/
+                    fi
 
                     echo "[strapi] Linking persistent uploads..."
                     rm -rf public/uploads

@@ -9,9 +9,9 @@ pipeline {
     environment {
         NODE_OPTIONS = "--max-old-space-size=768"
         JENKINS_NODE_COOKIE = "dontKillMeCasatudor"
-        STRAPI_APP_DIR = "/var/www/apps/casatudor/strapi"
-        NUXT_APP_DIR = "/var/www/apps/casatudor/nuxt"
-        PERSIST_UPLOADS = "/var/www/uploads/casatudor"
+        STRAPI_APP_DIR = "/var/www/apps/mandarastore/strapi"
+        NUXT_APP_DIR = "/var/www/apps/mandarastore/nuxt"
+        PERSIST_UPLOADS = "/var/www/uploads/mandarastore"
     }
 
     stages {

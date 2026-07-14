@@ -44,6 +44,10 @@
                 ></NuxtImg>
             </div>
         </div>
+        <div class="footer__developer">
+            <span>{{ texts.page_developed_by }}</span>&nbsp;
+            <a href="https://alexanderm.co" target="_blank" rel="noopener noreferrer">AlexanderM ❤️</a>
+        </div>
     </div>
 </template>
 <script setup>
@@ -129,6 +133,22 @@ const appConfig = useRuntimeConfig();
 .footer__social-media a {
     color: white;
     text-decoration: none;
+}
+
+.footer__developer {
+    margin-top: 1.5rem;
+    text-align: center;
+}
+
+.footer__developer a {
+    color: white;
+    opacity: 0.7;
+    text-decoration: none;
+    font-size: 0.95rem;
+}
+
+.footer__developer a:hover {
+    opacity: 1;
 }
 
 .footer__links {
